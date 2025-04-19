@@ -1,0 +1,78 @@
+测试单张去燥图像：python basicsr/demo.py -opt options/test/SIDD/NAFNet-width64.yml --input_path ./demo/0000-0004.png --output_path ./demo/denoise_img_0004.png
+
+
+
+
+
+##  DCAB 模块
+class DCABlock(nn.Module):
+    def __init__(self, num_fea):
+        super(DCABlock, self).__init__()
+        self.channel1=num_fea//2
+        self.channel2=num_fea-self.channel1
+        self.convblock = nn.Sequential(
+            nn.Conv2d(self.channel1, self.channel1, 3, 1, 1),
+            nn.LeakyReLU(0.05),
+            nn.Conv2d(self.channel1, self.channel1, 3, 1, 1),
+            nn.LeakyReLU(0.05),
+            nn.Conv2d(self.channel1, self.channel1, 3, 1, 1),
+        )
+        self.A_att_conv = CALayer(self.channel1)
+        self.B_att_conv = CALayer(self.channel2)
+
+        self.fuse1 = nn.Conv2d(num_fea, self.channel1, 1, 1, 0)
+        self.fuse2 = nn.Conv2d(num_fea, self.channel2, 1, 1, 0)
+        self.fuse = nn.Conv2d(num_fea, num_fea, 1, 1, 0)
+
+    def forward(self, x):
+        x1,x2=torch.split(x,[self.channel1,self.channel2],dim=1)
+
+        x1 = self.convblock(x1)
+
+        A = self.A_att_conv(x1)
+        P = torch.cat((x2, A*x1),dim=1)
+
+        B = self.B_att_conv(x2)
+        Q = torch.cat((x1, B*x2),dim=1)
+
+        c=torch.cat((self.fuse1(P),self.fuse2(Q)),dim=1)
+        out=self.fuse(c)
+        return out
+
+#attention fuse
+class AF(nn.Module):
+    def __init__(self, num_fea):
+        super(AF, self).__init__()
+        self.CA1=CALayer(num_fea)
+        self.CA2=CALayer(num_fea)
+        self.fuse=nn.Conv2d(num_fea*2,num_fea,1)
+    def forward(self,x1,x2):
+        x1=self.CA1(x1)*x1
+        x2=self.CA2(x2)*x2
+        return self.fuse(torch.cat((x1,x2),dim=1))
+
+####  PN 模块
+ls=[]
+class PN(nn.Module):
+    def __init__(self, num_fea):
+        super(PN, self).__init__()
+        self.CB1=DCABlock(num_fea)
+        self.CB2=DCABlock(num_fea)
+        self.CB3=DCABlock(num_fea)
+        self.AF1=AF(num_fea)
+        self.AF2=AF(num_fea)
+    def forward(self,x):
+        x1=self.CB1(x)
+        x2=self.CB2(x1)
+        x3=self.CB3(x2)
+        f1=self.AF1(x3,x2)
+        f2=self.AF2(f1,x1)
+        ls.append(torch.mean(x1[0].data,dim=0))
+        ls.append(torch.mean(x2[0].data,dim=0))
+        ls.append(torch.mean(x3[0].data,dim=0))
+        ls.append(torch.mean(f1[0].data,dim=0))
+        ls.append(torch.mean(f2[0].data,dim=0))
+        ls.append(torch.mean((x+f2)[0].data,dim=0))
+        return x+f2
+
+

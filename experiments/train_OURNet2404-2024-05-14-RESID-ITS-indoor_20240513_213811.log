@@ -1,0 +1,1205 @@
+2024-05-13 21:38:11,879 INFO: 
+                ____                _       _____  ____
+               / __ ) ____ _ _____ (_)_____/ ___/ / __ \
+              / __  |/ __ `// ___// // ___/\__ \ / /_/ /
+             / /_/ // /_/ /(__  )/ // /__ ___/ // _, _/
+            /_____/ \__,_//____//_/ \___//____//_/ |_|
+     ______                   __   __                 __      __
+    / ____/____   ____   ____/ /  / /   __  __ _____ / /__   / /
+   / / __ / __ \ / __ \ / __  /  / /   / / / // ___// //_/  / /
+  / /_/ // /_/ // /_/ // /_/ /  / /___/ /_/ // /__ / /<    /_/
+  \____/ \____/ \____/ \____/  /_____/\____/ \___//_/|_|  (_)
+    
+Version Information: 
+	BasicSR: 1.2.0+386ca20
+	PyTorch: 1.13.0
+	TorchVision: 0.14.0
+2024-05-13 21:38:11,879 INFO: 
+  name: OURNet2404-2024-05-14-RESID-ITS-indoor
+  model_type: ImageRestorationModel
+  scale: 1
+  num_gpu: 1
+  manual_seed: 10
+  datasets:[
+    train:[
+      name: RESID-ITS-indoor
+      type: PairedImageDataset
+      dataroot_gt: /home/wen/data_3/SR/BasicSR-master/datasets/RESIDE/test/SOTS/indoor/GT
+      dataroot_lq: /home/wen/data_3/SR/BasicSR-master/datasets/RESIDE/test/SOTS/indoor/hazy
+      filename_tmpl: {}
+      io_backend:[
+        type: disk
+      ]
+      gt_size: 256
+      use_flip: False
+      use_rot: False
+      use_shuffle: True
+      num_worker_per_gpu: 1
+      batch_size_per_gpu: 1
+      dataset_enlarge_ratio: 1
+      prefetch_mode: None
+      phase: train
+      scale: 1
+    ]
+    val:[
+      name: SOTS-indoor
+      type: PairedImageDataset
+      dataroot_gt: /home/wen/data_3/SR/BasicSR-master/datasets/RESIDE/test/SOTS/indoor/GT
+      dataroot_lq: /home/wen/data_3/SR/BasicSR-master/datasets/RESIDE/test/SOTS/indoor/hazy
+      io_backend:[
+        type: disk
+      ]
+      phase: val
+      scale: 1
+    ]
+  ]
+  network_g:[
+    type: OURNet2404
+    width: 48
+    enc_blk_nums: [2, 2, 4, 8]
+    middle_blk_num: 12
+    dec_blk_nums: [2, 2, 2, 2]
+  ]
+  path:[
+    pretrain_network_g: None
+    strict_load_g: True
+    resume_state: None
+    root: /home/wen/data_3/XianYu/2024_04/NAFNet-main
+    experiments_root: /home/wen/data_3/XianYu/2024_04/NAFNet-main/experiments/OURNet2404-2024-05-14-RESID-ITS-indoor
+    models: /home/wen/data_3/XianYu/2024_04/NAFNet-main/experiments/OURNet2404-2024-05-14-RESID-ITS-indoor/models
+    training_states: /home/wen/data_3/XianYu/2024_04/NAFNet-main/experiments/OURNet2404-2024-05-14-RESID-ITS-indoor/training_states
+    log: /home/wen/data_3/XianYu/2024_04/NAFNet-main/experiments/OURNet2404-2024-05-14-RESID-ITS-indoor
+    visualization: /home/wen/data_3/XianYu/2024_04/NAFNet-main/experiments/OURNet2404-2024-05-14-RESID-ITS-indoor/visualization
+  ]
+  train:[
+    optim_g:[
+      type: AdamW
+      lr: 0.001
+      weight_decay: 0.0
+      betas: [0.9, 0.9]
+    ]
+    scheduler:[
+      type: TrueCosineAnnealingLR
+      T_max: 400000
+      eta_min: 1e-07
+    ]
+    total_iter: 100000
+    warmup_iter: -1
+    pixel_opt:[
+      type: PSNRLoss
+      loss_weight: 1
+      reduction: mean
+    ]
+  ]
+  val:[
+    val_freq: 5000.0
+    save_img: False
+    use_image: False
+    metrics:[
+      psnr:[
+        type: calculate_psnr
+        crop_border: 0
+        test_y_channel: False
+      ]
+      ssim:[
+        type: calculate_ssim
+        crop_border: 0
+        test_y_channel: False
+      ]
+    ]
+  ]
+  logger:[
+    print_freq: 100
+    save_checkpoint_freq: 5000.0
+    use_tb_logger: True
+    wandb:[
+      project: None
+      resume_id: None
+    ]
+  ]
+  dist_params:[
+    backend: nccl
+    port: 29500
+  ]
+  is_train: True
+  dist: True
+  rank: 0
+  world_size: 1
+
+2024-05-13 21:38:11,930 INFO: Dataset PairedImageDataset - RESID-ITS-indoor is created.
+2024-05-13 21:38:11,930 INFO: Training statistics:
+	Number of train images: 500
+	Dataset enlarge ratio: 1
+	Batch size per gpu: 1
+	World size (gpu number): 1
+	Require iter number per epoch: 500
+	Total epochs: 200; iters: 100000.
+2024-05-13 21:38:11,937 INFO: Dataset PairedImageDataset - SOTS-indoor is created.
+2024-05-13 21:38:11,937 INFO: Number of val images/folders in SOTS-indoor: 500
+2024-05-13 21:38:14,588 INFO: Model [ImageRestorationModel] is created.
+2024-05-13 21:38:15,322 INFO: Start training from epoch: 0, iter: 0
+2024-05-13 21:38:57,023 INFO: [OURNe..][epoch:  0, iter:     100, lr:(1.000e-03,)] [eta: 11:39:32, time (data): 0.363 (0.002)] l_pix: -1.3398e+01 
+2024-05-13 21:39:33,382 INFO: [OURNe..][epoch:  0, iter:     200, lr:(1.000e-03,)] [eta: 10:52:02, time (data): 0.363 (0.002)] l_pix: -1.4602e+01 
+2024-05-13 21:40:09,776 INFO: [OURNe..][epoch:  0, iter:     300, lr:(1.000e-03,)] [eta: 10:35:53, time (data): 0.364 (0.002)] l_pix: -2.7563e+01 
+2024-05-13 21:40:46,045 INFO: [OURNe..][epoch:  0, iter:     400, lr:(1.000e-03,)] [eta: 10:26:58, time (data): 0.362 (0.002)] l_pix: -1.4697e+01 
+2024-05-13 21:41:22,323 INFO: [OURNe..][epoch:  0, iter:     500, lr:(1.000e-03,)] [eta: 10:21:24, time (data): 0.363 (0.002)] l_pix: -2.3405e+01 
+2024-05-13 21:41:58,643 INFO: [OURNe..][epoch:  1, iter:     600, lr:(1.000e-03,)] [eta: 10:17:36, time (data): 0.362 (0.002)] l_pix: -2.0495e+01 
+2024-05-13 21:42:34,941 INFO: [OURNe..][epoch:  1, iter:     700, lr:(1.000e-03,)] [eta: 10:14:39, time (data): 0.364 (0.002)] l_pix: -1.9234e+01 
+2024-05-13 21:43:11,237 INFO: [OURNe..][epoch:  1, iter:     800, lr:(1.000e-03,)] [eta: 10:12:18, time (data): 0.364 (0.002)] l_pix: -1.7868e+01 
+2024-05-13 21:43:47,527 INFO: [OURNe..][epoch:  1, iter:     900, lr:(1.000e-03,)] [eta: 10:10:19, time (data): 0.363 (0.002)] l_pix: -2.1254e+01 
+2024-05-13 21:44:23,793 INFO: [OURNe..][epoch:  1, iter:   1,000, lr:(1.000e-03,)] [eta: 10:08:34, time (data): 0.362 (0.002)] l_pix: -1.8836e+01 
+2024-05-13 21:46:43,134 INFO: Validation SOTS-indoor, 		 # psnr: 19.9033	 # ssim: 0.8374
+2024-05-13 21:46:43,134 INFO: [OURNe..][epoch:  1, iter:   1,000, lr:(1.000e-03,)] m_psnr: 1.9903e+01 m_ssim: 8.3736e-01 
+2024-05-13 21:47:19,399 INFO: [OURNe..][epoch:  2, iter:   1,100, lr:(1.000e-03,)] [eta: 13:35:38, time (data): 0.361 (0.002)] l_pix: -1.8186e+01 
+2024-05-13 21:47:55,664 INFO: [OURNe..][epoch:  2, iter:   1,200, lr:(1.000e-03,)] [eta: 13:16:41, time (data): 0.363 (0.002)] l_pix: -2.2989e+01 
+2024-05-13 21:48:31,923 INFO: [OURNe..][epoch:  2, iter:   1,300, lr:(1.000e-03,)] [eta: 13:00:33, time (data): 0.362 (0.002)] l_pix: -1.8263e+01 
+2024-05-13 21:49:08,110 INFO: [OURNe..][epoch:  2, iter:   1,400, lr:(1.000e-03,)] [eta: 12:46:33, time (data): 0.361 (0.002)] l_pix: -2.3688e+01 
+2024-05-13 21:49:44,273 INFO: [OURNe..][epoch:  2, iter:   1,500, lr:(1.000e-03,)] [eta: 12:34:18, time (data): 0.361 (0.002)] l_pix: -1.7836e+01 
+2024-05-13 21:50:20,413 INFO: [OURNe..][epoch:  3, iter:   1,600, lr:(1.000e-03,)] [eta: 12:23:29, time (data): 0.361 (0.002)] l_pix: -2.4373e+01 
+2024-05-13 21:50:56,533 INFO: [OURNe..][epoch:  3, iter:   1,700, lr:(1.000e-03,)] [eta: 12:13:51, time (data): 0.361 (0.002)] l_pix: -2.3636e+01 
+2024-05-13 21:51:32,763 INFO: [OURNe..][epoch:  3, iter:   1,800, lr:(1.000e-03,)] [eta: 12:05:20, time (data): 0.365 (0.002)] l_pix: -2.6073e+01 
+2024-05-13 21:52:09,015 INFO: [OURNe..][epoch:  3, iter:   1,900, lr:(9.999e-04,)] [eta: 11:57:39, time (data): 0.361 (0.002)] l_pix: -2.3002e+01 
+2024-05-13 21:52:45,207 INFO: [OURNe..][epoch:  3, iter:   2,000, lr:(9.999e-04,)] [eta: 11:50:38, time (data): 0.361 (0.002)] l_pix: -2.7478e+01 
+2024-05-13 21:53:21,527 INFO: [OURNe..][epoch:  4, iter:   2,100, lr:(9.999e-04,)] [eta: 11:44:20, time (data): 0.363 (0.002)] l_pix: -1.3419e+01 
+2024-05-13 21:53:57,751 INFO: [OURNe..][epoch:  4, iter:   2,200, lr:(9.999e-04,)] [eta: 11:38:28, time (data): 0.362 (0.002)] l_pix: -2.5666e+01 
+2024-05-13 21:54:34,014 INFO: [OURNe..][epoch:  4, iter:   2,300, lr:(9.999e-04,)] [eta: 11:33:05, time (data): 0.362 (0.002)] l_pix: -2.5160e+01 
+2024-05-13 21:55:10,245 INFO: [OURNe..][epoch:  4, iter:   2,400, lr:(9.999e-04,)] [eta: 11:28:05, time (data): 0.362 (0.002)] l_pix: -2.6407e+01 
+2024-05-13 21:55:46,472 INFO: [OURNe..][epoch:  4, iter:   2,500, lr:(9.999e-04,)] [eta: 11:23:26, time (data): 0.363 (0.002)] l_pix: -1.9696e+01 
+2024-05-13 21:56:22,631 INFO: [OURNe..][epoch:  5, iter:   2,600, lr:(9.999e-04,)] [eta: 11:19:03, time (data): 0.361 (0.002)] l_pix: -2.3818e+01 
+2024-05-13 21:56:58,879 INFO: [OURNe..][epoch:  5, iter:   2,700, lr:(9.999e-04,)] [eta: 11:15:00, time (data): 0.361 (0.002)] l_pix: -2.0356e+01 
+2024-05-13 21:57:35,138 INFO: [OURNe..][epoch:  5, iter:   2,800, lr:(9.999e-04,)] [eta: 11:11:12, time (data): 0.363 (0.002)] l_pix: -2.7429e+01 
+2024-05-13 21:58:11,427 INFO: [OURNe..][epoch:  5, iter:   2,900, lr:(9.999e-04,)] [eta: 11:07:39, time (data): 0.361 (0.002)] l_pix: -2.1889e+01 
+2024-05-13 21:58:47,725 INFO: [OURNe..][epoch:  5, iter:   3,000, lr:(9.999e-04,)] [eta: 11:04:17, time (data): 0.361 (0.002)] l_pix: -2.5919e+01 
+2024-05-13 21:59:23,919 INFO: [OURNe..][epoch:  6, iter:   3,100, lr:(9.999e-04,)] [eta: 11:01:03, time (data): 0.360 (0.002)] l_pix: -2.7897e+01 
+2024-05-13 22:00:00,188 INFO: [OURNe..][epoch:  6, iter:   3,200, lr:(9.998e-04,)] [eta: 10:58:01, time (data): 0.364 (0.002)] l_pix: -2.1445e+01 
+2024-05-13 22:00:36,392 INFO: [OURNe..][epoch:  6, iter:   3,300, lr:(9.998e-04,)] [eta: 10:55:06, time (data): 0.363 (0.002)] l_pix: -2.0608e+01 
+2024-05-13 22:01:12,617 INFO: [OURNe..][epoch:  6, iter:   3,400, lr:(9.998e-04,)] [eta: 10:52:20, time (data): 0.361 (0.002)] l_pix: -2.1188e+01 
+2024-05-13 22:01:48,757 INFO: [OURNe..][epoch:  6, iter:   3,500, lr:(9.998e-04,)] [eta: 10:49:39, time (data): 0.361 (0.002)] l_pix: -1.8096e+01 
+2024-05-13 22:02:24,946 INFO: [OURNe..][epoch:  7, iter:   3,600, lr:(9.998e-04,)] [eta: 10:47:06, time (data): 0.361 (0.002)] l_pix: -1.4960e+01 
+2024-05-13 22:03:01,099 INFO: [OURNe..][epoch:  7, iter:   3,700, lr:(9.998e-04,)] [eta: 10:44:38, time (data): 0.361 (0.002)] l_pix: -2.2998e+01 
+2024-05-13 22:03:37,243 INFO: [OURNe..][epoch:  7, iter:   3,800, lr:(9.998e-04,)] [eta: 10:42:16, time (data): 0.361 (0.002)] l_pix: -2.5569e+01 
+2024-05-13 22:04:13,375 INFO: [OURNe..][epoch:  7, iter:   3,900, lr:(9.998e-04,)] [eta: 10:39:59, time (data): 0.362 (0.002)] l_pix: -2.5009e+01 
+2024-05-13 22:04:49,543 INFO: [OURNe..][epoch:  7, iter:   4,000, lr:(9.998e-04,)] [eta: 10:37:48, time (data): 0.362 (0.002)] l_pix: -2.9436e+01 
+2024-05-13 22:05:25,792 INFO: [OURNe..][epoch:  8, iter:   4,100, lr:(9.997e-04,)] [eta: 10:35:44, time (data): 0.361 (0.002)] l_pix: -2.0670e+01 
+2024-05-13 22:06:01,990 INFO: [OURNe..][epoch:  8, iter:   4,200, lr:(9.997e-04,)] [eta: 10:33:43, time (data): 0.362 (0.002)] l_pix: -2.6838e+01 
+2024-05-13 22:06:38,189 INFO: [OURNe..][epoch:  8, iter:   4,300, lr:(9.997e-04,)] [eta: 10:31:45, time (data): 0.362 (0.002)] l_pix: -2.4836e+01 
+2024-05-13 22:07:14,334 INFO: [OURNe..][epoch:  8, iter:   4,400, lr:(9.997e-04,)] [eta: 10:29:50, time (data): 0.360 (0.002)] l_pix: -2.1677e+01 
+2024-05-13 22:07:50,524 INFO: [OURNe..][epoch:  8, iter:   4,500, lr:(9.997e-04,)] [eta: 10:28:00, time (data): 0.361 (0.002)] l_pix: -1.6481e+01 
+2024-05-13 22:08:26,768 INFO: [OURNe..][epoch:  9, iter:   4,600, lr:(9.997e-04,)] [eta: 10:26:14, time (data): 0.362 (0.002)] l_pix: -2.3957e+01 
+2024-05-13 22:09:03,042 INFO: [OURNe..][epoch:  9, iter:   4,700, lr:(9.997e-04,)] [eta: 10:24:31, time (data): 0.363 (0.002)] l_pix: -1.8715e+01 
+2024-05-13 22:09:39,341 INFO: [OURNe..][epoch:  9, iter:   4,800, lr:(9.996e-04,)] [eta: 10:22:52, time (data): 0.363 (0.002)] l_pix: -2.6872e+01 
+2024-05-13 22:10:15,590 INFO: [OURNe..][epoch:  9, iter:   4,900, lr:(9.996e-04,)] [eta: 10:21:15, time (data): 0.361 (0.002)] l_pix: -2.2867e+01 
+2024-05-13 22:10:51,876 INFO: [OURNe..][epoch:  9, iter:   5,000, lr:(9.996e-04,)] [eta: 10:19:40, time (data): 0.361 (0.002)] l_pix: -2.4311e+01 
+2024-05-13 22:10:51,877 INFO: Saving models and training states.
+2024-05-13 22:13:14,201 INFO: Validation SOTS-indoor, 		 # psnr: 21.0542	 # ssim: 0.8728
+2024-05-13 22:13:14,203 INFO: [OURNe..][epoch:  9, iter:   5,000, lr:(9.996e-04,)] m_psnr: 2.1054e+01 m_ssim: 8.7284e-01 
+2024-05-13 22:13:50,445 INFO: [OURNe..][epoch: 10, iter:   5,100, lr:(9.996e-04,)] [eta: 11:02:15, time (data): 0.362 (0.001)] l_pix: -2.5442e+01 
+2024-05-13 22:14:26,640 INFO: [OURNe..][epoch: 10, iter:   5,200, lr:(9.996e-04,)] [eta: 10:59:50, time (data): 0.362 (0.002)] l_pix: -2.6641e+01 
+2024-05-13 22:15:02,869 INFO: [OURNe..][epoch: 10, iter:   5,300, lr:(9.996e-04,)] [eta: 10:57:29, time (data): 0.362 (0.002)] l_pix: -2.6899e+01 
+2024-05-13 22:15:39,069 INFO: [OURNe..][epoch: 10, iter:   5,400, lr:(9.996e-04,)] [eta: 10:55:12, time (data): 0.361 (0.002)] l_pix: -1.9542e+01 
+2024-05-13 22:16:15,270 INFO: [OURNe..][epoch: 10, iter:   5,500, lr:(9.995e-04,)] [eta: 10:52:58, time (data): 0.362 (0.002)] l_pix: -2.8982e+01 
+2024-05-13 22:16:51,492 INFO: [OURNe..][epoch: 11, iter:   5,600, lr:(9.995e-04,)] [eta: 10:50:48, time (data): 0.393 (0.002)] l_pix: -2.4557e+01 
+2024-05-13 22:17:27,668 INFO: [OURNe..][epoch: 11, iter:   5,700, lr:(9.995e-04,)] [eta: 10:48:41, time (data): 0.362 (0.002)] l_pix: -2.5704e+01 
+2024-05-13 22:18:03,810 INFO: [OURNe..][epoch: 11, iter:   5,800, lr:(9.995e-04,)] [eta: 10:46:37, time (data): 0.361 (0.002)] l_pix: -2.9162e+01 
+2024-05-13 22:18:39,981 INFO: [OURNe..][epoch: 11, iter:   5,900, lr:(9.995e-04,)] [eta: 10:44:35, time (data): 0.362 (0.002)] l_pix: -2.6703e+01 
+2024-05-13 22:19:16,165 INFO: [OURNe..][epoch: 11, iter:   6,000, lr:(9.994e-04,)] [eta: 10:42:37, time (data): 0.363 (0.002)] l_pix: -2.3567e+01 
+2024-05-13 22:19:52,382 INFO: [OURNe..][epoch: 12, iter:   6,100, lr:(9.994e-04,)] [eta: 10:40:42, time (data): 0.361 (0.002)] l_pix: -2.4483e+01 
+2024-05-13 22:20:28,591 INFO: [OURNe..][epoch: 12, iter:   6,200, lr:(9.994e-04,)] [eta: 10:38:50, time (data): 0.361 (0.002)] l_pix: -3.3175e+01 
+2024-05-13 22:21:04,819 INFO: [OURNe..][epoch: 12, iter:   6,300, lr:(9.994e-04,)] [eta: 10:37:00, time (data): 0.362 (0.002)] l_pix: -2.7699e+01 
+2024-05-13 22:21:41,017 INFO: [OURNe..][epoch: 12, iter:   6,400, lr:(9.994e-04,)] [eta: 10:35:12, time (data): 0.362 (0.002)] l_pix: -2.2174e+01 
+2024-05-13 22:22:17,205 INFO: [OURNe..][epoch: 12, iter:   6,500, lr:(9.993e-04,)] [eta: 10:33:26, time (data): 0.361 (0.002)] l_pix: -2.5342e+01 
+2024-05-13 22:22:53,391 INFO: [OURNe..][epoch: 13, iter:   6,600, lr:(9.993e-04,)] [eta: 10:31:42, time (data): 0.362 (0.002)] l_pix: -2.5408e+01 
+2024-05-13 22:23:29,587 INFO: [OURNe..][epoch: 13, iter:   6,700, lr:(9.993e-04,)] [eta: 10:30:01, time (data): 0.360 (0.002)] l_pix: -2.7696e+01 
+2024-05-13 22:24:05,760 INFO: [OURNe..][epoch: 13, iter:   6,800, lr:(9.993e-04,)] [eta: 10:28:21, time (data): 0.362 (0.002)] l_pix: -2.8250e+01 
+2024-05-13 22:24:41,954 INFO: [OURNe..][epoch: 13, iter:   6,900, lr:(9.993e-04,)] [eta: 10:26:43, time (data): 0.361 (0.002)] l_pix: -2.6026e+01 
+2024-05-13 22:25:18,104 INFO: [OURNe..][epoch: 13, iter:   7,000, lr:(9.992e-04,)] [eta: 10:25:06, time (data): 0.361 (0.002)] l_pix: -2.4393e+01 
+2024-05-13 22:25:54,320 INFO: [OURNe..][epoch: 14, iter:   7,100, lr:(9.992e-04,)] [eta: 10:23:32, time (data): 0.362 (0.002)] l_pix: -2.1999e+01 
+2024-05-13 22:26:30,495 INFO: [OURNe..][epoch: 14, iter:   7,200, lr:(9.992e-04,)] [eta: 10:21:59, time (data): 0.362 (0.002)] l_pix: -2.3395e+01 
+2024-05-13 22:27:06,763 INFO: [OURNe..][epoch: 14, iter:   7,300, lr:(9.992e-04,)] [eta: 10:20:29, time (data): 0.364 (0.002)] l_pix: -1.8465e+01 
+2024-05-13 22:27:42,992 INFO: [OURNe..][epoch: 14, iter:   7,400, lr:(9.992e-04,)] [eta: 10:18:59, time (data): 0.362 (0.002)] l_pix: -2.8205e+01 
+2024-05-13 22:28:19,220 INFO: [OURNe..][epoch: 14, iter:   7,500, lr:(9.991e-04,)] [eta: 10:17:31, time (data): 0.362 (0.002)] l_pix: -1.9440e+01 
+2024-05-13 22:28:55,439 INFO: [OURNe..][epoch: 15, iter:   7,600, lr:(9.991e-04,)] [eta: 10:16:05, time (data): 0.363 (0.002)] l_pix: -2.8034e+01 
+2024-05-13 22:29:31,682 INFO: [OURNe..][epoch: 15, iter:   7,700, lr:(9.991e-04,)] [eta: 10:14:39, time (data): 0.361 (0.002)] l_pix: -2.0320e+01 
+2024-05-13 22:30:07,824 INFO: [OURNe..][epoch: 15, iter:   7,800, lr:(9.991e-04,)] [eta: 10:13:14, time (data): 0.361 (0.002)] l_pix: -2.6035e+01 
+2024-05-13 22:30:43,968 INFO: [OURNe..][epoch: 15, iter:   7,900, lr:(9.990e-04,)] [eta: 10:11:51, time (data): 0.362 (0.002)] l_pix: -2.4428e+01 
+2024-05-13 22:31:20,116 INFO: [OURNe..][epoch: 15, iter:   8,000, lr:(9.990e-04,)] [eta: 10:10:28, time (data): 0.361 (0.002)] l_pix: -2.5509e+01 
+2024-05-13 22:31:56,435 INFO: [OURNe..][epoch: 16, iter:   8,100, lr:(9.990e-04,)] [eta: 10:09:09, time (data): 0.363 (0.002)] l_pix: -2.6065e+01 
+2024-05-13 22:32:32,792 INFO: [OURNe..][epoch: 16, iter:   8,200, lr:(9.990e-04,)] [eta: 10:07:51, time (data): 0.364 (0.002)] l_pix: -2.3122e+01 
+2024-05-13 22:33:09,011 INFO: [OURNe..][epoch: 16, iter:   8,300, lr:(9.989e-04,)] [eta: 10:06:32, time (data): 0.361 (0.002)] l_pix: -2.5689e+01 
+2024-05-13 22:33:45,238 INFO: [OURNe..][epoch: 16, iter:   8,400, lr:(9.989e-04,)] [eta: 10:05:15, time (data): 0.363 (0.002)] l_pix: -2.0519e+01 
+2024-05-13 22:34:21,479 INFO: [OURNe..][epoch: 16, iter:   8,500, lr:(9.989e-04,)] [eta: 10:03:58, time (data): 0.363 (0.002)] l_pix: -2.2146e+01 
+2024-05-13 22:34:57,775 INFO: [OURNe..][epoch: 17, iter:   8,600, lr:(9.989e-04,)] [eta: 10:02:44, time (data): 0.362 (0.002)] l_pix: -3.0522e+01 
+2024-05-13 22:35:34,023 INFO: [OURNe..][epoch: 17, iter:   8,700, lr:(9.988e-04,)] [eta: 10:01:29, time (data): 0.362 (0.002)] l_pix: -2.7230e+01 
+2024-05-13 22:36:10,212 INFO: [OURNe..][epoch: 17, iter:   8,800, lr:(9.988e-04,)] [eta: 10:00:15, time (data): 0.362 (0.002)] l_pix: -2.5090e+01 
+2024-05-13 22:36:46,394 INFO: [OURNe..][epoch: 17, iter:   8,900, lr:(9.988e-04,)] [eta: 9:59:02, time (data): 0.361 (0.001)] l_pix: -2.6223e+01 
+2024-05-13 22:37:22,545 INFO: [OURNe..][epoch: 17, iter:   9,000, lr:(9.988e-04,)] [eta: 9:57:49, time (data): 0.361 (0.001)] l_pix: -2.3083e+01 
+2024-05-13 22:37:58,783 INFO: [OURNe..][epoch: 18, iter:   9,100, lr:(9.987e-04,)] [eta: 9:56:38, time (data): 0.362 (0.002)] l_pix: -2.8609e+01 
+2024-05-13 22:38:35,033 INFO: [OURNe..][epoch: 18, iter:   9,200, lr:(9.987e-04,)] [eta: 9:55:27, time (data): 0.362 (0.002)] l_pix: -2.6664e+01 
+2024-05-13 22:39:11,271 INFO: [OURNe..][epoch: 18, iter:   9,300, lr:(9.987e-04,)] [eta: 9:54:18, time (data): 0.362 (0.002)] l_pix: -2.4138e+01 
+2024-05-13 22:39:47,590 INFO: [OURNe..][epoch: 18, iter:   9,400, lr:(9.986e-04,)] [eta: 9:53:10, time (data): 0.362 (0.001)] l_pix: -2.9623e+01 
+2024-05-13 22:40:23,769 INFO: [OURNe..][epoch: 18, iter:   9,500, lr:(9.986e-04,)] [eta: 9:52:01, time (data): 0.362 (0.002)] l_pix: -2.7536e+01 
+2024-05-13 22:41:00,030 INFO: [OURNe..][epoch: 19, iter:   9,600, lr:(9.986e-04,)] [eta: 9:50:53, time (data): 0.363 (0.002)] l_pix: -2.6306e+01 
+2024-05-13 22:41:36,244 INFO: [OURNe..][epoch: 19, iter:   9,700, lr:(9.986e-04,)] [eta: 9:49:46, time (data): 0.361 (0.001)] l_pix: -2.7662e+01 
+2024-05-13 22:42:12,512 INFO: [OURNe..][epoch: 19, iter:   9,800, lr:(9.985e-04,)] [eta: 9:48:40, time (data): 0.362 (0.001)] l_pix: -2.2272e+01 
+2024-05-13 22:42:48,775 INFO: [OURNe..][epoch: 19, iter:   9,900, lr:(9.985e-04,)] [eta: 9:47:35, time (data): 0.364 (0.002)] l_pix: -2.1668e+01 
+2024-05-13 22:43:25,079 INFO: [OURNe..][epoch: 19, iter:  10,000, lr:(9.985e-04,)] [eta: 9:46:30, time (data): 0.363 (0.001)] l_pix: -2.4325e+01 
+2024-05-13 22:43:25,080 INFO: Saving models and training states.
+2024-05-13 22:45:47,260 INFO: Validation SOTS-indoor, 		 # psnr: 20.7539	 # ssim: 0.8778
+2024-05-13 22:45:47,262 INFO: [OURNe..][epoch: 19, iter:  10,000, lr:(9.985e-04,)] m_psnr: 2.0754e+01 m_ssim: 8.7782e-01 
+2024-05-13 22:46:23,566 INFO: [OURNe..][epoch: 20, iter:  10,100, lr:(9.984e-04,)] [eta: 10:06:31, time (data): 0.363 (0.002)] l_pix: -3.0998e+01 
+2024-05-13 22:46:59,892 INFO: [OURNe..][epoch: 20, iter:  10,200, lr:(9.984e-04,)] [eta: 10:05:14, time (data): 0.364 (0.002)] l_pix: -2.6391e+01 
+2024-05-13 22:47:36,174 INFO: [OURNe..][epoch: 20, iter:  10,300, lr:(9.984e-04,)] [eta: 10:03:58, time (data): 0.363 (0.002)] l_pix: -2.1216e+01 
+2024-05-13 22:48:12,458 INFO: [OURNe..][epoch: 20, iter:  10,400, lr:(9.983e-04,)] [eta: 10:02:42, time (data): 0.363 (0.002)] l_pix: -2.6940e+01 
+2024-05-13 22:48:48,705 INFO: [OURNe..][epoch: 20, iter:  10,500, lr:(9.983e-04,)] [eta: 10:01:26, time (data): 0.362 (0.002)] l_pix: -2.0234e+01 
+2024-05-13 22:49:24,988 INFO: [OURNe..][epoch: 21, iter:  10,600, lr:(9.983e-04,)] [eta: 10:00:12, time (data): 0.364 (0.002)] l_pix: -2.9019e+01 
+2024-05-13 22:50:01,249 INFO: [OURNe..][epoch: 21, iter:  10,700, lr:(9.982e-04,)] [eta: 9:58:58, time (data): 0.362 (0.002)] l_pix: -2.5161e+01 
+2024-05-13 22:50:37,553 INFO: [OURNe..][epoch: 21, iter:  10,800, lr:(9.982e-04,)] [eta: 9:57:45, time (data): 0.364 (0.002)] l_pix: -2.9648e+01 
+2024-05-13 22:51:13,824 INFO: [OURNe..][epoch: 21, iter:  10,900, lr:(9.982e-04,)] [eta: 9:56:33, time (data): 0.364 (0.002)] l_pix: -2.8953e+01 
+2024-05-13 22:51:50,087 INFO: [OURNe..][epoch: 21, iter:  11,000, lr:(9.981e-04,)] [eta: 9:55:21, time (data): 0.362 (0.002)] l_pix: -2.6317e+01 
+2024-05-13 22:52:26,387 INFO: [OURNe..][epoch: 22, iter:  11,100, lr:(9.981e-04,)] [eta: 9:54:10, time (data): 0.362 (0.002)] l_pix: -2.4913e+01 
+2024-05-13 22:53:02,622 INFO: [OURNe..][epoch: 22, iter:  11,200, lr:(9.981e-04,)] [eta: 9:53:00, time (data): 0.363 (0.002)] l_pix: -2.6088e+01 
+2024-05-13 22:53:38,896 INFO: [OURNe..][epoch: 22, iter:  11,300, lr:(9.980e-04,)] [eta: 9:51:50, time (data): 0.363 (0.002)] l_pix: -2.1789e+01 
+2024-05-13 22:54:15,128 INFO: [OURNe..][epoch: 22, iter:  11,400, lr:(9.980e-04,)] [eta: 9:50:40, time (data): 0.363 (0.002)] l_pix: -2.7807e+01 
+2024-05-13 22:54:51,375 INFO: [OURNe..][epoch: 22, iter:  11,500, lr:(9.980e-04,)] [eta: 9:49:31, time (data): 0.363 (0.002)] l_pix: -2.4503e+01 
+2024-05-13 22:55:27,637 INFO: [OURNe..][epoch: 23, iter:  11,600, lr:(9.979e-04,)] [eta: 9:48:23, time (data): 0.363 (0.002)] l_pix: -1.8188e+01 
+2024-05-13 22:56:03,903 INFO: [OURNe..][epoch: 23, iter:  11,700, lr:(9.979e-04,)] [eta: 9:47:15, time (data): 0.362 (0.002)] l_pix: -2.6420e+01 
+2024-05-13 22:56:40,221 INFO: [OURNe..][epoch: 23, iter:  11,800, lr:(9.979e-04,)] [eta: 9:46:09, time (data): 0.363 (0.002)] l_pix: -3.0885e+01 
+2024-05-13 22:57:16,473 INFO: [OURNe..][epoch: 23, iter:  11,900, lr:(9.978e-04,)] [eta: 9:45:02, time (data): 0.361 (0.002)] l_pix: -3.0817e+01 
+2024-05-13 22:57:52,757 INFO: [OURNe..][epoch: 23, iter:  12,000, lr:(9.978e-04,)] [eta: 9:43:56, time (data): 0.362 (0.002)] l_pix: -2.3619e+01 
+2024-05-13 22:58:29,084 INFO: [OURNe..][epoch: 24, iter:  12,100, lr:(9.977e-04,)] [eta: 9:42:51, time (data): 0.362 (0.001)] l_pix: -2.8588e+01 
+2024-05-13 22:59:05,349 INFO: [OURNe..][epoch: 24, iter:  12,200, lr:(9.977e-04,)] [eta: 9:41:46, time (data): 0.362 (0.002)] l_pix: -2.7413e+01 
+2024-05-13 22:59:41,609 INFO: [OURNe..][epoch: 24, iter:  12,300, lr:(9.977e-04,)] [eta: 9:40:41, time (data): 0.363 (0.002)] l_pix: -2.6808e+01 
+2024-05-13 23:00:17,898 INFO: [OURNe..][epoch: 24, iter:  12,400, lr:(9.976e-04,)] [eta: 9:39:37, time (data): 0.362 (0.002)] l_pix: -2.6824e+01 
+2024-05-13 23:00:54,171 INFO: [OURNe..][epoch: 24, iter:  12,500, lr:(9.976e-04,)] [eta: 9:38:33, time (data): 0.361 (0.002)] l_pix: -2.7760e+01 
+2024-05-13 23:01:30,490 INFO: [OURNe..][epoch: 25, iter:  12,600, lr:(9.976e-04,)] [eta: 9:37:30, time (data): 0.365 (0.002)] l_pix: -2.9841e+01 
+2024-05-13 23:02:06,804 INFO: [OURNe..][epoch: 25, iter:  12,700, lr:(9.975e-04,)] [eta: 9:36:28, time (data): 0.364 (0.002)] l_pix: -2.4056e+01 
+2024-05-13 23:02:43,100 INFO: [OURNe..][epoch: 25, iter:  12,800, lr:(9.975e-04,)] [eta: 9:35:26, time (data): 0.364 (0.002)] l_pix: -2.7668e+01 
+2024-05-13 23:03:19,483 INFO: [OURNe..][epoch: 25, iter:  12,900, lr:(9.974e-04,)] [eta: 9:34:24, time (data): 0.363 (0.002)] l_pix: -2.4504e+01 
+2024-05-13 23:03:55,801 INFO: [OURNe..][epoch: 25, iter:  13,000, lr:(9.974e-04,)] [eta: 9:33:23, time (data): 0.363 (0.002)] l_pix: -2.8922e+01 
+2024-05-13 23:04:32,200 INFO: [OURNe..][epoch: 26, iter:  13,100, lr:(9.974e-04,)] [eta: 9:32:23, time (data): 0.363 (0.002)] l_pix: -2.2580e+01 
+2024-05-13 23:05:08,519 INFO: [OURNe..][epoch: 26, iter:  13,200, lr:(9.973e-04,)] [eta: 9:31:22, time (data): 0.364 (0.002)] l_pix: -3.1046e+01 
+2024-05-13 23:05:44,881 INFO: [OURNe..][epoch: 26, iter:  13,300, lr:(9.973e-04,)] [eta: 9:30:22, time (data): 0.364 (0.002)] l_pix: -1.7818e+01 
+2024-05-13 23:06:21,266 INFO: [OURNe..][epoch: 26, iter:  13,400, lr:(9.972e-04,)] [eta: 9:29:23, time (data): 0.363 (0.002)] l_pix: -2.3238e+01 
+2024-05-13 23:06:57,488 INFO: [OURNe..][epoch: 26, iter:  13,500, lr:(9.972e-04,)] [eta: 9:28:23, time (data): 0.362 (0.002)] l_pix: -2.8616e+01 
+2024-05-13 23:07:33,667 INFO: [OURNe..][epoch: 27, iter:  13,600, lr:(9.972e-04,)] [eta: 9:27:23, time (data): 0.361 (0.002)] l_pix: -2.9327e+01 
+2024-05-13 23:08:09,861 INFO: [OURNe..][epoch: 27, iter:  13,700, lr:(9.971e-04,)] [eta: 9:26:23, time (data): 0.362 (0.002)] l_pix: -2.7879e+01 
+2024-05-13 23:08:46,048 INFO: [OURNe..][epoch: 27, iter:  13,800, lr:(9.971e-04,)] [eta: 9:25:24, time (data): 0.361 (0.002)] l_pix: -2.7094e+01 
+2024-05-13 23:09:22,297 INFO: [OURNe..][epoch: 27, iter:  13,900, lr:(9.970e-04,)] [eta: 9:24:25, time (data): 0.362 (0.002)] l_pix: -3.0272e+01 
+2024-05-13 23:09:58,619 INFO: [OURNe..][epoch: 27, iter:  14,000, lr:(9.970e-04,)] [eta: 9:23:27, time (data): 0.364 (0.002)] l_pix: -2.6171e+01 
+2024-05-13 23:10:35,016 INFO: [OURNe..][epoch: 28, iter:  14,100, lr:(9.969e-04,)] [eta: 9:22:30, time (data): 0.363 (0.002)] l_pix: -2.7405e+01 
+2024-05-13 23:11:11,345 INFO: [OURNe..][epoch: 28, iter:  14,200, lr:(9.969e-04,)] [eta: 9:21:33, time (data): 0.364 (0.002)] l_pix: -2.8885e+01 
+2024-05-13 23:11:47,652 INFO: [OURNe..][epoch: 28, iter:  14,300, lr:(9.969e-04,)] [eta: 9:20:36, time (data): 0.363 (0.002)] l_pix: -2.6414e+01 
+2024-05-13 23:12:23,961 INFO: [OURNe..][epoch: 28, iter:  14,400, lr:(9.968e-04,)] [eta: 9:19:39, time (data): 0.363 (0.002)] l_pix: -2.8486e+01 
+2024-05-13 23:13:00,267 INFO: [OURNe..][epoch: 28, iter:  14,500, lr:(9.968e-04,)] [eta: 9:18:43, time (data): 0.392 (0.001)] l_pix: -2.6450e+01 
+2024-05-13 23:13:36,579 INFO: [OURNe..][epoch: 29, iter:  14,600, lr:(9.967e-04,)] [eta: 9:17:47, time (data): 0.364 (0.002)] l_pix: -2.8545e+01 
+2024-05-13 23:14:12,881 INFO: [OURNe..][epoch: 29, iter:  14,700, lr:(9.967e-04,)] [eta: 9:16:51, time (data): 0.363 (0.002)] l_pix: -2.5550e+01 
+2024-05-13 23:14:49,239 INFO: [OURNe..][epoch: 29, iter:  14,800, lr:(9.966e-04,)] [eta: 9:15:55, time (data): 0.364 (0.002)] l_pix: -3.2454e+01 
+2024-05-13 23:15:25,525 INFO: [OURNe..][epoch: 29, iter:  14,900, lr:(9.966e-04,)] [eta: 9:15:00, time (data): 0.364 (0.002)] l_pix: -2.8253e+01 
+2024-05-13 23:16:01,867 INFO: [OURNe..][epoch: 29, iter:  15,000, lr:(9.965e-04,)] [eta: 9:14:05, time (data): 0.362 (0.002)] l_pix: -3.3303e+01 
+2024-05-13 23:16:01,868 INFO: Saving models and training states.
+2024-05-13 23:18:24,004 INFO: Validation SOTS-indoor, 		 # psnr: 21.8415	 # ssim: 0.8959
+2024-05-13 23:18:24,006 INFO: [OURNe..][epoch: 29, iter:  15,000, lr:(9.965e-04,)] m_psnr: 2.1842e+01 m_ssim: 8.9594e-01 
+2024-05-13 23:19:00,341 INFO: [OURNe..][epoch: 30, iter:  15,100, lr:(9.965e-04,)] [eta: 9:26:29, time (data): 0.362 (0.002)] l_pix: -2.6399e+01 
+2024-05-13 23:19:36,571 INFO: [OURNe..][epoch: 30, iter:  15,200, lr:(9.964e-04,)] [eta: 9:25:28, time (data): 0.365 (0.002)] l_pix: -2.6832e+01 
+2024-05-13 23:20:12,820 INFO: [OURNe..][epoch: 30, iter:  15,300, lr:(9.964e-04,)] [eta: 9:24:27, time (data): 0.362 (0.002)] l_pix: -3.0063e+01 
+2024-05-13 23:20:48,977 INFO: [OURNe..][epoch: 30, iter:  15,400, lr:(9.963e-04,)] [eta: 9:23:26, time (data): 0.361 (0.002)] l_pix: -2.4917e+01 
+2024-05-13 23:21:25,141 INFO: [OURNe..][epoch: 30, iter:  15,500, lr:(9.963e-04,)] [eta: 9:22:25, time (data): 0.362 (0.002)] l_pix: -2.8718e+01 
+2024-05-13 23:22:01,353 INFO: [OURNe..][epoch: 31, iter:  15,600, lr:(9.963e-04,)] [eta: 9:21:25, time (data): 0.362 (0.002)] l_pix: -2.5632e+01 
+2024-05-13 23:22:37,660 INFO: [OURNe..][epoch: 31, iter:  15,700, lr:(9.962e-04,)] [eta: 9:20:26, time (data): 0.364 (0.002)] l_pix: -3.1106e+01 
+2024-05-13 23:23:13,961 INFO: [OURNe..][epoch: 31, iter:  15,800, lr:(9.962e-04,)] [eta: 9:19:27, time (data): 0.363 (0.002)] l_pix: -2.3105e+01 
+2024-05-13 23:23:50,140 INFO: [OURNe..][epoch: 31, iter:  15,900, lr:(9.961e-04,)] [eta: 9:18:28, time (data): 0.362 (0.002)] l_pix: -2.1206e+01 
+2024-05-13 23:24:26,388 INFO: [OURNe..][epoch: 31, iter:  16,000, lr:(9.961e-04,)] [eta: 9:17:29, time (data): 0.363 (0.002)] l_pix: -2.3712e+01 
+2024-05-13 23:25:02,694 INFO: [OURNe..][epoch: 32, iter:  16,100, lr:(9.960e-04,)] [eta: 9:16:31, time (data): 0.363 (0.002)] l_pix: -3.4345e+01 
+2024-05-13 23:25:39,022 INFO: [OURNe..][epoch: 32, iter:  16,200, lr:(9.960e-04,)] [eta: 9:15:33, time (data): 0.362 (0.002)] l_pix: -2.0479e+01 
+2024-05-13 23:26:15,278 INFO: [OURNe..][epoch: 32, iter:  16,300, lr:(9.959e-04,)] [eta: 9:14:35, time (data): 0.362 (0.001)] l_pix: -2.7918e+01 
+2024-05-13 23:26:51,538 INFO: [OURNe..][epoch: 32, iter:  16,400, lr:(9.959e-04,)] [eta: 9:13:38, time (data): 0.363 (0.002)] l_pix: -2.5259e+01 
+2024-05-13 23:27:27,842 INFO: [OURNe..][epoch: 32, iter:  16,500, lr:(9.958e-04,)] [eta: 9:12:41, time (data): 0.361 (0.002)] l_pix: -2.8941e+01 
+2024-05-13 23:28:04,128 INFO: [OURNe..][epoch: 33, iter:  16,600, lr:(9.958e-04,)] [eta: 9:11:44, time (data): 0.362 (0.002)] l_pix: -2.5265e+01 
+2024-05-13 23:28:40,425 INFO: [OURNe..][epoch: 33, iter:  16,700, lr:(9.957e-04,)] [eta: 9:10:47, time (data): 0.362 (0.002)] l_pix: -2.5143e+01 
+2024-05-13 23:29:16,605 INFO: [OURNe..][epoch: 33, iter:  16,800, lr:(9.957e-04,)] [eta: 9:09:50, time (data): 0.362 (0.002)] l_pix: -2.9571e+01 
+2024-05-13 23:29:52,857 INFO: [OURNe..][epoch: 33, iter:  16,900, lr:(9.956e-04,)] [eta: 9:08:54, time (data): 0.363 (0.002)] l_pix: -2.8404e+01 
+2024-05-13 23:30:29,107 INFO: [OURNe..][epoch: 33, iter:  17,000, lr:(9.956e-04,)] [eta: 9:07:57, time (data): 0.362 (0.002)] l_pix: -2.6849e+01 
+2024-05-13 23:31:05,390 INFO: [OURNe..][epoch: 34, iter:  17,100, lr:(9.955e-04,)] [eta: 9:07:02, time (data): 0.362 (0.002)] l_pix: -3.3966e+01 
+2024-05-13 23:31:41,632 INFO: [OURNe..][epoch: 34, iter:  17,200, lr:(9.954e-04,)] [eta: 9:06:06, time (data): 0.362 (0.002)] l_pix: -2.6732e+01 
+2024-05-13 23:32:17,888 INFO: [OURNe..][epoch: 34, iter:  17,300, lr:(9.954e-04,)] [eta: 9:05:11, time (data): 0.362 (0.001)] l_pix: -1.5953e+01 
+2024-05-13 23:32:54,148 INFO: [OURNe..][epoch: 34, iter:  17,400, lr:(9.953e-04,)] [eta: 9:04:15, time (data): 0.364 (0.002)] l_pix: -2.3560e+01 
+2024-05-13 23:33:30,423 INFO: [OURNe..][epoch: 34, iter:  17,500, lr:(9.953e-04,)] [eta: 9:03:20, time (data): 0.361 (0.002)] l_pix: -2.5092e+01 
+2024-05-13 23:34:06,683 INFO: [OURNe..][epoch: 35, iter:  17,600, lr:(9.952e-04,)] [eta: 9:02:26, time (data): 0.362 (0.002)] l_pix: -2.8569e+01 
+2024-05-13 23:34:42,905 INFO: [OURNe..][epoch: 35, iter:  17,700, lr:(9.952e-04,)] [eta: 9:01:31, time (data): 0.364 (0.002)] l_pix: -2.6202e+01 
+2024-05-13 23:35:19,276 INFO: [OURNe..][epoch: 35, iter:  17,800, lr:(9.951e-04,)] [eta: 9:00:37, time (data): 0.364 (0.002)] l_pix: -2.7318e+01 
+2024-05-13 23:35:55,638 INFO: [OURNe..][epoch: 35, iter:  17,900, lr:(9.951e-04,)] [eta: 8:59:43, time (data): 0.364 (0.002)] l_pix: -2.8246e+01 
+2024-05-13 23:36:31,936 INFO: [OURNe..][epoch: 35, iter:  18,000, lr:(9.950e-04,)] [eta: 8:58:50, time (data): 0.362 (0.002)] l_pix: -2.8016e+01 
+2024-05-13 23:37:08,213 INFO: [OURNe..][epoch: 36, iter:  18,100, lr:(9.950e-04,)] [eta: 8:57:56, time (data): 0.362 (0.002)] l_pix: -2.1850e+01 
+2024-05-13 23:37:44,509 INFO: [OURNe..][epoch: 36, iter:  18,200, lr:(9.949e-04,)] [eta: 8:57:03, time (data): 0.362 (0.002)] l_pix: -2.8814e+01 
+2024-05-13 23:38:20,774 INFO: [OURNe..][epoch: 36, iter:  18,300, lr:(9.948e-04,)] [eta: 8:56:09, time (data): 0.363 (0.002)] l_pix: -2.1628e+01 
+2024-05-13 23:38:56,965 INFO: [OURNe..][epoch: 36, iter:  18,400, lr:(9.948e-04,)] [eta: 8:55:16, time (data): 0.362 (0.002)] l_pix: -2.9751e+01 
+2024-05-13 23:39:33,141 INFO: [OURNe..][epoch: 36, iter:  18,500, lr:(9.947e-04,)] [eta: 8:54:22, time (data): 0.360 (0.001)] l_pix: -2.9068e+01 
+2024-05-13 23:40:09,374 INFO: [OURNe..][epoch: 37, iter:  18,600, lr:(9.947e-04,)] [eta: 8:53:29, time (data): 0.363 (0.002)] l_pix: -3.3563e+01 
+2024-05-13 23:40:45,644 INFO: [OURNe..][epoch: 37, iter:  18,700, lr:(9.946e-04,)] [eta: 8:52:37, time (data): 0.361 (0.001)] l_pix: -3.1816e+01 
+2024-05-13 23:41:21,912 INFO: [OURNe..][epoch: 37, iter:  18,800, lr:(9.946e-04,)] [eta: 8:51:44, time (data): 0.363 (0.002)] l_pix: -2.9069e+01 
+2024-05-13 23:41:58,195 INFO: [OURNe..][epoch: 37, iter:  18,900, lr:(9.945e-04,)] [eta: 8:50:52, time (data): 0.362 (0.002)] l_pix: -2.4612e+01 
+2024-05-13 23:42:34,504 INFO: [OURNe..][epoch: 37, iter:  19,000, lr:(9.944e-04,)] [eta: 8:50:00, time (data): 0.362 (0.002)] l_pix: -3.5198e+01 
+2024-05-13 23:43:10,777 INFO: [OURNe..][epoch: 38, iter:  19,100, lr:(9.944e-04,)] [eta: 8:49:08, time (data): 0.362 (0.002)] l_pix: -3.0379e+01 
+2024-05-13 23:43:46,936 INFO: [OURNe..][epoch: 38, iter:  19,200, lr:(9.943e-04,)] [eta: 8:48:16, time (data): 0.361 (0.002)] l_pix: -2.5536e+01 
+2024-05-13 23:44:23,097 INFO: [OURNe..][epoch: 38, iter:  19,300, lr:(9.943e-04,)] [eta: 8:47:24, time (data): 0.361 (0.002)] l_pix: -3.2778e+01 
+2024-05-13 23:44:59,305 INFO: [OURNe..][epoch: 38, iter:  19,400, lr:(9.942e-04,)] [eta: 8:46:32, time (data): 0.362 (0.002)] l_pix: -2.7361e+01 
+2024-05-13 23:45:35,514 INFO: [OURNe..][epoch: 38, iter:  19,500, lr:(9.941e-04,)] [eta: 8:45:41, time (data): 0.362 (0.002)] l_pix: -3.3413e+01 
+2024-05-13 23:46:11,728 INFO: [OURNe..][epoch: 39, iter:  19,600, lr:(9.941e-04,)] [eta: 8:44:49, time (data): 0.361 (0.002)] l_pix: -2.7446e+01 
+2024-05-13 23:46:47,949 INFO: [OURNe..][epoch: 39, iter:  19,700, lr:(9.940e-04,)] [eta: 8:43:58, time (data): 0.362 (0.002)] l_pix: -2.5453e+01 
+2024-05-13 23:47:24,256 INFO: [OURNe..][epoch: 39, iter:  19,800, lr:(9.940e-04,)] [eta: 8:43:08, time (data): 0.362 (0.002)] l_pix: -3.1954e+01 
+2024-05-13 23:48:00,463 INFO: [OURNe..][epoch: 39, iter:  19,900, lr:(9.939e-04,)] [eta: 8:42:17, time (data): 0.363 (0.002)] l_pix: -3.3832e+01 
+2024-05-13 23:48:36,682 INFO: [OURNe..][epoch: 39, iter:  20,000, lr:(9.938e-04,)] [eta: 8:41:26, time (data): 0.362 (0.002)] l_pix: -3.2098e+01 
+2024-05-13 23:48:36,683 INFO: Saving models and training states.
+2024-05-13 23:50:58,821 INFO: Validation SOTS-indoor, 		 # psnr: 21.4181	 # ssim: 0.8970
+2024-05-13 23:50:58,823 INFO: [OURNe..][epoch: 39, iter:  20,000, lr:(9.938e-04,)] m_psnr: 2.1418e+01 m_ssim: 8.9701e-01 
+2024-05-13 23:51:35,110 INFO: [OURNe..][epoch: 40, iter:  20,100, lr:(9.938e-04,)] [eta: 8:50:01, time (data): 0.362 (0.002)] l_pix: -2.7926e+01 
+2024-05-13 23:52:11,309 INFO: [OURNe..][epoch: 40, iter:  20,200, lr:(9.937e-04,)] [eta: 8:49:07, time (data): 0.361 (0.002)] l_pix: -3.0444e+01 
+2024-05-13 23:52:47,477 INFO: [OURNe..][epoch: 40, iter:  20,300, lr:(9.937e-04,)] [eta: 8:48:13, time (data): 0.362 (0.002)] l_pix: -3.0215e+01 
+2024-05-13 23:53:23,672 INFO: [OURNe..][epoch: 40, iter:  20,400, lr:(9.936e-04,)] [eta: 8:47:19, time (data): 0.363 (0.002)] l_pix: -2.9273e+01 
+2024-05-13 23:53:59,887 INFO: [OURNe..][epoch: 40, iter:  20,500, lr:(9.935e-04,)] [eta: 8:46:25, time (data): 0.361 (0.002)] l_pix: -3.3317e+01 
+2024-05-13 23:54:36,091 INFO: [OURNe..][epoch: 41, iter:  20,600, lr:(9.935e-04,)] [eta: 8:45:32, time (data): 0.361 (0.002)] l_pix: -2.4545e+01 
+2024-05-13 23:55:12,232 INFO: [OURNe..][epoch: 41, iter:  20,700, lr:(9.934e-04,)] [eta: 8:44:39, time (data): 0.361 (0.002)] l_pix: -2.7619e+01 
+2024-05-13 23:55:48,388 INFO: [OURNe..][epoch: 41, iter:  20,800, lr:(9.933e-04,)] [eta: 8:43:46, time (data): 0.362 (0.002)] l_pix: -3.0544e+01 
+2024-05-13 23:56:24,608 INFO: [OURNe..][epoch: 41, iter:  20,900, lr:(9.933e-04,)] [eta: 8:42:53, time (data): 0.361 (0.002)] l_pix: -2.6491e+01 
+2024-05-13 23:57:00,752 INFO: [OURNe..][epoch: 41, iter:  21,000, lr:(9.932e-04,)] [eta: 8:42:00, time (data): 0.361 (0.002)] l_pix: -2.6650e+01 
+2024-05-13 23:57:36,920 INFO: [OURNe..][epoch: 42, iter:  21,100, lr:(9.932e-04,)] [eta: 8:41:07, time (data): 0.360 (0.001)] l_pix: -2.4183e+01 
+2024-05-13 23:58:13,027 INFO: [OURNe..][epoch: 42, iter:  21,200, lr:(9.931e-04,)] [eta: 8:40:14, time (data): 0.360 (0.002)] l_pix: -3.3734e+01 
+2024-05-13 23:58:49,168 INFO: [OURNe..][epoch: 42, iter:  21,300, lr:(9.930e-04,)] [eta: 8:39:22, time (data): 0.361 (0.002)] l_pix: -2.8697e+01 
+2024-05-13 23:59:25,415 INFO: [OURNe..][epoch: 42, iter:  21,400, lr:(9.930e-04,)] [eta: 8:38:30, time (data): 0.362 (0.002)] l_pix: -2.8857e+01 
+2024-05-14 00:00:01,637 INFO: [OURNe..][epoch: 42, iter:  21,500, lr:(9.929e-04,)] [eta: 8:37:38, time (data): 0.362 (0.002)] l_pix: -3.6008e+01 
+2024-05-14 00:00:37,814 INFO: [OURNe..][epoch: 43, iter:  21,600, lr:(9.928e-04,)] [eta: 8:36:46, time (data): 0.361 (0.002)] l_pix: -3.0491e+01 
+2024-05-14 00:01:14,082 INFO: [OURNe..][epoch: 43, iter:  21,700, lr:(9.928e-04,)] [eta: 8:35:55, time (data): 0.362 (0.002)] l_pix: -3.2619e+01 
+2024-05-14 00:01:50,291 INFO: [OURNe..][epoch: 43, iter:  21,800, lr:(9.927e-04,)] [eta: 8:35:04, time (data): 0.363 (0.002)] l_pix: -3.0683e+01 
+2024-05-14 00:02:26,603 INFO: [OURNe..][epoch: 43, iter:  21,900, lr:(9.926e-04,)] [eta: 8:34:13, time (data): 0.363 (0.002)] l_pix: -2.8158e+01 
+2024-05-14 00:03:02,796 INFO: [OURNe..][epoch: 43, iter:  22,000, lr:(9.926e-04,)] [eta: 8:33:21, time (data): 0.362 (0.002)] l_pix: -2.4796e+01 
+2024-05-14 00:03:38,995 INFO: [OURNe..][epoch: 44, iter:  22,100, lr:(9.925e-04,)] [eta: 8:32:30, time (data): 0.362 (0.002)] l_pix: -2.3582e+01 
+2024-05-14 00:04:15,184 INFO: [OURNe..][epoch: 44, iter:  22,200, lr:(9.924e-04,)] [eta: 8:31:39, time (data): 0.362 (0.002)] l_pix: -2.8212e+01 
+2024-05-14 00:04:51,388 INFO: [OURNe..][epoch: 44, iter:  22,300, lr:(9.924e-04,)] [eta: 8:30:48, time (data): 0.389 (0.002)] l_pix: -2.4952e+01 
+2024-05-14 00:05:27,597 INFO: [OURNe..][epoch: 44, iter:  22,400, lr:(9.923e-04,)] [eta: 8:29:58, time (data): 0.362 (0.002)] l_pix: -2.7376e+01 
+2024-05-14 00:06:03,782 INFO: [OURNe..][epoch: 44, iter:  22,500, lr:(9.922e-04,)] [eta: 8:29:07, time (data): 0.362 (0.002)] l_pix: -2.8582e+01 
+2024-05-14 00:06:40,025 INFO: [OURNe..][epoch: 45, iter:  22,600, lr:(9.921e-04,)] [eta: 8:28:17, time (data): 0.362 (0.002)] l_pix: -2.4987e+01 
+2024-05-14 00:07:16,188 INFO: [OURNe..][epoch: 45, iter:  22,700, lr:(9.921e-04,)] [eta: 8:27:26, time (data): 0.361 (0.002)] l_pix: -2.8978e+01 
+2024-05-14 00:07:52,357 INFO: [OURNe..][epoch: 45, iter:  22,800, lr:(9.920e-04,)] [eta: 8:26:36, time (data): 0.361 (0.002)] l_pix: -2.8895e+01 
+2024-05-14 00:08:28,517 INFO: [OURNe..][epoch: 45, iter:  22,900, lr:(9.919e-04,)] [eta: 8:25:46, time (data): 0.362 (0.002)] l_pix: -2.8604e+01 
+2024-05-14 00:09:04,706 INFO: [OURNe..][epoch: 45, iter:  23,000, lr:(9.919e-04,)] [eta: 8:24:56, time (data): 0.362 (0.002)] l_pix: -2.3643e+01 
+2024-05-14 00:09:40,934 INFO: [OURNe..][epoch: 46, iter:  23,100, lr:(9.918e-04,)] [eta: 8:24:06, time (data): 0.361 (0.002)] l_pix: -2.4025e+01 
+2024-05-14 00:10:17,180 INFO: [OURNe..][epoch: 46, iter:  23,200, lr:(9.917e-04,)] [eta: 8:23:17, time (data): 0.363 (0.002)] l_pix: -3.1859e+01 
+2024-05-14 00:10:53,381 INFO: [OURNe..][epoch: 46, iter:  23,300, lr:(9.917e-04,)] [eta: 8:22:27, time (data): 0.361 (0.002)] l_pix: -3.1443e+01 
+2024-05-14 00:11:29,564 INFO: [OURNe..][epoch: 46, iter:  23,400, lr:(9.916e-04,)] [eta: 8:21:38, time (data): 0.362 (0.002)] l_pix: -2.5967e+01 
+2024-05-14 00:12:05,704 INFO: [OURNe..][epoch: 46, iter:  23,500, lr:(9.915e-04,)] [eta: 8:20:48, time (data): 0.361 (0.002)] l_pix: -3.0168e+01 
+2024-05-14 00:12:41,881 INFO: [OURNe..][epoch: 47, iter:  23,600, lr:(9.914e-04,)] [eta: 8:19:59, time (data): 0.361 (0.002)] l_pix: -2.7072e+01 
+2024-05-14 00:13:18,107 INFO: [OURNe..][epoch: 47, iter:  23,700, lr:(9.914e-04,)] [eta: 8:19:10, time (data): 0.362 (0.002)] l_pix: -3.1487e+01 
+2024-05-14 00:13:54,333 INFO: [OURNe..][epoch: 47, iter:  23,800, lr:(9.913e-04,)] [eta: 8:18:21, time (data): 0.362 (0.002)] l_pix: -3.3849e+01 
+2024-05-14 00:14:30,483 INFO: [OURNe..][epoch: 47, iter:  23,900, lr:(9.912e-04,)] [eta: 8:17:32, time (data): 0.361 (0.002)] l_pix: -3.0684e+01 
+2024-05-14 00:15:06,669 INFO: [OURNe..][epoch: 47, iter:  24,000, lr:(9.911e-04,)] [eta: 8:16:43, time (data): 0.361 (0.002)] l_pix: -3.0212e+01 
+2024-05-14 00:15:42,796 INFO: [OURNe..][epoch: 48, iter:  24,100, lr:(9.911e-04,)] [eta: 8:15:54, time (data): 0.361 (0.002)] l_pix: -2.5891e+01 
+2024-05-14 00:16:18,931 INFO: [OURNe..][epoch: 48, iter:  24,200, lr:(9.910e-04,)] [eta: 8:15:05, time (data): 0.363 (0.002)] l_pix: -3.1051e+01 
+2024-05-14 00:16:55,092 INFO: [OURNe..][epoch: 48, iter:  24,300, lr:(9.909e-04,)] [eta: 8:14:16, time (data): 0.361 (0.002)] l_pix: -3.3527e+01 
+2024-05-14 00:17:31,301 INFO: [OURNe..][epoch: 48, iter:  24,400, lr:(9.908e-04,)] [eta: 8:13:28, time (data): 0.363 (0.002)] l_pix: -2.9227e+01 
+2024-05-14 00:18:07,530 INFO: [OURNe..][epoch: 48, iter:  24,500, lr:(9.908e-04,)] [eta: 8:12:40, time (data): 0.362 (0.002)] l_pix: -2.8029e+01 
+2024-05-14 00:18:43,854 INFO: [OURNe..][epoch: 49, iter:  24,600, lr:(9.907e-04,)] [eta: 8:11:52, time (data): 0.363 (0.002)] l_pix: -3.0794e+01 
+2024-05-14 00:19:20,085 INFO: [OURNe..][epoch: 49, iter:  24,700, lr:(9.906e-04,)] [eta: 8:11:04, time (data): 0.363 (0.002)] l_pix: -2.6638e+01 
+2024-05-14 00:19:56,320 INFO: [OURNe..][epoch: 49, iter:  24,800, lr:(9.905e-04,)] [eta: 8:10:16, time (data): 0.363 (0.002)] l_pix: -2.4893e+01 
+2024-05-14 00:20:32,591 INFO: [OURNe..][epoch: 49, iter:  24,900, lr:(9.905e-04,)] [eta: 8:09:28, time (data): 0.363 (0.002)] l_pix: -2.6380e+01 
+2024-05-14 00:21:08,815 INFO: [OURNe..][epoch: 49, iter:  25,000, lr:(9.904e-04,)] [eta: 8:08:41, time (data): 0.362 (0.002)] l_pix: -3.0676e+01 
+2024-05-14 00:21:08,816 INFO: Saving models and training states.
+2024-05-14 00:23:31,095 INFO: Validation SOTS-indoor, 		 # psnr: 21.1725	 # ssim: 0.8944
+2024-05-14 00:23:31,095 INFO: [OURNe..][epoch: 49, iter:  25,000, lr:(9.904e-04,)] m_psnr: 2.1172e+01 m_ssim: 8.9440e-01 
+2024-05-14 00:24:07,438 INFO: [OURNe..][epoch: 50, iter:  25,100, lr:(9.903e-04,)] [eta: 8:14:58, time (data): 0.363 (0.002)] l_pix: -2.9184e+01 
+2024-05-14 00:24:43,733 INFO: [OURNe..][epoch: 50, iter:  25,200, lr:(9.902e-04,)] [eta: 8:14:08, time (data): 0.362 (0.002)] l_pix: -2.9376e+01 
+2024-05-14 00:25:20,049 INFO: [OURNe..][epoch: 50, iter:  25,300, lr:(9.902e-04,)] [eta: 8:13:19, time (data): 0.363 (0.002)] l_pix: -2.8854e+01 
+2024-05-14 00:25:56,334 INFO: [OURNe..][epoch: 50, iter:  25,400, lr:(9.901e-04,)] [eta: 8:12:29, time (data): 0.362 (0.002)] l_pix: -2.9905e+01 
+2024-05-14 00:26:32,630 INFO: [OURNe..][epoch: 50, iter:  25,500, lr:(9.900e-04,)] [eta: 8:11:40, time (data): 0.363 (0.002)] l_pix: -2.8063e+01 
+2024-05-14 00:27:08,916 INFO: [OURNe..][epoch: 51, iter:  25,600, lr:(9.899e-04,)] [eta: 8:10:51, time (data): 0.362 (0.002)] l_pix: -3.3120e+01 
+2024-05-14 00:27:45,225 INFO: [OURNe..][epoch: 51, iter:  25,700, lr:(9.899e-04,)] [eta: 8:10:02, time (data): 0.363 (0.002)] l_pix: -2.6397e+01 
+2024-05-14 00:28:21,460 INFO: [OURNe..][epoch: 51, iter:  25,800, lr:(9.898e-04,)] [eta: 8:09:13, time (data): 0.360 (0.002)] l_pix: -2.3312e+01 
+2024-05-14 00:28:57,697 INFO: [OURNe..][epoch: 51, iter:  25,900, lr:(9.897e-04,)] [eta: 8:08:24, time (data): 0.362 (0.001)] l_pix: -2.5574e+01 
+2024-05-14 00:29:33,923 INFO: [OURNe..][epoch: 51, iter:  26,000, lr:(9.896e-04,)] [eta: 8:07:35, time (data): 0.363 (0.002)] l_pix: -3.7060e+01 
+2024-05-14 00:30:10,292 INFO: [OURNe..][epoch: 52, iter:  26,100, lr:(9.895e-04,)] [eta: 8:06:46, time (data): 0.364 (0.002)] l_pix: -2.7901e+01 
+2024-05-14 00:30:46,565 INFO: [OURNe..][epoch: 52, iter:  26,200, lr:(9.895e-04,)] [eta: 8:05:57, time (data): 0.363 (0.002)] l_pix: -3.1914e+01 
+2024-05-14 00:31:22,864 INFO: [OURNe..][epoch: 52, iter:  26,300, lr:(9.894e-04,)] [eta: 8:05:09, time (data): 0.361 (0.002)] l_pix: -3.2790e+01 
+2024-05-14 00:31:59,084 INFO: [OURNe..][epoch: 52, iter:  26,400, lr:(9.893e-04,)] [eta: 8:04:20, time (data): 0.362 (0.001)] l_pix: -2.4967e+01 
+2024-05-14 00:32:35,368 INFO: [OURNe..][epoch: 52, iter:  26,500, lr:(9.892e-04,)] [eta: 8:03:32, time (data): 0.361 (0.002)] l_pix: -3.5433e+01 
+2024-05-14 00:33:11,579 INFO: [OURNe..][epoch: 53, iter:  26,600, lr:(9.891e-04,)] [eta: 8:02:43, time (data): 0.362 (0.002)] l_pix: -3.5348e+01 
+2024-05-14 00:33:47,798 INFO: [OURNe..][epoch: 53, iter:  26,700, lr:(9.890e-04,)] [eta: 8:01:55, time (data): 0.363 (0.001)] l_pix: -2.5589e+01 
+2024-05-14 00:34:23,985 INFO: [OURNe..][epoch: 53, iter:  26,800, lr:(9.890e-04,)] [eta: 8:01:07, time (data): 0.362 (0.002)] l_pix: -3.3262e+01 
+2024-05-14 00:35:00,206 INFO: [OURNe..][epoch: 53, iter:  26,900, lr:(9.889e-04,)] [eta: 8:00:19, time (data): 0.363 (0.002)] l_pix: -1.9963e+01 
+2024-05-14 00:35:36,449 INFO: [OURNe..][epoch: 53, iter:  27,000, lr:(9.888e-04,)] [eta: 7:59:30, time (data): 0.363 (0.002)] l_pix: -3.0718e+01 
+2024-05-14 00:36:12,750 INFO: [OURNe..][epoch: 54, iter:  27,100, lr:(9.887e-04,)] [eta: 7:58:43, time (data): 0.363 (0.002)] l_pix: -3.0635e+01 
+2024-05-14 00:36:49,025 INFO: [OURNe..][epoch: 54, iter:  27,200, lr:(9.886e-04,)] [eta: 7:57:55, time (data): 0.361 (0.001)] l_pix: -3.2201e+01 
+2024-05-14 00:37:25,207 INFO: [OURNe..][epoch: 54, iter:  27,300, lr:(9.886e-04,)] [eta: 7:57:07, time (data): 0.362 (0.002)] l_pix: -3.1686e+01 
+2024-05-14 00:38:01,440 INFO: [OURNe..][epoch: 54, iter:  27,400, lr:(9.885e-04,)] [eta: 7:56:19, time (data): 0.361 (0.002)] l_pix: -3.2377e+01 
+2024-05-14 00:38:37,630 INFO: [OURNe..][epoch: 54, iter:  27,500, lr:(9.884e-04,)] [eta: 7:55:32, time (data): 0.362 (0.002)] l_pix: -3.3456e+01 
+2024-05-14 00:39:13,836 INFO: [OURNe..][epoch: 55, iter:  27,600, lr:(9.883e-04,)] [eta: 7:54:44, time (data): 0.361 (0.002)] l_pix: -2.6484e+01 
+2024-05-14 00:39:50,006 INFO: [OURNe..][epoch: 55, iter:  27,700, lr:(9.882e-04,)] [eta: 7:53:56, time (data): 0.362 (0.002)] l_pix: -2.8240e+01 
+2024-05-14 00:40:26,297 INFO: [OURNe..][epoch: 55, iter:  27,800, lr:(9.881e-04,)] [eta: 7:53:09, time (data): 0.362 (0.002)] l_pix: -2.7119e+01 
+2024-05-14 00:41:02,586 INFO: [OURNe..][epoch: 55, iter:  27,900, lr:(9.880e-04,)] [eta: 7:52:22, time (data): 0.363 (0.002)] l_pix: -2.3002e+01 
+2024-05-14 00:41:38,868 INFO: [OURNe..][epoch: 55, iter:  28,000, lr:(9.880e-04,)] [eta: 7:51:35, time (data): 0.362 (0.002)] l_pix: -4.0448e+01 
+2024-05-14 00:42:15,108 INFO: [OURNe..][epoch: 56, iter:  28,100, lr:(9.879e-04,)] [eta: 7:50:48, time (data): 0.363 (0.002)] l_pix: -2.4146e+01 
+2024-05-14 00:42:51,375 INFO: [OURNe..][epoch: 56, iter:  28,200, lr:(9.878e-04,)] [eta: 7:50:01, time (data): 0.362 (0.002)] l_pix: -3.2819e+01 
+2024-05-14 00:43:27,589 INFO: [OURNe..][epoch: 56, iter:  28,300, lr:(9.877e-04,)] [eta: 7:49:14, time (data): 0.363 (0.002)] l_pix: -2.5823e+01 
+2024-05-14 00:44:03,922 INFO: [OURNe..][epoch: 56, iter:  28,400, lr:(9.876e-04,)] [eta: 7:48:27, time (data): 0.362 (0.002)] l_pix: -3.2391e+01 
+2024-05-14 00:44:40,195 INFO: [OURNe..][epoch: 56, iter:  28,500, lr:(9.875e-04,)] [eta: 7:47:40, time (data): 0.364 (0.002)] l_pix: -3.0625e+01 
+2024-05-14 00:45:16,500 INFO: [OURNe..][epoch: 57, iter:  28,600, lr:(9.874e-04,)] [eta: 7:46:54, time (data): 0.362 (0.001)] l_pix: -2.8576e+01 
+2024-05-14 00:45:52,780 INFO: [OURNe..][epoch: 57, iter:  28,700, lr:(9.874e-04,)] [eta: 7:46:07, time (data): 0.372 (0.002)] l_pix: -3.3465e+01 
+2024-05-14 00:46:29,088 INFO: [OURNe..][epoch: 57, iter:  28,800, lr:(9.873e-04,)] [eta: 7:45:21, time (data): 0.364 (0.002)] l_pix: -2.9641e+01 
+2024-05-14 00:47:05,414 INFO: [OURNe..][epoch: 57, iter:  28,900, lr:(9.872e-04,)] [eta: 7:44:34, time (data): 0.363 (0.002)] l_pix: -3.4667e+01 
+2024-05-14 00:47:41,658 INFO: [OURNe..][epoch: 57, iter:  29,000, lr:(9.871e-04,)] [eta: 7:43:48, time (data): 0.363 (0.002)] l_pix: -2.8817e+01 
+2024-05-14 00:48:18,034 INFO: [OURNe..][epoch: 58, iter:  29,100, lr:(9.870e-04,)] [eta: 7:43:02, time (data): 0.363 (0.002)] l_pix: -2.9075e+01 
+2024-05-14 00:48:54,335 INFO: [OURNe..][epoch: 58, iter:  29,200, lr:(9.869e-04,)] [eta: 7:42:16, time (data): 0.363 (0.002)] l_pix: -3.4597e+01 
+2024-05-14 00:49:30,680 INFO: [OURNe..][epoch: 58, iter:  29,300, lr:(9.868e-04,)] [eta: 7:41:30, time (data): 0.363 (0.002)] l_pix: -3.3956e+01 
+2024-05-14 00:50:06,965 INFO: [OURNe..][epoch: 58, iter:  29,400, lr:(9.867e-04,)] [eta: 7:40:44, time (data): 0.361 (0.002)] l_pix: -3.2444e+01 
+2024-05-14 00:50:43,257 INFO: [OURNe..][epoch: 58, iter:  29,500, lr:(9.866e-04,)] [eta: 7:39:58, time (data): 0.362 (0.002)] l_pix: -3.2973e+01 
+2024-05-14 00:51:19,531 INFO: [OURNe..][epoch: 59, iter:  29,600, lr:(9.866e-04,)] [eta: 7:39:12, time (data): 0.363 (0.002)] l_pix: -3.2499e+01 
+2024-05-14 00:51:55,813 INFO: [OURNe..][epoch: 59, iter:  29,700, lr:(9.865e-04,)] [eta: 7:38:26, time (data): 0.363 (0.002)] l_pix: -3.2563e+01 
+2024-05-14 00:52:32,078 INFO: [OURNe..][epoch: 59, iter:  29,800, lr:(9.864e-04,)] [eta: 7:37:40, time (data): 0.362 (0.002)] l_pix: -2.7581e+01 
+2024-05-14 00:53:08,311 INFO: [OURNe..][epoch: 59, iter:  29,900, lr:(9.863e-04,)] [eta: 7:36:54, time (data): 0.361 (0.002)] l_pix: -2.9408e+01 
+2024-05-14 00:53:44,534 INFO: [OURNe..][epoch: 59, iter:  30,000, lr:(9.862e-04,)] [eta: 7:36:08, time (data): 0.361 (0.002)] l_pix: -3.2390e+01 
+2024-05-14 00:53:44,535 INFO: Saving models and training states.
+2024-05-14 00:56:06,320 INFO: Validation SOTS-indoor, 		 # psnr: 19.0947	 # ssim: 0.8672
+2024-05-14 00:56:06,320 INFO: [OURNe..][epoch: 59, iter:  30,000, lr:(9.862e-04,)] m_psnr: 1.9095e+01 m_ssim: 8.6716e-01 
+2024-05-14 00:56:42,658 INFO: [OURNe..][epoch: 60, iter:  30,100, lr:(9.861e-04,)] [eta: 7:40:52, time (data): 0.362 (0.002)] l_pix: -3.2111e+01 
+2024-05-14 00:57:18,893 INFO: [OURNe..][epoch: 60, iter:  30,200, lr:(9.860e-04,)] [eta: 7:40:05, time (data): 0.362 (0.002)] l_pix: -3.0075e+01 
+2024-05-14 00:57:55,102 INFO: [OURNe..][epoch: 60, iter:  30,300, lr:(9.859e-04,)] [eta: 7:39:17, time (data): 0.362 (0.001)] l_pix: -3.2235e+01 
+2024-05-14 00:58:31,451 INFO: [OURNe..][epoch: 60, iter:  30,400, lr:(9.858e-04,)] [eta: 7:38:30, time (data): 0.363 (0.002)] l_pix: -3.2065e+01 
+2024-05-14 00:59:07,728 INFO: [OURNe..][epoch: 60, iter:  30,500, lr:(9.857e-04,)] [eta: 7:37:44, time (data): 0.364 (0.002)] l_pix: -3.4491e+01 
+2024-05-14 00:59:44,048 INFO: [OURNe..][epoch: 61, iter:  30,600, lr:(9.856e-04,)] [eta: 7:36:57, time (data): 0.362 (0.002)] l_pix: -2.7779e+01 
+2024-05-14 01:00:20,336 INFO: [OURNe..][epoch: 61, iter:  30,700, lr:(9.855e-04,)] [eta: 7:36:10, time (data): 0.362 (0.002)] l_pix: -3.1258e+01 
+2024-05-14 01:00:56,570 INFO: [OURNe..][epoch: 61, iter:  30,800, lr:(9.854e-04,)] [eta: 7:35:23, time (data): 0.362 (0.002)] l_pix: -2.9264e+01 
+2024-05-14 01:01:32,738 INFO: [OURNe..][epoch: 61, iter:  30,900, lr:(9.854e-04,)] [eta: 7:34:36, time (data): 0.363 (0.002)] l_pix: -2.9919e+01 
+2024-05-14 01:02:08,964 INFO: [OURNe..][epoch: 61, iter:  31,000, lr:(9.853e-04,)] [eta: 7:33:50, time (data): 0.361 (0.002)] l_pix: -3.3226e+01 
+2024-05-14 01:02:45,185 INFO: [OURNe..][epoch: 62, iter:  31,100, lr:(9.852e-04,)] [eta: 7:33:03, time (data): 0.362 (0.002)] l_pix: -3.0134e+01 
+2024-05-14 01:03:21,524 INFO: [OURNe..][epoch: 62, iter:  31,200, lr:(9.851e-04,)] [eta: 7:32:17, time (data): 0.363 (0.002)] l_pix: -2.6775e+01 
+2024-05-14 01:03:57,780 INFO: [OURNe..][epoch: 62, iter:  31,300, lr:(9.850e-04,)] [eta: 7:31:30, time (data): 0.363 (0.002)] l_pix: -2.9881e+01 
+2024-05-14 01:04:34,082 INFO: [OURNe..][epoch: 62, iter:  31,400, lr:(9.849e-04,)] [eta: 7:30:44, time (data): 0.362 (0.002)] l_pix: -3.3748e+01 
+2024-05-14 01:05:10,378 INFO: [OURNe..][epoch: 62, iter:  31,500, lr:(9.848e-04,)] [eta: 7:29:58, time (data): 0.363 (0.002)] l_pix: -3.1316e+01 
+2024-05-14 01:05:46,693 INFO: [OURNe..][epoch: 63, iter:  31,600, lr:(9.847e-04,)] [eta: 7:29:12, time (data): 0.362 (0.002)] l_pix: -3.5252e+01 
+2024-05-14 01:06:22,949 INFO: [OURNe..][epoch: 63, iter:  31,700, lr:(9.846e-04,)] [eta: 7:28:25, time (data): 0.361 (0.002)] l_pix: -3.1968e+01 
+2024-05-14 01:06:59,234 INFO: [OURNe..][epoch: 63, iter:  31,800, lr:(9.845e-04,)] [eta: 7:27:39, time (data): 0.362 (0.002)] l_pix: -2.8873e+01 
+2024-05-14 01:07:35,534 INFO: [OURNe..][epoch: 63, iter:  31,900, lr:(9.844e-04,)] [eta: 7:26:53, time (data): 0.361 (0.001)] l_pix: -3.0325e+01 
+2024-05-14 01:08:11,732 INFO: [OURNe..][epoch: 63, iter:  32,000, lr:(9.843e-04,)] [eta: 7:26:07, time (data): 0.362 (0.001)] l_pix: -2.9648e+01 
+2024-05-14 01:08:47,969 INFO: [OURNe..][epoch: 64, iter:  32,100, lr:(9.842e-04,)] [eta: 7:25:21, time (data): 0.361 (0.002)] l_pix: -3.1983e+01 
+2024-05-14 01:09:24,151 INFO: [OURNe..][epoch: 64, iter:  32,200, lr:(9.841e-04,)] [eta: 7:24:35, time (data): 0.361 (0.002)] l_pix: -3.2010e+01 
+2024-05-14 01:10:00,329 INFO: [OURNe..][epoch: 64, iter:  32,300, lr:(9.840e-04,)] [eta: 7:23:49, time (data): 0.362 (0.002)] l_pix: -3.1777e+01 
+2024-05-14 01:10:36,502 INFO: [OURNe..][epoch: 64, iter:  32,400, lr:(9.839e-04,)] [eta: 7:23:03, time (data): 0.361 (0.002)] l_pix: -3.0021e+01 
+2024-05-14 01:11:12,725 INFO: [OURNe..][epoch: 64, iter:  32,500, lr:(9.838e-04,)] [eta: 7:22:17, time (data): 0.361 (0.002)] l_pix: -2.6077e+01 
+2024-05-14 01:11:48,932 INFO: [OURNe..][epoch: 65, iter:  32,600, lr:(9.837e-04,)] [eta: 7:21:32, time (data): 0.362 (0.002)] l_pix: -2.7825e+01 
+2024-05-14 01:12:25,153 INFO: [OURNe..][epoch: 65, iter:  32,700, lr:(9.836e-04,)] [eta: 7:20:46, time (data): 0.362 (0.002)] l_pix: -3.6899e+01 
+2024-05-14 01:13:01,371 INFO: [OURNe..][epoch: 65, iter:  32,800, lr:(9.835e-04,)] [eta: 7:20:00, time (data): 0.363 (0.002)] l_pix: -3.1504e+01 
+2024-05-14 01:13:37,643 INFO: [OURNe..][epoch: 65, iter:  32,900, lr:(9.834e-04,)] [eta: 7:19:15, time (data): 0.362 (0.002)] l_pix: -3.4822e+01 
+2024-05-14 01:14:13,919 INFO: [OURNe..][epoch: 65, iter:  33,000, lr:(9.833e-04,)] [eta: 7:18:30, time (data): 0.362 (0.002)] l_pix: -2.7951e+01 
+2024-05-14 01:14:50,194 INFO: [OURNe..][epoch: 66, iter:  33,100, lr:(9.832e-04,)] [eta: 7:17:44, time (data): 0.363 (0.002)] l_pix: -3.1626e+01 
+2024-05-14 01:15:26,413 INFO: [OURNe..][epoch: 66, iter:  33,200, lr:(9.831e-04,)] [eta: 7:16:59, time (data): 0.362 (0.002)] l_pix: -3.5428e+01 
+2024-05-14 01:16:02,619 INFO: [OURNe..][epoch: 66, iter:  33,300, lr:(9.830e-04,)] [eta: 7:16:14, time (data): 0.362 (0.002)] l_pix: -3.5437e+01 
+2024-05-14 01:16:38,807 INFO: [OURNe..][epoch: 66, iter:  33,400, lr:(9.829e-04,)] [eta: 7:15:28, time (data): 0.361 (0.002)] l_pix: -3.0809e+01 
+2024-05-14 01:17:15,020 INFO: [OURNe..][epoch: 66, iter:  33,500, lr:(9.828e-04,)] [eta: 7:14:43, time (data): 0.362 (0.002)] l_pix: -3.5414e+01 
+2024-05-14 01:17:51,231 INFO: [OURNe..][epoch: 67, iter:  33,600, lr:(9.827e-04,)] [eta: 7:13:58, time (data): 0.363 (0.002)] l_pix: -3.3465e+01 
+2024-05-14 01:18:27,441 INFO: [OURNe..][epoch: 67, iter:  33,700, lr:(9.826e-04,)] [eta: 7:13:13, time (data): 0.362 (0.002)] l_pix: -3.2850e+01 
+2024-05-14 01:19:03,639 INFO: [OURNe..][epoch: 67, iter:  33,800, lr:(9.825e-04,)] [eta: 7:12:28, time (data): 0.362 (0.002)] l_pix: -2.6066e+01 
+2024-05-14 01:19:39,840 INFO: [OURNe..][epoch: 67, iter:  33,900, lr:(9.824e-04,)] [eta: 7:11:43, time (data): 0.362 (0.002)] l_pix: -3.3569e+01 
+2024-05-14 01:20:16,041 INFO: [OURNe..][epoch: 67, iter:  34,000, lr:(9.823e-04,)] [eta: 7:10:58, time (data): 0.362 (0.002)] l_pix: -3.3386e+01 
+2024-05-14 01:20:52,275 INFO: [OURNe..][epoch: 68, iter:  34,100, lr:(9.822e-04,)] [eta: 7:10:13, time (data): 0.362 (0.002)] l_pix: -3.2475e+01 
+2024-05-14 01:21:28,496 INFO: [OURNe..][epoch: 68, iter:  34,200, lr:(9.821e-04,)] [eta: 7:09:28, time (data): 0.362 (0.002)] l_pix: -3.3754e+01 
+2024-05-14 01:22:04,705 INFO: [OURNe..][epoch: 68, iter:  34,300, lr:(9.820e-04,)] [eta: 7:08:43, time (data): 0.363 (0.002)] l_pix: -2.7795e+01 
+2024-05-14 01:22:40,957 INFO: [OURNe..][epoch: 68, iter:  34,400, lr:(9.819e-04,)] [eta: 7:07:58, time (data): 0.361 (0.002)] l_pix: -2.8359e+01 
+2024-05-14 01:23:17,208 INFO: [OURNe..][epoch: 68, iter:  34,500, lr:(9.818e-04,)] [eta: 7:07:14, time (data): 0.363 (0.002)] l_pix: -2.9132e+01 
+2024-05-14 01:23:53,547 INFO: [OURNe..][epoch: 69, iter:  34,600, lr:(9.817e-04,)] [eta: 7:06:29, time (data): 0.363 (0.002)] l_pix: -3.3751e+01 
+2024-05-14 01:24:29,795 INFO: [OURNe..][epoch: 69, iter:  34,700, lr:(9.815e-04,)] [eta: 7:05:45, time (data): 0.363 (0.001)] l_pix: -2.9748e+01 
+2024-05-14 01:25:06,071 INFO: [OURNe..][epoch: 69, iter:  34,800, lr:(9.814e-04,)] [eta: 7:05:00, time (data): 0.362 (0.002)] l_pix: -2.9213e+01 
+2024-05-14 01:25:42,402 INFO: [OURNe..][epoch: 69, iter:  34,900, lr:(9.813e-04,)] [eta: 7:04:16, time (data): 0.393 (0.002)] l_pix: -3.4108e+01 
+2024-05-14 01:26:18,681 INFO: [OURNe..][epoch: 69, iter:  35,000, lr:(9.812e-04,)] [eta: 7:03:32, time (data): 0.363 (0.002)] l_pix: -2.8975e+01 
+2024-05-14 01:26:18,682 INFO: Saving models and training states.
+2024-05-14 01:28:41,127 INFO: Validation SOTS-indoor, 		 # psnr: 18.9093	 # ssim: 0.8663
+2024-05-14 01:28:41,128 INFO: [OURNe..][epoch: 69, iter:  35,000, lr:(9.812e-04,)] m_psnr: 1.8909e+01 m_ssim: 8.6631e-01 
+2024-05-14 01:29:17,406 INFO: [OURNe..][epoch: 70, iter:  35,100, lr:(9.811e-04,)] [eta: 7:07:11, time (data): 0.361 (0.002)] l_pix: -3.3568e+01 
+2024-05-14 01:29:53,615 INFO: [OURNe..][epoch: 70, iter:  35,200, lr:(9.810e-04,)] [eta: 7:06:25, time (data): 0.362 (0.002)] l_pix: -2.9295e+01 
+2024-05-14 01:30:29,810 INFO: [OURNe..][epoch: 70, iter:  35,300, lr:(9.809e-04,)] [eta: 7:05:40, time (data): 0.361 (0.002)] l_pix: -3.1111e+01 
+2024-05-14 01:31:06,005 INFO: [OURNe..][epoch: 70, iter:  35,400, lr:(9.808e-04,)] [eta: 7:04:54, time (data): 0.361 (0.002)] l_pix: -3.1115e+01 
+2024-05-14 01:31:42,244 INFO: [OURNe..][epoch: 70, iter:  35,500, lr:(9.807e-04,)] [eta: 7:04:09, time (data): 0.362 (0.002)] l_pix: -3.1182e+01 
+2024-05-14 01:32:18,435 INFO: [OURNe..][epoch: 71, iter:  35,600, lr:(9.806e-04,)] [eta: 7:03:24, time (data): 0.361 (0.002)] l_pix: -2.8752e+01 
+2024-05-14 01:32:54,634 INFO: [OURNe..][epoch: 71, iter:  35,700, lr:(9.805e-04,)] [eta: 7:02:38, time (data): 0.363 (0.002)] l_pix: -3.1572e+01 
+2024-05-14 01:33:30,905 INFO: [OURNe..][epoch: 71, iter:  35,800, lr:(9.804e-04,)] [eta: 7:01:53, time (data): 0.361 (0.002)] l_pix: -3.2712e+01 
+2024-05-14 01:34:07,096 INFO: [OURNe..][epoch: 71, iter:  35,900, lr:(9.803e-04,)] [eta: 7:01:08, time (data): 0.363 (0.002)] l_pix: -3.8651e+01 
+2024-05-14 01:34:43,394 INFO: [OURNe..][epoch: 71, iter:  36,000, lr:(9.801e-04,)] [eta: 7:00:23, time (data): 0.362 (0.002)] l_pix: -3.8893e+01 
+2024-05-14 01:35:19,716 INFO: [OURNe..][epoch: 72, iter:  36,100, lr:(9.800e-04,)] [eta: 6:59:38, time (data): 0.363 (0.002)] l_pix: -3.4643e+01 
+2024-05-14 01:35:56,054 INFO: [OURNe..][epoch: 72, iter:  36,200, lr:(9.799e-04,)] [eta: 6:58:53, time (data): 0.364 (0.002)] l_pix: -2.9909e+01 
+2024-05-14 01:36:32,332 INFO: [OURNe..][epoch: 72, iter:  36,300, lr:(9.798e-04,)] [eta: 6:58:08, time (data): 0.363 (0.002)] l_pix: -3.4758e+01 
+2024-05-14 01:37:08,618 INFO: [OURNe..][epoch: 72, iter:  36,400, lr:(9.797e-04,)] [eta: 6:57:24, time (data): 0.361 (0.002)] l_pix: -2.9075e+01 
+2024-05-14 01:37:44,831 INFO: [OURNe..][epoch: 72, iter:  36,500, lr:(9.796e-04,)] [eta: 6:56:39, time (data): 0.363 (0.002)] l_pix: -3.3461e+01 
+2024-05-14 01:38:21,159 INFO: [OURNe..][epoch: 73, iter:  36,600, lr:(9.795e-04,)] [eta: 6:55:54, time (data): 0.362 (0.002)] l_pix: -3.3717e+01 
+2024-05-14 01:38:57,460 INFO: [OURNe..][epoch: 73, iter:  36,700, lr:(9.794e-04,)] [eta: 6:55:09, time (data): 0.363 (0.002)] l_pix: -3.1648e+01 
+2024-05-14 01:39:33,691 INFO: [OURNe..][epoch: 73, iter:  36,800, lr:(9.793e-04,)] [eta: 6:54:25, time (data): 0.361 (0.002)] l_pix: -3.2167e+01 
+2024-05-14 01:40:09,938 INFO: [OURNe..][epoch: 73, iter:  36,900, lr:(9.792e-04,)] [eta: 6:53:40, time (data): 0.362 (0.002)] l_pix: -3.2032e+01 
+2024-05-14 01:40:46,176 INFO: [OURNe..][epoch: 73, iter:  37,000, lr:(9.790e-04,)] [eta: 6:52:55, time (data): 0.362 (0.002)] l_pix: -3.3716e+01 
+2024-05-14 01:41:22,510 INFO: [OURNe..][epoch: 74, iter:  37,100, lr:(9.789e-04,)] [eta: 6:52:11, time (data): 0.363 (0.002)] l_pix: -2.9798e+01 
+2024-05-14 01:41:58,792 INFO: [OURNe..][epoch: 74, iter:  37,200, lr:(9.788e-04,)] [eta: 6:51:27, time (data): 0.363 (0.002)] l_pix: -3.2580e+01 
+2024-05-14 01:42:35,099 INFO: [OURNe..][epoch: 74, iter:  37,300, lr:(9.787e-04,)] [eta: 6:50:42, time (data): 0.363 (0.002)] l_pix: -3.0286e+01 
+2024-05-14 01:43:11,360 INFO: [OURNe..][epoch: 74, iter:  37,400, lr:(9.786e-04,)] [eta: 6:49:58, time (data): 0.361 (0.002)] l_pix: -3.2963e+01 
+2024-05-14 01:43:47,525 INFO: [OURNe..][epoch: 74, iter:  37,500, lr:(9.785e-04,)] [eta: 6:49:13, time (data): 0.362 (0.002)] l_pix: -2.9448e+01 
+2024-05-14 01:44:23,701 INFO: [OURNe..][epoch: 75, iter:  37,600, lr:(9.784e-04,)] [eta: 6:48:29, time (data): 0.362 (0.002)] l_pix: -2.7869e+01 
+2024-05-14 01:44:59,994 INFO: [OURNe..][epoch: 75, iter:  37,700, lr:(9.782e-04,)] [eta: 6:47:45, time (data): 0.361 (0.002)] l_pix: -3.3607e+01 
+2024-05-14 01:45:36,188 INFO: [OURNe..][epoch: 75, iter:  37,800, lr:(9.781e-04,)] [eta: 6:47:00, time (data): 0.361 (0.002)] l_pix: -3.5437e+01 
+2024-05-14 01:46:12,365 INFO: [OURNe..][epoch: 75, iter:  37,900, lr:(9.780e-04,)] [eta: 6:46:16, time (data): 0.362 (0.002)] l_pix: -2.9809e+01 
+2024-05-14 01:46:48,584 INFO: [OURNe..][epoch: 75, iter:  38,000, lr:(9.779e-04,)] [eta: 6:45:32, time (data): 0.363 (0.002)] l_pix: -2.5363e+01 
+2024-05-14 01:47:24,780 INFO: [OURNe..][epoch: 76, iter:  38,100, lr:(9.778e-04,)] [eta: 6:44:48, time (data): 0.363 (0.002)] l_pix: -2.8835e+01 
+2024-05-14 01:48:00,975 INFO: [OURNe..][epoch: 76, iter:  38,200, lr:(9.777e-04,)] [eta: 6:44:03, time (data): 0.362 (0.002)] l_pix: -3.2207e+01 
+2024-05-14 01:48:37,183 INFO: [OURNe..][epoch: 76, iter:  38,300, lr:(9.776e-04,)] [eta: 6:43:19, time (data): 0.361 (0.002)] l_pix: -2.4933e+01 
+2024-05-14 01:49:13,415 INFO: [OURNe..][epoch: 76, iter:  38,400, lr:(9.774e-04,)] [eta: 6:42:35, time (data): 0.362 (0.002)] l_pix: -3.3314e+01 
+2024-05-14 01:49:49,721 INFO: [OURNe..][epoch: 76, iter:  38,500, lr:(9.773e-04,)] [eta: 6:41:51, time (data): 0.363 (0.002)] l_pix: -3.6138e+01 
+2024-05-14 01:50:25,965 INFO: [OURNe..][epoch: 77, iter:  38,600, lr:(9.772e-04,)] [eta: 6:41:08, time (data): 0.362 (0.002)] l_pix: -3.4945e+01 
+2024-05-14 01:51:02,218 INFO: [OURNe..][epoch: 77, iter:  38,700, lr:(9.771e-04,)] [eta: 6:40:24, time (data): 0.362 (0.002)] l_pix: -3.2575e+01 
+2024-05-14 01:51:38,441 INFO: [OURNe..][epoch: 77, iter:  38,800, lr:(9.770e-04,)] [eta: 6:39:40, time (data): 0.363 (0.002)] l_pix: -2.7152e+01 
+2024-05-14 01:52:14,737 INFO: [OURNe..][epoch: 77, iter:  38,900, lr:(9.768e-04,)] [eta: 6:38:56, time (data): 0.363 (0.002)] l_pix: -3.3367e+01 
+2024-05-14 01:52:51,021 INFO: [OURNe..][epoch: 77, iter:  39,000, lr:(9.767e-04,)] [eta: 6:38:12, time (data): 0.362 (0.002)] l_pix: -3.1469e+01 
+2024-05-14 01:53:27,316 INFO: [OURNe..][epoch: 78, iter:  39,100, lr:(9.766e-04,)] [eta: 6:37:29, time (data): 0.363 (0.002)] l_pix: -3.2717e+01 
+2024-05-14 01:54:03,665 INFO: [OURNe..][epoch: 78, iter:  39,200, lr:(9.765e-04,)] [eta: 6:36:45, time (data): 0.364 (0.002)] l_pix: -3.1771e+01 
+2024-05-14 01:54:39,963 INFO: [OURNe..][epoch: 78, iter:  39,300, lr:(9.764e-04,)] [eta: 6:36:02, time (data): 0.362 (0.002)] l_pix: -3.1446e+01 
+2024-05-14 01:55:16,251 INFO: [OURNe..][epoch: 78, iter:  39,400, lr:(9.763e-04,)] [eta: 6:35:18, time (data): 0.363 (0.002)] l_pix: -3.2387e+01 
+2024-05-14 01:55:52,532 INFO: [OURNe..][epoch: 78, iter:  39,500, lr:(9.761e-04,)] [eta: 6:34:35, time (data): 0.362 (0.002)] l_pix: -3.5595e+01 
+2024-05-14 01:56:28,811 INFO: [OURNe..][epoch: 79, iter:  39,600, lr:(9.760e-04,)] [eta: 6:33:51, time (data): 0.363 (0.002)] l_pix: -3.3234e+01 
+2024-05-14 01:57:05,031 INFO: [OURNe..][epoch: 79, iter:  39,700, lr:(9.759e-04,)] [eta: 6:33:08, time (data): 0.362 (0.002)] l_pix: -3.2537e+01 
+2024-05-14 01:57:41,333 INFO: [OURNe..][epoch: 79, iter:  39,800, lr:(9.758e-04,)] [eta: 6:32:24, time (data): 0.363 (0.002)] l_pix: -2.9584e+01 
+2024-05-14 01:58:17,572 INFO: [OURNe..][epoch: 79, iter:  39,900, lr:(9.757e-04,)] [eta: 6:31:41, time (data): 0.363 (0.002)] l_pix: -3.3369e+01 
+2024-05-14 01:58:53,832 INFO: [OURNe..][epoch: 79, iter:  40,000, lr:(9.755e-04,)] [eta: 6:30:57, time (data): 0.362 (0.002)] l_pix: -2.3179e+01 
+2024-05-14 01:58:53,833 INFO: Saving models and training states.
+2024-05-14 02:01:16,305 INFO: Validation SOTS-indoor, 		 # psnr: 18.2397	 # ssim: 0.8500
+2024-05-14 02:01:16,307 INFO: [OURNe..][epoch: 79, iter:  40,000, lr:(9.755e-04,)] m_psnr: 1.8240e+01 m_ssim: 8.5002e-01 
+2024-05-14 02:01:52,704 INFO: [OURNe..][epoch: 80, iter:  40,100, lr:(9.754e-04,)] [eta: 6:33:47, time (data): 0.363 (0.002)] l_pix: -3.3251e+01 
+2024-05-14 02:02:29,054 INFO: [OURNe..][epoch: 80, iter:  40,200, lr:(9.753e-04,)] [eta: 6:33:03, time (data): 0.363 (0.002)] l_pix: -3.2595e+01 
+2024-05-14 02:03:05,401 INFO: [OURNe..][epoch: 80, iter:  40,300, lr:(9.752e-04,)] [eta: 6:32:19, time (data): 0.362 (0.002)] l_pix: -3.0006e+01 
+2024-05-14 02:03:41,679 INFO: [OURNe..][epoch: 80, iter:  40,400, lr:(9.750e-04,)] [eta: 6:31:35, time (data): 0.363 (0.002)] l_pix: -3.7298e+01 
+2024-05-14 02:04:17,954 INFO: [OURNe..][epoch: 80, iter:  40,500, lr:(9.749e-04,)] [eta: 6:30:51, time (data): 0.363 (0.002)] l_pix: -3.8678e+01 
+2024-05-14 02:04:54,288 INFO: [OURNe..][epoch: 81, iter:  40,600, lr:(9.748e-04,)] [eta: 6:30:07, time (data): 0.362 (0.002)] l_pix: -2.8138e+01 
+2024-05-14 02:05:30,555 INFO: [OURNe..][epoch: 81, iter:  40,700, lr:(9.747e-04,)] [eta: 6:29:23, time (data): 0.362 (0.002)] l_pix: -3.1579e+01 
+2024-05-14 02:06:06,878 INFO: [OURNe..][epoch: 81, iter:  40,800, lr:(9.746e-04,)] [eta: 6:28:39, time (data): 0.365 (0.002)] l_pix: -2.6347e+01 
+2024-05-14 02:06:43,152 INFO: [OURNe..][epoch: 81, iter:  40,900, lr:(9.744e-04,)] [eta: 6:27:55, time (data): 0.363 (0.002)] l_pix: -2.8727e+01 
+2024-05-14 02:07:19,481 INFO: [OURNe..][epoch: 81, iter:  41,000, lr:(9.743e-04,)] [eta: 6:27:11, time (data): 0.363 (0.002)] l_pix: -2.4862e+01 
+2024-05-14 02:07:55,801 INFO: [OURNe..][epoch: 82, iter:  41,100, lr:(9.742e-04,)] [eta: 6:26:28, time (data): 0.363 (0.002)] l_pix: -2.8649e+01 
+2024-05-14 02:08:32,123 INFO: [OURNe..][epoch: 82, iter:  41,200, lr:(9.741e-04,)] [eta: 6:25:44, time (data): 0.363 (0.002)] l_pix: -3.1237e+01 
+2024-05-14 02:09:08,415 INFO: [OURNe..][epoch: 82, iter:  41,300, lr:(9.739e-04,)] [eta: 6:25:00, time (data): 0.362 (0.002)] l_pix: -3.5518e+01 
+2024-05-14 02:09:44,727 INFO: [OURNe..][epoch: 82, iter:  41,400, lr:(9.738e-04,)] [eta: 6:24:17, time (data): 0.363 (0.002)] l_pix: -3.1170e+01 
+2024-05-14 02:10:20,962 INFO: [OURNe..][epoch: 82, iter:  41,500, lr:(9.737e-04,)] [eta: 6:23:33, time (data): 0.361 (0.002)] l_pix: -3.3667e+01 
+2024-05-14 02:10:57,255 INFO: [OURNe..][epoch: 83, iter:  41,600, lr:(9.736e-04,)] [eta: 6:22:49, time (data): 0.363 (0.002)] l_pix: -3.0913e+01 
+2024-05-14 02:11:33,543 INFO: [OURNe..][epoch: 83, iter:  41,700, lr:(9.734e-04,)] [eta: 6:22:06, time (data): 0.364 (0.002)] l_pix: -2.7434e+01 
+2024-05-14 02:12:09,865 INFO: [OURNe..][epoch: 83, iter:  41,800, lr:(9.733e-04,)] [eta: 6:21:22, time (data): 0.363 (0.002)] l_pix: -3.3785e+01 
+2024-05-14 02:12:46,192 INFO: [OURNe..][epoch: 83, iter:  41,900, lr:(9.732e-04,)] [eta: 6:20:39, time (data): 0.363 (0.002)] l_pix: -3.6022e+01 
+2024-05-14 02:13:22,494 INFO: [OURNe..][epoch: 83, iter:  42,000, lr:(9.730e-04,)] [eta: 6:19:55, time (data): 0.362 (0.002)] l_pix: -2.4823e+01 
+2024-05-14 02:13:58,755 INFO: [OURNe..][epoch: 84, iter:  42,100, lr:(9.729e-04,)] [eta: 6:19:12, time (data): 0.362 (0.002)] l_pix: -3.2242e+01 
+2024-05-14 02:14:34,991 INFO: [OURNe..][epoch: 84, iter:  42,200, lr:(9.728e-04,)] [eta: 6:18:28, time (data): 0.364 (0.002)] l_pix: -3.2193e+01 
+2024-05-14 02:15:11,355 INFO: [OURNe..][epoch: 84, iter:  42,300, lr:(9.727e-04,)] [eta: 6:17:45, time (data): 0.362 (0.001)] l_pix: -3.5728e+01 
+2024-05-14 02:15:47,634 INFO: [OURNe..][epoch: 84, iter:  42,400, lr:(9.725e-04,)] [eta: 6:17:02, time (data): 0.362 (0.002)] l_pix: -3.0861e+01 
+2024-05-14 02:16:23,918 INFO: [OURNe..][epoch: 84, iter:  42,500, lr:(9.724e-04,)] [eta: 6:16:18, time (data): 0.363 (0.002)] l_pix: -3.5271e+01 
+2024-05-14 02:17:00,305 INFO: [OURNe..][epoch: 85, iter:  42,600, lr:(9.723e-04,)] [eta: 6:15:35, time (data): 0.364 (0.002)] l_pix: -2.8832e+01 
+2024-05-14 02:17:36,605 INFO: [OURNe..][epoch: 85, iter:  42,700, lr:(9.721e-04,)] [eta: 6:14:52, time (data): 0.364 (0.002)] l_pix: -3.1635e+01 
+2024-05-14 02:18:12,974 INFO: [OURNe..][epoch: 85, iter:  42,800, lr:(9.720e-04,)] [eta: 6:14:09, time (data): 0.363 (0.002)] l_pix: -3.4349e+01 
+2024-05-14 02:18:49,281 INFO: [OURNe..][epoch: 85, iter:  42,900, lr:(9.719e-04,)] [eta: 6:13:26, time (data): 0.364 (0.002)] l_pix: -3.0174e+01 
+2024-05-14 02:19:25,601 INFO: [OURNe..][epoch: 85, iter:  43,000, lr:(9.718e-04,)] [eta: 6:12:42, time (data): 0.363 (0.002)] l_pix: -3.1997e+01 
+2024-05-14 02:20:01,906 INFO: [OURNe..][epoch: 86, iter:  43,100, lr:(9.716e-04,)] [eta: 6:11:59, time (data): 0.362 (0.002)] l_pix: -3.5338e+01 
+2024-05-14 02:20:38,150 INFO: [OURNe..][epoch: 86, iter:  43,200, lr:(9.715e-04,)] [eta: 6:11:16, time (data): 0.361 (0.002)] l_pix: -3.0760e+01 
+2024-05-14 02:21:14,498 INFO: [OURNe..][epoch: 86, iter:  43,300, lr:(9.714e-04,)] [eta: 6:10:33, time (data): 0.362 (0.002)] l_pix: -3.2076e+01 
+2024-05-14 02:21:50,804 INFO: [OURNe..][epoch: 86, iter:  43,400, lr:(9.712e-04,)] [eta: 6:09:50, time (data): 0.363 (0.002)] l_pix: -3.0573e+01 
+2024-05-14 02:22:27,139 INFO: [OURNe..][epoch: 86, iter:  43,500, lr:(9.711e-04,)] [eta: 6:09:07, time (data): 0.362 (0.002)] l_pix: -3.1150e+01 
+2024-05-14 02:23:03,473 INFO: [OURNe..][epoch: 87, iter:  43,600, lr:(9.710e-04,)] [eta: 6:08:24, time (data): 0.364 (0.002)] l_pix: -3.3393e+01 
+2024-05-14 02:23:39,751 INFO: [OURNe..][epoch: 87, iter:  43,700, lr:(9.708e-04,)] [eta: 6:07:41, time (data): 0.362 (0.002)] l_pix: -3.4807e+01 
+2024-05-14 02:24:16,027 INFO: [OURNe..][epoch: 87, iter:  43,800, lr:(9.707e-04,)] [eta: 6:06:59, time (data): 0.363 (0.002)] l_pix: -3.1344e+01 
+2024-05-14 02:24:52,347 INFO: [OURNe..][epoch: 87, iter:  43,900, lr:(9.706e-04,)] [eta: 6:06:16, time (data): 0.364 (0.002)] l_pix: -3.4038e+01 
+2024-05-14 02:25:28,661 INFO: [OURNe..][epoch: 87, iter:  44,000, lr:(9.704e-04,)] [eta: 6:05:33, time (data): 0.363 (0.002)] l_pix: -3.2005e+01 
+2024-05-14 02:26:04,994 INFO: [OURNe..][epoch: 88, iter:  44,100, lr:(9.703e-04,)] [eta: 6:04:50, time (data): 0.362 (0.002)] l_pix: -3.4324e+01 
+2024-05-14 02:26:41,289 INFO: [OURNe..][epoch: 88, iter:  44,200, lr:(9.702e-04,)] [eta: 6:04:07, time (data): 0.362 (0.002)] l_pix: -2.9547e+01 
+2024-05-14 02:27:17,589 INFO: [OURNe..][epoch: 88, iter:  44,300, lr:(9.700e-04,)] [eta: 6:03:25, time (data): 0.363 (0.002)] l_pix: -3.2276e+01 
+2024-05-14 02:27:53,906 INFO: [OURNe..][epoch: 88, iter:  44,400, lr:(9.699e-04,)] [eta: 6:02:42, time (data): 0.364 (0.002)] l_pix: -3.2440e+01 
+2024-05-14 02:28:30,277 INFO: [OURNe..][epoch: 88, iter:  44,500, lr:(9.698e-04,)] [eta: 6:01:59, time (data): 0.364 (0.002)] l_pix: -3.0223e+01 
+2024-05-14 02:29:06,607 INFO: [OURNe..][epoch: 89, iter:  44,600, lr:(9.696e-04,)] [eta: 6:01:17, time (data): 0.364 (0.002)] l_pix: -3.0419e+01 
+2024-05-14 02:29:42,975 INFO: [OURNe..][epoch: 89, iter:  44,700, lr:(9.695e-04,)] [eta: 6:00:34, time (data): 0.364 (0.002)] l_pix: -3.5512e+01 
+2024-05-14 02:30:19,283 INFO: [OURNe..][epoch: 89, iter:  44,800, lr:(9.694e-04,)] [eta: 5:59:52, time (data): 0.362 (0.002)] l_pix: -3.2312e+01 
+2024-05-14 02:30:55,527 INFO: [OURNe..][epoch: 89, iter:  44,900, lr:(9.692e-04,)] [eta: 5:59:09, time (data): 0.362 (0.001)] l_pix: -3.6853e+01 
+2024-05-14 02:31:31,859 INFO: [OURNe..][epoch: 89, iter:  45,000, lr:(9.691e-04,)] [eta: 5:58:26, time (data): 0.362 (0.001)] l_pix: -3.5323e+01 
+2024-05-14 02:31:31,860 INFO: Saving models and training states.
+2024-05-14 02:33:54,328 INFO: Validation SOTS-indoor, 		 # psnr: 17.9298	 # ssim: 0.8410
+2024-05-14 02:33:54,328 INFO: [OURNe..][epoch: 89, iter:  45,000, lr:(9.691e-04,)] m_psnr: 1.7930e+01 m_ssim: 8.4095e-01 
+2024-05-14 02:34:30,628 INFO: [OURNe..][epoch: 90, iter:  45,100, lr:(9.690e-04,)] [eta: 6:00:37, time (data): 0.364 (0.002)] l_pix: -2.9583e+01 
+2024-05-14 02:35:06,942 INFO: [OURNe..][epoch: 90, iter:  45,200, lr:(9.688e-04,)] [eta: 5:59:54, time (data): 0.362 (0.002)] l_pix: -3.2175e+01 
+2024-05-14 02:35:43,219 INFO: [OURNe..][epoch: 90, iter:  45,300, lr:(9.687e-04,)] [eta: 5:59:11, time (data): 0.363 (0.002)] l_pix: -3.6551e+01 
+2024-05-14 02:36:19,510 INFO: [OURNe..][epoch: 90, iter:  45,400, lr:(9.686e-04,)] [eta: 5:58:28, time (data): 0.363 (0.002)] l_pix: -2.8758e+01 
+2024-05-14 02:36:55,801 INFO: [OURNe..][epoch: 90, iter:  45,500, lr:(9.684e-04,)] [eta: 5:57:45, time (data): 0.363 (0.002)] l_pix: -3.6566e+01 
+2024-05-14 02:37:32,048 INFO: [OURNe..][epoch: 91, iter:  45,600, lr:(9.683e-04,)] [eta: 5:57:02, time (data): 0.361 (0.002)] l_pix: -3.2501e+01 
+2024-05-14 02:38:08,323 INFO: [OURNe..][epoch: 91, iter:  45,700, lr:(9.681e-04,)] [eta: 5:56:19, time (data): 0.361 (0.002)] l_pix: -2.7788e+01 
+2024-05-14 02:38:44,576 INFO: [OURNe..][epoch: 91, iter:  45,800, lr:(9.680e-04,)] [eta: 5:55:35, time (data): 0.362 (0.002)] l_pix: -2.8292e+01 
+2024-05-14 02:39:20,857 INFO: [OURNe..][epoch: 91, iter:  45,900, lr:(9.679e-04,)] [eta: 5:54:52, time (data): 0.362 (0.002)] l_pix: -3.5023e+01 
+2024-05-14 02:39:57,038 INFO: [OURNe..][epoch: 91, iter:  46,000, lr:(9.677e-04,)] [eta: 5:54:09, time (data): 0.361 (0.002)] l_pix: -3.4948e+01 
+2024-05-14 02:40:33,272 INFO: [OURNe..][epoch: 92, iter:  46,100, lr:(9.676e-04,)] [eta: 5:53:26, time (data): 0.362 (0.002)] l_pix: -3.0945e+01 
+2024-05-14 02:41:09,481 INFO: [OURNe..][epoch: 92, iter:  46,200, lr:(9.674e-04,)] [eta: 5:52:43, time (data): 0.362 (0.002)] l_pix: -3.3231e+01 
+2024-05-14 02:41:45,737 INFO: [OURNe..][epoch: 92, iter:  46,300, lr:(9.673e-04,)] [eta: 5:52:00, time (data): 0.362 (0.002)] l_pix: -3.0947e+01 
+2024-05-14 02:42:22,035 INFO: [OURNe..][epoch: 92, iter:  46,400, lr:(9.672e-04,)] [eta: 5:51:18, time (data): 0.362 (0.002)] l_pix: -3.1922e+01 
+2024-05-14 02:42:58,322 INFO: [OURNe..][epoch: 92, iter:  46,500, lr:(9.670e-04,)] [eta: 5:50:35, time (data): 0.361 (0.002)] l_pix: -3.4487e+01 
+2024-05-14 02:43:34,620 INFO: [OURNe..][epoch: 93, iter:  46,600, lr:(9.669e-04,)] [eta: 5:49:52, time (data): 0.363 (0.002)] l_pix: -3.2530e+01 
+2024-05-14 02:44:10,888 INFO: [OURNe..][epoch: 93, iter:  46,700, lr:(9.667e-04,)] [eta: 5:49:09, time (data): 0.362 (0.002)] l_pix: -3.4176e+01 
+2024-05-14 02:44:47,131 INFO: [OURNe..][epoch: 93, iter:  46,800, lr:(9.666e-04,)] [eta: 5:48:26, time (data): 0.362 (0.002)] l_pix: -3.5536e+01 
+2024-05-14 02:45:23,398 INFO: [OURNe..][epoch: 93, iter:  46,900, lr:(9.665e-04,)] [eta: 5:47:44, time (data): 0.361 (0.002)] l_pix: -3.4797e+01 
+2024-05-14 02:45:59,626 INFO: [OURNe..][epoch: 93, iter:  47,000, lr:(9.663e-04,)] [eta: 5:47:01, time (data): 0.362 (0.002)] l_pix: -3.6268e+01 
+2024-05-14 02:46:35,841 INFO: [OURNe..][epoch: 94, iter:  47,100, lr:(9.662e-04,)] [eta: 5:46:18, time (data): 0.392 (0.002)] l_pix: -2.9954e+01 
+2024-05-14 02:47:12,056 INFO: [OURNe..][epoch: 94, iter:  47,200, lr:(9.660e-04,)] [eta: 5:45:35, time (data): 0.362 (0.002)] l_pix: -3.3527e+01 
+2024-05-14 02:47:48,317 INFO: [OURNe..][epoch: 94, iter:  47,300, lr:(9.659e-04,)] [eta: 5:44:53, time (data): 0.363 (0.002)] l_pix: -3.5287e+01 
+2024-05-14 02:48:24,531 INFO: [OURNe..][epoch: 94, iter:  47,400, lr:(9.658e-04,)] [eta: 5:44:10, time (data): 0.362 (0.002)] l_pix: -3.8418e+01 
+2024-05-14 02:49:00,774 INFO: [OURNe..][epoch: 94, iter:  47,500, lr:(9.656e-04,)] [eta: 5:43:28, time (data): 0.362 (0.002)] l_pix: -3.6336e+01 
+2024-05-14 02:49:36,991 INFO: [OURNe..][epoch: 95, iter:  47,600, lr:(9.655e-04,)] [eta: 5:42:45, time (data): 0.361 (0.002)] l_pix: -2.8827e+01 
+2024-05-14 02:50:13,252 INFO: [OURNe..][epoch: 95, iter:  47,700, lr:(9.653e-04,)] [eta: 5:42:02, time (data): 0.362 (0.002)] l_pix: -2.9098e+01 
+2024-05-14 02:50:49,497 INFO: [OURNe..][epoch: 95, iter:  47,800, lr:(9.652e-04,)] [eta: 5:41:20, time (data): 0.361 (0.002)] l_pix: -2.8431e+01 
+2024-05-14 02:51:25,734 INFO: [OURNe..][epoch: 95, iter:  47,900, lr:(9.650e-04,)] [eta: 5:40:37, time (data): 0.362 (0.002)] l_pix: -3.4114e+01 
+2024-05-14 02:52:02,030 INFO: [OURNe..][epoch: 95, iter:  48,000, lr:(9.649e-04,)] [eta: 5:39:55, time (data): 0.362 (0.002)] l_pix: -3.3133e+01 
+2024-05-14 02:52:38,276 INFO: [OURNe..][epoch: 96, iter:  48,100, lr:(9.647e-04,)] [eta: 5:39:13, time (data): 0.362 (0.002)] l_pix: -2.8301e+01 
+2024-05-14 02:53:14,527 INFO: [OURNe..][epoch: 96, iter:  48,200, lr:(9.646e-04,)] [eta: 5:38:30, time (data): 0.362 (0.002)] l_pix: -2.9806e+01 
+2024-05-14 02:53:50,781 INFO: [OURNe..][epoch: 96, iter:  48,300, lr:(9.645e-04,)] [eta: 5:37:48, time (data): 0.361 (0.002)] l_pix: -3.1793e+01 
+2024-05-14 02:54:27,000 INFO: [OURNe..][epoch: 96, iter:  48,400, lr:(9.643e-04,)] [eta: 5:37:05, time (data): 0.364 (0.002)] l_pix: -3.3346e+01 
+2024-05-14 02:55:03,240 INFO: [OURNe..][epoch: 96, iter:  48,500, lr:(9.642e-04,)] [eta: 5:36:23, time (data): 0.362 (0.002)] l_pix: -3.0447e+01 
+2024-05-14 02:55:39,556 INFO: [OURNe..][epoch: 97, iter:  48,600, lr:(9.640e-04,)] [eta: 5:35:41, time (data): 0.363 (0.002)] l_pix: -3.5324e+01 
+2024-05-14 02:56:15,741 INFO: [OURNe..][epoch: 97, iter:  48,700, lr:(9.639e-04,)] [eta: 5:34:59, time (data): 0.363 (0.001)] l_pix: -3.0973e+01 
+2024-05-14 02:56:51,945 INFO: [OURNe..][epoch: 97, iter:  48,800, lr:(9.637e-04,)] [eta: 5:34:16, time (data): 0.361 (0.002)] l_pix: -2.5399e+01 
+2024-05-14 02:57:28,104 INFO: [OURNe..][epoch: 97, iter:  48,900, lr:(9.636e-04,)] [eta: 5:33:34, time (data): 0.361 (0.002)] l_pix: -3.1834e+01 
+2024-05-14 02:58:04,317 INFO: [OURNe..][epoch: 97, iter:  49,000, lr:(9.634e-04,)] [eta: 5:32:52, time (data): 0.362 (0.002)] l_pix: -3.2296e+01 
+2024-05-14 02:58:40,516 INFO: [OURNe..][epoch: 98, iter:  49,100, lr:(9.633e-04,)] [eta: 5:32:09, time (data): 0.362 (0.002)] l_pix: -3.3323e+01 
+2024-05-14 02:59:16,744 INFO: [OURNe..][epoch: 98, iter:  49,200, lr:(9.631e-04,)] [eta: 5:31:27, time (data): 0.362 (0.002)] l_pix: -2.9387e+01 
+2024-05-14 02:59:52,966 INFO: [OURNe..][epoch: 98, iter:  49,300, lr:(9.630e-04,)] [eta: 5:30:45, time (data): 0.362 (0.002)] l_pix: -2.5248e+01 
+2024-05-14 03:00:29,169 INFO: [OURNe..][epoch: 98, iter:  49,400, lr:(9.628e-04,)] [eta: 5:30:03, time (data): 0.362 (0.002)] l_pix: -3.2441e+01 
+2024-05-14 03:01:05,340 INFO: [OURNe..][epoch: 98, iter:  49,500, lr:(9.627e-04,)] [eta: 5:29:21, time (data): 0.361 (0.002)] l_pix: -3.7028e+01 
+2024-05-14 03:01:41,580 INFO: [OURNe..][epoch: 99, iter:  49,600, lr:(9.625e-04,)] [eta: 5:28:39, time (data): 0.362 (0.002)] l_pix: -3.4362e+01 
+2024-05-14 03:02:17,801 INFO: [OURNe..][epoch: 99, iter:  49,700, lr:(9.624e-04,)] [eta: 5:27:57, time (data): 0.363 (0.002)] l_pix: -3.3377e+01 
+2024-05-14 03:02:53,980 INFO: [OURNe..][epoch: 99, iter:  49,800, lr:(9.622e-04,)] [eta: 5:27:15, time (data): 0.361 (0.002)] l_pix: -3.6171e+01 
+2024-05-14 03:03:30,273 INFO: [OURNe..][epoch: 99, iter:  49,900, lr:(9.621e-04,)] [eta: 5:26:33, time (data): 0.360 (0.002)] l_pix: -2.8723e+01 
+2024-05-14 03:04:06,405 INFO: [OURNe..][epoch: 99, iter:  50,000, lr:(9.619e-04,)] [eta: 5:25:51, time (data): 0.360 (0.001)] l_pix: -3.4547e+01 
+2024-05-14 03:04:06,406 INFO: Saving models and training states.
+2024-05-14 03:06:28,578 INFO: Validation SOTS-indoor, 		 # psnr: 16.5908	 # ssim: 0.8104
+2024-05-14 03:06:28,579 INFO: [OURNe..][epoch: 99, iter:  50,000, lr:(9.619e-04,)] m_psnr: 1.6591e+01 m_ssim: 8.1044e-01 
+2024-05-14 03:07:04,929 INFO: [OURNe..][epoch:100, iter:  50,100, lr:(9.618e-04,)] [eta: 5:27:30, time (data): 0.362 (0.002)] l_pix: -2.9983e+01 
+2024-05-14 03:07:41,131 INFO: [OURNe..][epoch:100, iter:  50,200, lr:(9.616e-04,)] [eta: 5:26:48, time (data): 0.362 (0.002)] l_pix: -3.0464e+01 
+2024-05-14 03:08:17,390 INFO: [OURNe..][epoch:100, iter:  50,300, lr:(9.615e-04,)] [eta: 5:26:05, time (data): 0.361 (0.002)] l_pix: -2.7849e+01 
+2024-05-14 03:08:53,619 INFO: [OURNe..][epoch:100, iter:  50,400, lr:(9.613e-04,)] [eta: 5:25:23, time (data): 0.362 (0.002)] l_pix: -2.9779e+01 
+2024-05-14 03:09:29,861 INFO: [OURNe..][epoch:100, iter:  50,500, lr:(9.612e-04,)] [eta: 5:24:40, time (data): 0.362 (0.002)] l_pix: -3.0911e+01 
+2024-05-14 03:10:06,117 INFO: [OURNe..][epoch:101, iter:  50,600, lr:(9.610e-04,)] [eta: 5:23:58, time (data): 0.362 (0.002)] l_pix: -3.6177e+01 
+2024-05-14 03:10:42,396 INFO: [OURNe..][epoch:101, iter:  50,700, lr:(9.609e-04,)] [eta: 5:23:16, time (data): 0.363 (0.002)] l_pix: -3.6814e+01 
+2024-05-14 03:11:18,672 INFO: [OURNe..][epoch:101, iter:  50,800, lr:(9.607e-04,)] [eta: 5:22:33, time (data): 0.362 (0.002)] l_pix: -3.5045e+01 
+2024-05-14 03:11:54,839 INFO: [OURNe..][epoch:101, iter:  50,900, lr:(9.606e-04,)] [eta: 5:21:51, time (data): 0.362 (0.002)] l_pix: -2.7568e+01 
+2024-05-14 03:12:31,096 INFO: [OURNe..][epoch:101, iter:  51,000, lr:(9.604e-04,)] [eta: 5:21:09, time (data): 0.362 (0.002)] l_pix: -3.3072e+01 
+2024-05-14 03:13:07,348 INFO: [OURNe..][epoch:102, iter:  51,100, lr:(9.603e-04,)] [eta: 5:20:26, time (data): 0.362 (0.002)] l_pix: -3.6512e+01 
+2024-05-14 03:13:43,653 INFO: [OURNe..][epoch:102, iter:  51,200, lr:(9.601e-04,)] [eta: 5:19:44, time (data): 0.363 (0.002)] l_pix: -2.9958e+01 
+2024-05-14 03:14:19,936 INFO: [OURNe..][epoch:102, iter:  51,300, lr:(9.600e-04,)] [eta: 5:19:02, time (data): 0.363 (0.002)] l_pix: -3.3424e+01 
+2024-05-14 03:14:56,163 INFO: [OURNe..][epoch:102, iter:  51,400, lr:(9.598e-04,)] [eta: 5:18:20, time (data): 0.362 (0.002)] l_pix: -3.1920e+01 
+2024-05-14 03:15:32,405 INFO: [OURNe..][epoch:102, iter:  51,500, lr:(9.597e-04,)] [eta: 5:17:38, time (data): 0.362 (0.002)] l_pix: -2.9237e+01 
+2024-05-14 03:16:08,674 INFO: [OURNe..][epoch:103, iter:  51,600, lr:(9.595e-04,)] [eta: 5:16:56, time (data): 0.363 (0.002)] l_pix: -3.1445e+01 
+2024-05-14 03:16:44,963 INFO: [OURNe..][epoch:103, iter:  51,700, lr:(9.593e-04,)] [eta: 5:16:13, time (data): 0.362 (0.002)] l_pix: -2.4738e+01 
+2024-05-14 03:17:21,257 INFO: [OURNe..][epoch:103, iter:  51,800, lr:(9.592e-04,)] [eta: 5:15:31, time (data): 0.363 (0.002)] l_pix: -3.4535e+01 
+2024-05-14 03:17:57,542 INFO: [OURNe..][epoch:103, iter:  51,900, lr:(9.590e-04,)] [eta: 5:14:49, time (data): 0.362 (0.002)] l_pix: -2.6437e+01 
+2024-05-14 03:18:33,766 INFO: [OURNe..][epoch:103, iter:  52,000, lr:(9.589e-04,)] [eta: 5:14:07, time (data): 0.362 (0.002)] l_pix: -3.0128e+01 
+2024-05-14 03:19:10,003 INFO: [OURNe..][epoch:104, iter:  52,100, lr:(9.587e-04,)] [eta: 5:13:25, time (data): 0.362 (0.002)] l_pix: -3.3019e+01 
+2024-05-14 03:19:46,285 INFO: [OURNe..][epoch:104, iter:  52,200, lr:(9.586e-04,)] [eta: 5:12:43, time (data): 0.362 (0.002)] l_pix: -3.2520e+01 
+2024-05-14 03:20:22,521 INFO: [OURNe..][epoch:104, iter:  52,300, lr:(9.584e-04,)] [eta: 5:12:01, time (data): 0.363 (0.002)] l_pix: -3.2827e+01 
+2024-05-14 03:20:58,783 INFO: [OURNe..][epoch:104, iter:  52,400, lr:(9.583e-04,)] [eta: 5:11:19, time (data): 0.363 (0.002)] l_pix: -3.4485e+01 
+2024-05-14 03:21:34,980 INFO: [OURNe..][epoch:104, iter:  52,500, lr:(9.581e-04,)] [eta: 5:10:37, time (data): 0.364 (0.002)] l_pix: -3.0497e+01 
+2024-05-14 03:22:11,327 INFO: [OURNe..][epoch:105, iter:  52,600, lr:(9.579e-04,)] [eta: 5:09:55, time (data): 0.364 (0.002)] l_pix: -3.1614e+01 
+2024-05-14 03:22:47,658 INFO: [OURNe..][epoch:105, iter:  52,700, lr:(9.578e-04,)] [eta: 5:09:14, time (data): 0.363 (0.002)] l_pix: -3.5074e+01 
+2024-05-14 03:23:23,905 INFO: [OURNe..][epoch:105, iter:  52,800, lr:(9.576e-04,)] [eta: 5:08:32, time (data): 0.363 (0.002)] l_pix: -3.6301e+01 
+2024-05-14 03:24:00,209 INFO: [OURNe..][epoch:105, iter:  52,900, lr:(9.575e-04,)] [eta: 5:07:50, time (data): 0.364 (0.002)] l_pix: -3.9898e+01 
+2024-05-14 03:24:36,538 INFO: [OURNe..][epoch:105, iter:  53,000, lr:(9.573e-04,)] [eta: 5:07:08, time (data): 0.363 (0.002)] l_pix: -3.6669e+01 
+2024-05-14 03:25:12,851 INFO: [OURNe..][epoch:106, iter:  53,100, lr:(9.572e-04,)] [eta: 5:06:26, time (data): 0.364 (0.002)] l_pix: -3.6304e+01 
+2024-05-14 03:25:49,080 INFO: [OURNe..][epoch:106, iter:  53,200, lr:(9.570e-04,)] [eta: 5:05:44, time (data): 0.362 (0.002)] l_pix: -3.2357e+01 
+2024-05-14 03:26:25,327 INFO: [OURNe..][epoch:106, iter:  53,300, lr:(9.568e-04,)] [eta: 5:05:03, time (data): 0.362 (0.001)] l_pix: -2.9903e+01 
+2024-05-14 03:27:01,569 INFO: [OURNe..][epoch:106, iter:  53,400, lr:(9.567e-04,)] [eta: 5:04:21, time (data): 0.364 (0.002)] l_pix: -3.4152e+01 
+2024-05-14 03:27:37,834 INFO: [OURNe..][epoch:106, iter:  53,500, lr:(9.565e-04,)] [eta: 5:03:39, time (data): 0.363 (0.002)] l_pix: -3.2870e+01 
+2024-05-14 03:28:14,129 INFO: [OURNe..][epoch:107, iter:  53,600, lr:(9.564e-04,)] [eta: 5:02:57, time (data): 0.361 (0.002)] l_pix: -3.1637e+01 
+2024-05-14 03:28:50,338 INFO: [OURNe..][epoch:107, iter:  53,700, lr:(9.562e-04,)] [eta: 5:02:16, time (data): 0.362 (0.002)] l_pix: -3.4118e+01 
+2024-05-14 03:29:26,526 INFO: [OURNe..][epoch:107, iter:  53,800, lr:(9.560e-04,)] [eta: 5:01:34, time (data): 0.361 (0.002)] l_pix: -3.2260e+01 
+2024-05-14 03:30:02,745 INFO: [OURNe..][epoch:107, iter:  53,900, lr:(9.559e-04,)] [eta: 5:00:52, time (data): 0.363 (0.002)] l_pix: -3.2554e+01 
+2024-05-14 03:30:38,909 INFO: [OURNe..][epoch:107, iter:  54,000, lr:(9.557e-04,)] [eta: 5:00:11, time (data): 0.361 (0.002)] l_pix: -3.1786e+01 
+2024-05-14 03:31:15,120 INFO: [OURNe..][epoch:108, iter:  54,100, lr:(9.555e-04,)] [eta: 4:59:29, time (data): 0.360 (0.001)] l_pix: -2.8378e+01 
+2024-05-14 03:31:51,322 INFO: [OURNe..][epoch:108, iter:  54,200, lr:(9.554e-04,)] [eta: 4:58:47, time (data): 0.361 (0.002)] l_pix: -3.3237e+01 
+2024-05-14 03:32:27,519 INFO: [OURNe..][epoch:108, iter:  54,300, lr:(9.552e-04,)] [eta: 4:58:06, time (data): 0.362 (0.002)] l_pix: -3.1436e+01 
+2024-05-14 03:33:03,760 INFO: [OURNe..][epoch:108, iter:  54,400, lr:(9.551e-04,)] [eta: 4:57:24, time (data): 0.363 (0.002)] l_pix: -2.7153e+01 
+2024-05-14 03:33:40,021 INFO: [OURNe..][epoch:108, iter:  54,500, lr:(9.549e-04,)] [eta: 4:56:43, time (data): 0.362 (0.002)] l_pix: -4.1896e+01 
+2024-05-14 03:34:16,277 INFO: [OURNe..][epoch:109, iter:  54,600, lr:(9.547e-04,)] [eta: 4:56:01, time (data): 0.362 (0.002)] l_pix: -3.3932e+01 
+2024-05-14 03:34:52,503 INFO: [OURNe..][epoch:109, iter:  54,700, lr:(9.546e-04,)] [eta: 4:55:20, time (data): 0.363 (0.002)] l_pix: -2.9445e+01 
+2024-05-14 03:35:28,701 INFO: [OURNe..][epoch:109, iter:  54,800, lr:(9.544e-04,)] [eta: 4:54:38, time (data): 0.361 (0.002)] l_pix: -3.1542e+01 
+2024-05-14 03:36:04,947 INFO: [OURNe..][epoch:109, iter:  54,900, lr:(9.542e-04,)] [eta: 4:53:57, time (data): 0.363 (0.002)] l_pix: -3.1975e+01 
+2024-05-14 03:36:41,134 INFO: [OURNe..][epoch:109, iter:  55,000, lr:(9.541e-04,)] [eta: 4:53:15, time (data): 0.363 (0.002)] l_pix: -3.0987e+01 
+2024-05-14 03:36:41,135 INFO: Saving models and training states.
+2024-05-14 03:39:03,816 INFO: Validation SOTS-indoor, 		 # psnr: 18.4332	 # ssim: 0.8379
+2024-05-14 03:39:03,817 INFO: [OURNe..][epoch:109, iter:  55,000, lr:(9.541e-04,)] m_psnr: 1.8433e+01 m_ssim: 8.3789e-01 
+2024-05-14 03:39:40,022 INFO: [OURNe..][epoch:110, iter:  55,100, lr:(9.539e-04,)] [eta: 4:54:30, time (data): 0.361 (0.002)] l_pix: -2.5436e+01 
+2024-05-14 03:40:16,268 INFO: [OURNe..][epoch:110, iter:  55,200, lr:(9.537e-04,)] [eta: 4:53:48, time (data): 0.362 (0.002)] l_pix: -3.0387e+01 
+2024-05-14 03:40:52,445 INFO: [OURNe..][epoch:110, iter:  55,300, lr:(9.536e-04,)] [eta: 4:53:06, time (data): 0.362 (0.002)] l_pix: -2.8127e+01 
+2024-05-14 03:41:28,637 INFO: [OURNe..][epoch:110, iter:  55,400, lr:(9.534e-04,)] [eta: 4:52:24, time (data): 0.361 (0.002)] l_pix: -3.4079e+01 
+2024-05-14 03:42:04,842 INFO: [OURNe..][epoch:110, iter:  55,500, lr:(9.533e-04,)] [eta: 4:51:42, time (data): 0.362 (0.002)] l_pix: -3.7271e+01 
+2024-05-14 03:42:41,069 INFO: [OURNe..][epoch:111, iter:  55,600, lr:(9.531e-04,)] [eta: 4:51:01, time (data): 0.361 (0.002)] l_pix: -2.9823e+01 
+2024-05-14 03:43:17,210 INFO: [OURNe..][epoch:111, iter:  55,700, lr:(9.529e-04,)] [eta: 4:50:19, time (data): 0.361 (0.002)] l_pix: -3.4984e+01 
+2024-05-14 03:43:53,359 INFO: [OURNe..][epoch:111, iter:  55,800, lr:(9.528e-04,)] [eta: 4:49:37, time (data): 0.361 (0.002)] l_pix: -3.4066e+01 
+2024-05-14 03:44:29,538 INFO: [OURNe..][epoch:111, iter:  55,900, lr:(9.526e-04,)] [eta: 4:48:55, time (data): 0.363 (0.002)] l_pix: -3.4516e+01 
+2024-05-14 03:45:05,768 INFO: [OURNe..][epoch:111, iter:  56,000, lr:(9.524e-04,)] [eta: 4:48:13, time (data): 0.362 (0.001)] l_pix: -3.3271e+01 
+2024-05-14 03:45:41,979 INFO: [OURNe..][epoch:112, iter:  56,100, lr:(9.523e-04,)] [eta: 4:47:32, time (data): 0.361 (0.002)] l_pix: -2.5884e+01 
+2024-05-14 03:46:18,196 INFO: [OURNe..][epoch:112, iter:  56,200, lr:(9.521e-04,)] [eta: 4:46:50, time (data): 0.361 (0.002)] l_pix: -3.3070e+01 
+2024-05-14 03:46:54,447 INFO: [OURNe..][epoch:112, iter:  56,300, lr:(9.519e-04,)] [eta: 4:46:08, time (data): 0.363 (0.002)] l_pix: -3.6151e+01 
+2024-05-14 03:47:30,721 INFO: [OURNe..][epoch:112, iter:  56,400, lr:(9.517e-04,)] [eta: 4:45:27, time (data): 0.364 (0.002)] l_pix: -3.1198e+01 
+2024-05-14 03:48:07,058 INFO: [OURNe..][epoch:112, iter:  56,500, lr:(9.516e-04,)] [eta: 4:44:45, time (data): 0.364 (0.002)] l_pix: -3.2501e+01 
+2024-05-14 03:48:43,457 INFO: [OURNe..][epoch:113, iter:  56,600, lr:(9.514e-04,)] [eta: 4:44:04, time (data): 0.363 (0.002)] l_pix: -3.3351e+01 
+2024-05-14 03:49:19,773 INFO: [OURNe..][epoch:113, iter:  56,700, lr:(9.512e-04,)] [eta: 4:43:22, time (data): 0.362 (0.002)] l_pix: -3.6062e+01 
+2024-05-14 03:49:56,013 INFO: [OURNe..][epoch:113, iter:  56,800, lr:(9.511e-04,)] [eta: 4:42:40, time (data): 0.362 (0.002)] l_pix: -3.3430e+01 
+2024-05-14 03:50:32,282 INFO: [OURNe..][epoch:113, iter:  56,900, lr:(9.509e-04,)] [eta: 4:41:59, time (data): 0.364 (0.002)] l_pix: -3.1319e+01 
+2024-05-14 03:51:08,582 INFO: [OURNe..][epoch:113, iter:  57,000, lr:(9.507e-04,)] [eta: 4:41:17, time (data): 0.363 (0.002)] l_pix: -2.3055e+01 
+2024-05-14 03:51:44,949 INFO: [OURNe..][epoch:114, iter:  57,100, lr:(9.506e-04,)] [eta: 4:40:36, time (data): 0.363 (0.002)] l_pix: -2.7955e+01 
+2024-05-14 03:52:21,285 INFO: [OURNe..][epoch:114, iter:  57,200, lr:(9.504e-04,)] [eta: 4:39:55, time (data): 0.362 (0.002)] l_pix: -4.4663e+01 
+2024-05-14 03:52:57,595 INFO: [OURNe..][epoch:114, iter:  57,300, lr:(9.502e-04,)] [eta: 4:39:13, time (data): 0.362 (0.002)] l_pix: -3.2135e+01 
+2024-05-14 03:53:33,906 INFO: [OURNe..][epoch:114, iter:  57,400, lr:(9.501e-04,)] [eta: 4:38:32, time (data): 0.364 (0.002)] l_pix: -3.6279e+01 
+2024-05-14 03:54:10,244 INFO: [OURNe..][epoch:114, iter:  57,500, lr:(9.499e-04,)] [eta: 4:37:50, time (data): 0.363 (0.002)] l_pix: -3.6444e+01 
+2024-05-14 03:54:46,522 INFO: [OURNe..][epoch:115, iter:  57,600, lr:(9.497e-04,)] [eta: 4:37:09, time (data): 0.363 (0.002)] l_pix: -3.4878e+01 
+2024-05-14 03:55:22,825 INFO: [OURNe..][epoch:115, iter:  57,700, lr:(9.495e-04,)] [eta: 4:36:28, time (data): 0.363 (0.002)] l_pix: -3.1942e+01 
+2024-05-14 03:55:59,072 INFO: [OURNe..][epoch:115, iter:  57,800, lr:(9.494e-04,)] [eta: 4:35:46, time (data): 0.361 (0.002)] l_pix: -3.6295e+01 
+2024-05-14 03:56:35,298 INFO: [OURNe..][epoch:115, iter:  57,900, lr:(9.492e-04,)] [eta: 4:35:05, time (data): 0.362 (0.002)] l_pix: -3.7452e+01 
+2024-05-14 03:57:11,520 INFO: [OURNe..][epoch:115, iter:  58,000, lr:(9.490e-04,)] [eta: 4:34:23, time (data): 0.361 (0.002)] l_pix: -3.3801e+01 
+2024-05-14 03:57:47,735 INFO: [OURNe..][epoch:116, iter:  58,100, lr:(9.488e-04,)] [eta: 4:33:42, time (data): 0.361 (0.002)] l_pix: -3.6447e+01 
+2024-05-14 03:58:23,987 INFO: [OURNe..][epoch:116, iter:  58,200, lr:(9.487e-04,)] [eta: 4:33:01, time (data): 0.363 (0.002)] l_pix: -3.1457e+01 
+2024-05-14 03:59:00,321 INFO: [OURNe..][epoch:116, iter:  58,300, lr:(9.485e-04,)] [eta: 4:32:20, time (data): 0.363 (0.001)] l_pix: -3.7201e+01 
+2024-05-14 03:59:36,610 INFO: [OURNe..][epoch:116, iter:  58,400, lr:(9.483e-04,)] [eta: 4:31:38, time (data): 0.364 (0.002)] l_pix: -3.4136e+01 
+2024-05-14 04:00:12,946 INFO: [OURNe..][epoch:116, iter:  58,500, lr:(9.482e-04,)] [eta: 4:30:57, time (data): 0.363 (0.002)] l_pix: -3.1360e+01 
+2024-05-14 04:00:49,220 INFO: [OURNe..][epoch:117, iter:  58,600, lr:(9.480e-04,)] [eta: 4:30:16, time (data): 0.362 (0.002)] l_pix: -3.5583e+01 
+2024-05-14 04:01:25,436 INFO: [OURNe..][epoch:117, iter:  58,700, lr:(9.478e-04,)] [eta: 4:29:35, time (data): 0.361 (0.001)] l_pix: -3.5740e+01 
+2024-05-14 04:02:01,673 INFO: [OURNe..][epoch:117, iter:  58,800, lr:(9.476e-04,)] [eta: 4:28:53, time (data): 0.363 (0.002)] l_pix: -3.5765e+01 
+2024-05-14 04:02:37,923 INFO: [OURNe..][epoch:117, iter:  58,900, lr:(9.475e-04,)] [eta: 4:28:12, time (data): 0.364 (0.002)] l_pix: -3.3168e+01 
+2024-05-14 04:03:14,154 INFO: [OURNe..][epoch:117, iter:  59,000, lr:(9.473e-04,)] [eta: 4:27:31, time (data): 0.362 (0.002)] l_pix: -3.0514e+01 
+2024-05-14 04:03:50,518 INFO: [OURNe..][epoch:118, iter:  59,100, lr:(9.471e-04,)] [eta: 4:26:50, time (data): 0.363 (0.002)] l_pix: -3.5161e+01 
+2024-05-14 04:04:26,819 INFO: [OURNe..][epoch:118, iter:  59,200, lr:(9.469e-04,)] [eta: 4:26:09, time (data): 0.363 (0.002)] l_pix: -2.8252e+01 
+2024-05-14 04:05:03,169 INFO: [OURNe..][epoch:118, iter:  59,300, lr:(9.468e-04,)] [eta: 4:25:28, time (data): 0.394 (0.002)] l_pix: -3.1652e+01 
+2024-05-14 04:05:39,523 INFO: [OURNe..][epoch:118, iter:  59,400, lr:(9.466e-04,)] [eta: 4:24:47, time (data): 0.363 (0.002)] l_pix: -3.1638e+01 
+2024-05-14 04:06:15,827 INFO: [OURNe..][epoch:118, iter:  59,500, lr:(9.464e-04,)] [eta: 4:24:06, time (data): 0.363 (0.002)] l_pix: -3.7420e+01 
+2024-05-14 04:06:52,200 INFO: [OURNe..][epoch:119, iter:  59,600, lr:(9.462e-04,)] [eta: 4:23:25, time (data): 0.363 (0.002)] l_pix: -3.1617e+01 
+2024-05-14 04:07:28,506 INFO: [OURNe..][epoch:119, iter:  59,700, lr:(9.460e-04,)] [eta: 4:22:44, time (data): 0.363 (0.002)] l_pix: -3.6347e+01 
+2024-05-14 04:08:04,792 INFO: [OURNe..][epoch:119, iter:  59,800, lr:(9.459e-04,)] [eta: 4:22:03, time (data): 0.363 (0.002)] l_pix: -3.3476e+01 
+2024-05-14 04:08:41,009 INFO: [OURNe..][epoch:119, iter:  59,900, lr:(9.457e-04,)] [eta: 4:21:22, time (data): 0.362 (0.002)] l_pix: -3.0422e+01 
+2024-05-14 04:09:17,249 INFO: [OURNe..][epoch:119, iter:  60,000, lr:(9.455e-04,)] [eta: 4:20:41, time (data): 0.362 (0.002)] l_pix: -3.4528e+01 
+2024-05-14 04:09:17,250 INFO: Saving models and training states.
+2024-05-14 04:11:39,442 INFO: Validation SOTS-indoor, 		 # psnr: 16.5276	 # ssim: 0.8101
+2024-05-14 04:11:39,442 INFO: [OURNe..][epoch:119, iter:  60,000, lr:(9.455e-04,)] m_psnr: 1.6528e+01 m_ssim: 8.1010e-01 
+2024-05-14 04:12:15,735 INFO: [OURNe..][epoch:120, iter:  60,100, lr:(9.453e-04,)] [eta: 4:21:34, time (data): 0.363 (0.002)] l_pix: -3.1563e+01 
+2024-05-14 04:12:51,999 INFO: [OURNe..][epoch:120, iter:  60,200, lr:(9.452e-04,)] [eta: 4:20:53, time (data): 0.364 (0.002)] l_pix: -3.6768e+01 
+2024-05-14 04:13:28,248 INFO: [OURNe..][epoch:120, iter:  60,300, lr:(9.450e-04,)] [eta: 4:20:11, time (data): 0.362 (0.002)] l_pix: -3.6365e+01 
+2024-05-14 04:14:04,482 INFO: [OURNe..][epoch:120, iter:  60,400, lr:(9.448e-04,)] [eta: 4:19:30, time (data): 0.361 (0.002)] l_pix: -3.4783e+01 
+2024-05-14 04:14:40,735 INFO: [OURNe..][epoch:120, iter:  60,500, lr:(9.446e-04,)] [eta: 4:18:49, time (data): 0.362 (0.002)] l_pix: -3.3262e+01 
+2024-05-14 04:15:17,014 INFO: [OURNe..][epoch:121, iter:  60,600, lr:(9.444e-04,)] [eta: 4:18:07, time (data): 0.361 (0.002)] l_pix: -3.9494e+01 
+2024-05-14 04:15:53,302 INFO: [OURNe..][epoch:121, iter:  60,700, lr:(9.443e-04,)] [eta: 4:17:26, time (data): 0.362 (0.002)] l_pix: -3.3371e+01 
+2024-05-14 04:16:29,646 INFO: [OURNe..][epoch:121, iter:  60,800, lr:(9.441e-04,)] [eta: 4:16:45, time (data): 0.364 (0.002)] l_pix: -2.8104e+01 
+2024-05-14 04:17:06,005 INFO: [OURNe..][epoch:121, iter:  60,900, lr:(9.439e-04,)] [eta: 4:16:04, time (data): 0.363 (0.002)] l_pix: -2.0803e+01 
+2024-05-14 04:17:42,298 INFO: [OURNe..][epoch:121, iter:  61,000, lr:(9.437e-04,)] [eta: 4:15:22, time (data): 0.362 (0.002)] l_pix: -3.5559e+01 
+2024-05-14 04:18:18,644 INFO: [OURNe..][epoch:122, iter:  61,100, lr:(9.435e-04,)] [eta: 4:14:41, time (data): 0.392 (0.002)] l_pix: -3.6804e+01 
+2024-05-14 04:18:54,878 INFO: [OURNe..][epoch:122, iter:  61,200, lr:(9.434e-04,)] [eta: 4:14:00, time (data): 0.363 (0.002)] l_pix: -3.4466e+01 
+2024-05-14 04:19:31,198 INFO: [OURNe..][epoch:122, iter:  61,300, lr:(9.432e-04,)] [eta: 4:13:19, time (data): 0.362 (0.002)] l_pix: -3.5829e+01 
+2024-05-14 04:20:07,440 INFO: [OURNe..][epoch:122, iter:  61,400, lr:(9.430e-04,)] [eta: 4:12:38, time (data): 0.363 (0.002)] l_pix: -3.3090e+01 
+2024-05-14 04:20:43,720 INFO: [OURNe..][epoch:122, iter:  61,500, lr:(9.428e-04,)] [eta: 4:11:57, time (data): 0.361 (0.001)] l_pix: -3.1727e+01 
+2024-05-14 04:21:20,018 INFO: [OURNe..][epoch:123, iter:  61,600, lr:(9.426e-04,)] [eta: 4:11:15, time (data): 0.363 (0.002)] l_pix: -3.3284e+01 
+2024-05-14 04:21:56,363 INFO: [OURNe..][epoch:123, iter:  61,700, lr:(9.424e-04,)] [eta: 4:10:34, time (data): 0.363 (0.002)] l_pix: -3.5723e+01 
+2024-05-14 04:22:32,628 INFO: [OURNe..][epoch:123, iter:  61,800, lr:(9.423e-04,)] [eta: 4:09:53, time (data): 0.363 (0.002)] l_pix: -3.1965e+01 
+2024-05-14 04:23:08,964 INFO: [OURNe..][epoch:123, iter:  61,900, lr:(9.421e-04,)] [eta: 4:09:12, time (data): 0.363 (0.002)] l_pix: -3.5578e+01 
+2024-05-14 04:23:45,277 INFO: [OURNe..][epoch:123, iter:  62,000, lr:(9.419e-04,)] [eta: 4:08:31, time (data): 0.364 (0.002)] l_pix: -3.5678e+01 
+2024-05-14 04:24:21,622 INFO: [OURNe..][epoch:124, iter:  62,100, lr:(9.417e-04,)] [eta: 4:07:50, time (data): 0.364 (0.002)] l_pix: -3.2377e+01 
+2024-05-14 04:24:57,859 INFO: [OURNe..][epoch:124, iter:  62,200, lr:(9.415e-04,)] [eta: 4:07:09, time (data): 0.363 (0.002)] l_pix: -3.4419e+01 
+2024-05-14 04:25:34,155 INFO: [OURNe..][epoch:124, iter:  62,300, lr:(9.413e-04,)] [eta: 4:06:28, time (data): 0.362 (0.002)] l_pix: -3.0673e+01 
+2024-05-14 04:26:10,462 INFO: [OURNe..][epoch:124, iter:  62,400, lr:(9.412e-04,)] [eta: 4:05:47, time (data): 0.363 (0.002)] l_pix: -3.3605e+01 
+2024-05-14 04:26:46,738 INFO: [OURNe..][epoch:124, iter:  62,500, lr:(9.410e-04,)] [eta: 4:05:06, time (data): 0.364 (0.002)] l_pix: -2.7215e+01 
+2024-05-14 04:27:23,085 INFO: [OURNe..][epoch:125, iter:  62,600, lr:(9.408e-04,)] [eta: 4:04:25, time (data): 0.363 (0.002)] l_pix: -3.4380e+01 
+2024-05-14 04:27:59,440 INFO: [OURNe..][epoch:125, iter:  62,700, lr:(9.406e-04,)] [eta: 4:03:44, time (data): 0.364 (0.002)] l_pix: -3.7690e+01 
+2024-05-14 04:28:35,767 INFO: [OURNe..][epoch:125, iter:  62,800, lr:(9.404e-04,)] [eta: 4:03:03, time (data): 0.362 (0.002)] l_pix: -3.6534e+01 
+2024-05-14 04:29:12,030 INFO: [OURNe..][epoch:125, iter:  62,900, lr:(9.402e-04,)] [eta: 4:02:22, time (data): 0.360 (0.002)] l_pix: -3.4648e+01 
+2024-05-14 04:29:48,305 INFO: [OURNe..][epoch:125, iter:  63,000, lr:(9.400e-04,)] [eta: 4:01:42, time (data): 0.362 (0.002)] l_pix: -2.3429e+01 
+2024-05-14 04:30:24,680 INFO: [OURNe..][epoch:126, iter:  63,100, lr:(9.399e-04,)] [eta: 4:01:01, time (data): 0.363 (0.002)] l_pix: -3.2096e+01 
+2024-05-14 04:31:01,040 INFO: [OURNe..][epoch:126, iter:  63,200, lr:(9.397e-04,)] [eta: 4:00:20, time (data): 0.364 (0.002)] l_pix: -3.3688e+01 
+2024-05-14 04:31:37,366 INFO: [OURNe..][epoch:126, iter:  63,300, lr:(9.395e-04,)] [eta: 3:59:39, time (data): 0.362 (0.002)] l_pix: -3.6359e+01 
+2024-05-14 04:32:13,681 INFO: [OURNe..][epoch:126, iter:  63,400, lr:(9.393e-04,)] [eta: 3:58:58, time (data): 0.375 (0.002)] l_pix: -3.4960e+01 
+2024-05-14 04:32:49,982 INFO: [OURNe..][epoch:126, iter:  63,500, lr:(9.391e-04,)] [eta: 3:58:17, time (data): 0.363 (0.002)] l_pix: -3.3297e+01 
+2024-05-14 04:33:26,296 INFO: [OURNe..][epoch:127, iter:  63,600, lr:(9.389e-04,)] [eta: 3:57:37, time (data): 0.363 (0.002)] l_pix: -3.7454e+01 
+2024-05-14 04:34:02,651 INFO: [OURNe..][epoch:127, iter:  63,700, lr:(9.387e-04,)] [eta: 3:56:56, time (data): 0.364 (0.002)] l_pix: -3.8431e+01 
+2024-05-14 04:34:39,015 INFO: [OURNe..][epoch:127, iter:  63,800, lr:(9.385e-04,)] [eta: 3:56:15, time (data): 0.363 (0.002)] l_pix: -3.6690e+01 
+2024-05-14 04:35:15,339 INFO: [OURNe..][epoch:127, iter:  63,900, lr:(9.384e-04,)] [eta: 3:55:34, time (data): 0.362 (0.002)] l_pix: -3.6603e+01 
+2024-05-14 04:35:51,671 INFO: [OURNe..][epoch:127, iter:  64,000, lr:(9.382e-04,)] [eta: 3:54:53, time (data): 0.364 (0.002)] l_pix: -3.4181e+01 
+2024-05-14 04:36:28,002 INFO: [OURNe..][epoch:128, iter:  64,100, lr:(9.380e-04,)] [eta: 3:54:13, time (data): 0.362 (0.002)] l_pix: -3.5975e+01 
+2024-05-14 04:37:04,329 INFO: [OURNe..][epoch:128, iter:  64,200, lr:(9.378e-04,)] [eta: 3:53:32, time (data): 0.363 (0.002)] l_pix: -3.1361e+01 
+2024-05-14 04:37:40,656 INFO: [OURNe..][epoch:128, iter:  64,300, lr:(9.376e-04,)] [eta: 3:52:51, time (data): 0.363 (0.002)] l_pix: -2.8989e+01 
+2024-05-14 04:38:17,042 INFO: [OURNe..][epoch:128, iter:  64,400, lr:(9.374e-04,)] [eta: 3:52:11, time (data): 0.363 (0.002)] l_pix: -3.1296e+01 
+2024-05-14 04:38:53,326 INFO: [OURNe..][epoch:128, iter:  64,500, lr:(9.372e-04,)] [eta: 3:51:30, time (data): 0.363 (0.002)] l_pix: -3.2435e+01 
+2024-05-14 04:39:29,663 INFO: [OURNe..][epoch:129, iter:  64,600, lr:(9.370e-04,)] [eta: 3:50:49, time (data): 0.364 (0.002)] l_pix: -3.4866e+01 
+2024-05-14 04:40:05,979 INFO: [OURNe..][epoch:129, iter:  64,700, lr:(9.368e-04,)] [eta: 3:50:09, time (data): 0.362 (0.002)] l_pix: -3.8357e+01 
+2024-05-14 04:40:42,353 INFO: [OURNe..][epoch:129, iter:  64,800, lr:(9.366e-04,)] [eta: 3:49:28, time (data): 0.364 (0.002)] l_pix: -2.3473e+01 
+2024-05-14 04:41:18,696 INFO: [OURNe..][epoch:129, iter:  64,900, lr:(9.364e-04,)] [eta: 3:48:47, time (data): 0.363 (0.002)] l_pix: -2.7550e+01 
+2024-05-14 04:41:54,974 INFO: [OURNe..][epoch:129, iter:  65,000, lr:(9.363e-04,)] [eta: 3:48:07, time (data): 0.361 (0.002)] l_pix: -3.3893e+01 
+2024-05-14 04:41:54,975 INFO: Saving models and training states.
+2024-05-14 04:44:17,057 INFO: Validation SOTS-indoor, 		 # psnr: 17.4236	 # ssim: 0.8308
+2024-05-14 04:44:17,058 INFO: [OURNe..][epoch:129, iter:  65,000, lr:(9.363e-04,)] m_psnr: 1.7424e+01 m_ssim: 8.3078e-01 
+2024-05-14 04:44:53,355 INFO: [OURNe..][epoch:130, iter:  65,100, lr:(9.361e-04,)] [eta: 3:48:42, time (data): 0.362 (0.002)] l_pix: -3.2874e+01 
+2024-05-14 04:45:29,538 INFO: [OURNe..][epoch:130, iter:  65,200, lr:(9.359e-04,)] [eta: 3:48:01, time (data): 0.362 (0.001)] l_pix: -3.4237e+01 
+2024-05-14 04:46:05,762 INFO: [OURNe..][epoch:130, iter:  65,300, lr:(9.357e-04,)] [eta: 3:47:20, time (data): 0.363 (0.002)] l_pix: -3.4768e+01 
+2024-05-14 04:46:42,079 INFO: [OURNe..][epoch:130, iter:  65,400, lr:(9.355e-04,)] [eta: 3:46:39, time (data): 0.363 (0.002)] l_pix: -3.5376e+01 
+2024-05-14 04:47:18,351 INFO: [OURNe..][epoch:130, iter:  65,500, lr:(9.353e-04,)] [eta: 3:45:59, time (data): 0.361 (0.002)] l_pix: -3.1229e+01 
+2024-05-14 04:47:54,633 INFO: [OURNe..][epoch:131, iter:  65,600, lr:(9.351e-04,)] [eta: 3:45:18, time (data): 0.363 (0.002)] l_pix: -2.3921e+01 
+2024-05-14 04:48:30,900 INFO: [OURNe..][epoch:131, iter:  65,700, lr:(9.349e-04,)] [eta: 3:44:37, time (data): 0.362 (0.002)] l_pix: -3.5214e+01 
+2024-05-14 04:49:07,148 INFO: [OURNe..][epoch:131, iter:  65,800, lr:(9.347e-04,)] [eta: 3:43:56, time (data): 0.363 (0.002)] l_pix: -3.1143e+01 
+2024-05-14 04:49:43,376 INFO: [OURNe..][epoch:131, iter:  65,900, lr:(9.345e-04,)] [eta: 3:43:15, time (data): 0.362 (0.002)] l_pix: -3.4078e+01 
+2024-05-14 04:50:19,641 INFO: [OURNe..][epoch:131, iter:  66,000, lr:(9.343e-04,)] [eta: 3:42:34, time (data): 0.362 (0.002)] l_pix: -3.8575e+01 
+2024-05-14 04:50:55,890 INFO: [OURNe..][epoch:132, iter:  66,100, lr:(9.341e-04,)] [eta: 3:41:53, time (data): 0.362 (0.002)] l_pix: -3.3087e+01 
+2024-05-14 04:51:32,154 INFO: [OURNe..][epoch:132, iter:  66,200, lr:(9.339e-04,)] [eta: 3:41:13, time (data): 0.361 (0.002)] l_pix: -2.7705e+01 
+2024-05-14 04:52:08,396 INFO: [OURNe..][epoch:132, iter:  66,300, lr:(9.337e-04,)] [eta: 3:40:32, time (data): 0.361 (0.002)] l_pix: -3.5646e+01 
+2024-05-14 04:52:44,723 INFO: [OURNe..][epoch:132, iter:  66,400, lr:(9.335e-04,)] [eta: 3:39:51, time (data): 0.365 (0.002)] l_pix: -3.5227e+01 
+2024-05-14 04:53:20,997 INFO: [OURNe..][epoch:132, iter:  66,500, lr:(9.333e-04,)] [eta: 3:39:10, time (data): 0.363 (0.002)] l_pix: -3.0092e+01 
+2024-05-14 04:53:57,276 INFO: [OURNe..][epoch:133, iter:  66,600, lr:(9.332e-04,)] [eta: 3:38:30, time (data): 0.363 (0.002)] l_pix: -3.5347e+01 
+2024-05-14 04:54:33,548 INFO: [OURNe..][epoch:133, iter:  66,700, lr:(9.330e-04,)] [eta: 3:37:49, time (data): 0.362 (0.002)] l_pix: -3.1728e+01 
+2024-05-14 04:55:09,832 INFO: [OURNe..][epoch:133, iter:  66,800, lr:(9.328e-04,)] [eta: 3:37:08, time (data): 0.362 (0.002)] l_pix: -3.2979e+01 
+2024-05-14 04:55:46,068 INFO: [OURNe..][epoch:133, iter:  66,900, lr:(9.326e-04,)] [eta: 3:36:27, time (data): 0.362 (0.002)] l_pix: -3.5322e+01 
+2024-05-14 04:56:22,332 INFO: [OURNe..][epoch:133, iter:  67,000, lr:(9.324e-04,)] [eta: 3:35:47, time (data): 0.361 (0.002)] l_pix: -3.4054e+01 
+2024-05-14 04:56:58,625 INFO: [OURNe..][epoch:134, iter:  67,100, lr:(9.322e-04,)] [eta: 3:35:06, time (data): 0.364 (0.002)] l_pix: -3.6901e+01 
+2024-05-14 04:57:34,892 INFO: [OURNe..][epoch:134, iter:  67,200, lr:(9.320e-04,)] [eta: 3:34:25, time (data): 0.362 (0.002)] l_pix: -2.9552e+01 
+2024-05-14 04:58:11,149 INFO: [OURNe..][epoch:134, iter:  67,300, lr:(9.318e-04,)] [eta: 3:33:45, time (data): 0.363 (0.002)] l_pix: -2.8443e+01 
+2024-05-14 04:58:47,434 INFO: [OURNe..][epoch:134, iter:  67,400, lr:(9.316e-04,)] [eta: 3:33:04, time (data): 0.362 (0.002)] l_pix: -3.3228e+01 
+2024-05-14 04:59:23,715 INFO: [OURNe..][epoch:134, iter:  67,500, lr:(9.314e-04,)] [eta: 3:32:23, time (data): 0.362 (0.002)] l_pix: -3.6732e+01 
+2024-05-14 05:00:00,024 INFO: [OURNe..][epoch:135, iter:  67,600, lr:(9.312e-04,)] [eta: 3:31:43, time (data): 0.364 (0.002)] l_pix: -3.5502e+01 
+2024-05-14 05:00:36,298 INFO: [OURNe..][epoch:135, iter:  67,700, lr:(9.310e-04,)] [eta: 3:31:02, time (data): 0.362 (0.002)] l_pix: -3.7973e+01 
+2024-05-14 05:01:12,578 INFO: [OURNe..][epoch:135, iter:  67,800, lr:(9.308e-04,)] [eta: 3:30:22, time (data): 0.365 (0.002)] l_pix: -3.1741e+01 
+2024-05-14 05:01:48,890 INFO: [OURNe..][epoch:135, iter:  67,900, lr:(9.306e-04,)] [eta: 3:29:41, time (data): 0.364 (0.002)] l_pix: -3.4502e+01 
+2024-05-14 05:02:25,170 INFO: [OURNe..][epoch:135, iter:  68,000, lr:(9.304e-04,)] [eta: 3:29:00, time (data): 0.363 (0.002)] l_pix: -3.7897e+01 
+2024-05-14 05:03:01,502 INFO: [OURNe..][epoch:136, iter:  68,100, lr:(9.302e-04,)] [eta: 3:28:20, time (data): 0.363 (0.002)] l_pix: -3.3996e+01 
+2024-05-14 05:03:37,763 INFO: [OURNe..][epoch:136, iter:  68,200, lr:(9.300e-04,)] [eta: 3:27:39, time (data): 0.362 (0.002)] l_pix: -3.7611e+01 
+2024-05-14 05:04:14,090 INFO: [OURNe..][epoch:136, iter:  68,300, lr:(9.298e-04,)] [eta: 3:26:59, time (data): 0.363 (0.002)] l_pix: -3.3217e+01 
+2024-05-14 05:04:50,375 INFO: [OURNe..][epoch:136, iter:  68,400, lr:(9.296e-04,)] [eta: 3:26:18, time (data): 0.363 (0.002)] l_pix: -3.6701e+01 
+2024-05-14 05:05:26,695 INFO: [OURNe..][epoch:136, iter:  68,500, lr:(9.294e-04,)] [eta: 3:25:38, time (data): 0.363 (0.002)] l_pix: -3.8757e+01 
+2024-05-14 05:06:03,014 INFO: [OURNe..][epoch:137, iter:  68,600, lr:(9.292e-04,)] [eta: 3:24:57, time (data): 0.364 (0.002)] l_pix: -3.0378e+01 
+2024-05-14 05:06:39,269 INFO: [OURNe..][epoch:137, iter:  68,700, lr:(9.290e-04,)] [eta: 3:24:17, time (data): 0.363 (0.002)] l_pix: -2.8370e+01 
+2024-05-14 05:07:15,556 INFO: [OURNe..][epoch:137, iter:  68,800, lr:(9.288e-04,)] [eta: 3:23:36, time (data): 0.362 (0.002)] l_pix: -3.0495e+01 
+2024-05-14 05:07:51,794 INFO: [OURNe..][epoch:137, iter:  68,900, lr:(9.286e-04,)] [eta: 3:22:56, time (data): 0.362 (0.002)] l_pix: -3.6285e+01 
+2024-05-14 05:08:28,102 INFO: [OURNe..][epoch:137, iter:  69,000, lr:(9.284e-04,)] [eta: 3:22:15, time (data): 0.363 (0.001)] l_pix: -3.6241e+01 
+2024-05-14 05:09:04,433 INFO: [OURNe..][epoch:138, iter:  69,100, lr:(9.282e-04,)] [eta: 3:21:35, time (data): 0.363 (0.002)] l_pix: -3.5802e+01 
+2024-05-14 05:09:40,715 INFO: [OURNe..][epoch:138, iter:  69,200, lr:(9.280e-04,)] [eta: 3:20:55, time (data): 0.362 (0.002)] l_pix: -3.4585e+01 
+2024-05-14 05:10:17,051 INFO: [OURNe..][epoch:138, iter:  69,300, lr:(9.278e-04,)] [eta: 3:20:14, time (data): 0.362 (0.002)] l_pix: -3.6123e+01 
+2024-05-14 05:10:53,275 INFO: [OURNe..][epoch:138, iter:  69,400, lr:(9.276e-04,)] [eta: 3:19:34, time (data): 0.363 (0.002)] l_pix: -3.1648e+01 
+2024-05-14 05:11:29,553 INFO: [OURNe..][epoch:138, iter:  69,500, lr:(9.274e-04,)] [eta: 3:18:53, time (data): 0.364 (0.002)] l_pix: -3.3974e+01 
+2024-05-14 05:12:05,827 INFO: [OURNe..][epoch:139, iter:  69,600, lr:(9.271e-04,)] [eta: 3:18:13, time (data): 0.374 (0.002)] l_pix: -2.9944e+01 
+2024-05-14 05:12:42,075 INFO: [OURNe..][epoch:139, iter:  69,700, lr:(9.269e-04,)] [eta: 3:17:33, time (data): 0.363 (0.002)] l_pix: -3.3932e+01 
+2024-05-14 05:13:18,426 INFO: [OURNe..][epoch:139, iter:  69,800, lr:(9.267e-04,)] [eta: 3:16:52, time (data): 0.363 (0.002)] l_pix: -3.5934e+01 
+2024-05-14 05:13:54,749 INFO: [OURNe..][epoch:139, iter:  69,900, lr:(9.265e-04,)] [eta: 3:16:12, time (data): 0.363 (0.002)] l_pix: -2.3253e+01 
+2024-05-14 05:14:31,086 INFO: [OURNe..][epoch:139, iter:  70,000, lr:(9.263e-04,)] [eta: 3:15:32, time (data): 0.363 (0.002)] l_pix: -3.2446e+01 
+2024-05-14 05:14:31,087 INFO: Saving models and training states.
+2024-05-14 05:16:53,343 INFO: Validation SOTS-indoor, 		 # psnr: 16.2212	 # ssim: 0.8009
+2024-05-14 05:16:53,344 INFO: [OURNe..][epoch:139, iter:  70,000, lr:(9.263e-04,)] m_psnr: 1.6221e+01 m_ssim: 8.0093e-01 
+2024-05-14 05:17:29,641 INFO: [OURNe..][epoch:140, iter:  70,100, lr:(9.261e-04,)] [eta: 3:15:52, time (data): 0.363 (0.002)] l_pix: -3.7863e+01 
+2024-05-14 05:18:05,872 INFO: [OURNe..][epoch:140, iter:  70,200, lr:(9.259e-04,)] [eta: 3:15:11, time (data): 0.362 (0.002)] l_pix: -3.4619e+01 
+2024-05-14 05:18:42,136 INFO: [OURNe..][epoch:140, iter:  70,300, lr:(9.257e-04,)] [eta: 3:14:31, time (data): 0.363 (0.002)] l_pix: -3.1990e+01 
+2024-05-14 05:19:18,413 INFO: [OURNe..][epoch:140, iter:  70,400, lr:(9.255e-04,)] [eta: 3:13:50, time (data): 0.362 (0.002)] l_pix: -3.3307e+01 
+2024-05-14 05:19:54,692 INFO: [OURNe..][epoch:140, iter:  70,500, lr:(9.253e-04,)] [eta: 3:13:10, time (data): 0.363 (0.002)] l_pix: -3.1742e+01 
+2024-05-14 05:20:30,979 INFO: [OURNe..][epoch:141, iter:  70,600, lr:(9.251e-04,)] [eta: 3:12:29, time (data): 0.363 (0.002)] l_pix: -3.1665e+01 
+2024-05-14 05:21:07,264 INFO: [OURNe..][epoch:141, iter:  70,700, lr:(9.249e-04,)] [eta: 3:11:49, time (data): 0.362 (0.002)] l_pix: -2.9795e+01 
+2024-05-14 05:21:43,538 INFO: [OURNe..][epoch:141, iter:  70,800, lr:(9.247e-04,)] [eta: 3:11:08, time (data): 0.362 (0.002)] l_pix: -3.1145e+01 
+2024-05-14 05:22:19,775 INFO: [OURNe..][epoch:141, iter:  70,900, lr:(9.245e-04,)] [eta: 3:10:28, time (data): 0.361 (0.002)] l_pix: -3.6556e+01 
+2024-05-14 05:22:56,039 INFO: [OURNe..][epoch:141, iter:  71,000, lr:(9.243e-04,)] [eta: 3:09:47, time (data): 0.363 (0.002)] l_pix: -3.2825e+01 
+2024-05-14 05:23:32,366 INFO: [OURNe..][epoch:142, iter:  71,100, lr:(9.241e-04,)] [eta: 3:09:07, time (data): 0.361 (0.002)] l_pix: -3.2999e+01 
+2024-05-14 05:24:08,622 INFO: [OURNe..][epoch:142, iter:  71,200, lr:(9.238e-04,)] [eta: 3:08:26, time (data): 0.364 (0.002)] l_pix: -3.6309e+01 
+2024-05-14 05:24:44,906 INFO: [OURNe..][epoch:142, iter:  71,300, lr:(9.236e-04,)] [eta: 3:07:46, time (data): 0.362 (0.002)] l_pix: -2.6345e+01 
+2024-05-14 05:25:21,115 INFO: [OURNe..][epoch:142, iter:  71,400, lr:(9.234e-04,)] [eta: 3:07:05, time (data): 0.362 (0.002)] l_pix: -3.1896e+01 
+2024-05-14 05:25:57,393 INFO: [OURNe..][epoch:142, iter:  71,500, lr:(9.232e-04,)] [eta: 3:06:25, time (data): 0.363 (0.001)] l_pix: -3.6834e+01 
+2024-05-14 05:26:33,674 INFO: [OURNe..][epoch:143, iter:  71,600, lr:(9.230e-04,)] [eta: 3:05:44, time (data): 0.362 (0.002)] l_pix: -3.4901e+01 
+2024-05-14 05:27:09,936 INFO: [OURNe..][epoch:143, iter:  71,700, lr:(9.228e-04,)] [eta: 3:05:04, time (data): 0.363 (0.002)] l_pix: -3.6218e+01 
+2024-05-14 05:27:46,236 INFO: [OURNe..][epoch:143, iter:  71,800, lr:(9.226e-04,)] [eta: 3:04:24, time (data): 0.362 (0.001)] l_pix: -3.6281e+01 
+2024-05-14 05:28:22,537 INFO: [OURNe..][epoch:143, iter:  71,900, lr:(9.224e-04,)] [eta: 3:03:43, time (data): 0.363 (0.002)] l_pix: -3.4841e+01 
+2024-05-14 05:28:58,859 INFO: [OURNe..][epoch:143, iter:  72,000, lr:(9.222e-04,)] [eta: 3:03:03, time (data): 0.362 (0.001)] l_pix: -3.8462e+01 
+2024-05-14 05:29:35,156 INFO: [OURNe..][epoch:144, iter:  72,100, lr:(9.220e-04,)] [eta: 3:02:22, time (data): 0.361 (0.001)] l_pix: -3.3283e+01 
+2024-05-14 05:30:11,433 INFO: [OURNe..][epoch:144, iter:  72,200, lr:(9.218e-04,)] [eta: 3:01:42, time (data): 0.363 (0.002)] l_pix: -3.0485e+01 
+2024-05-14 05:30:47,677 INFO: [OURNe..][epoch:144, iter:  72,300, lr:(9.215e-04,)] [eta: 3:01:02, time (data): 0.364 (0.002)] l_pix: -3.5912e+01 
+2024-05-14 05:31:23,989 INFO: [OURNe..][epoch:144, iter:  72,400, lr:(9.213e-04,)] [eta: 3:00:21, time (data): 0.363 (0.002)] l_pix: -3.8600e+01 
+2024-05-14 05:32:00,291 INFO: [OURNe..][epoch:144, iter:  72,500, lr:(9.211e-04,)] [eta: 2:59:41, time (data): 0.364 (0.002)] l_pix: -3.3404e+01 
+2024-05-14 05:32:36,634 INFO: [OURNe..][epoch:145, iter:  72,600, lr:(9.209e-04,)] [eta: 2:59:01, time (data): 0.363 (0.002)] l_pix: -3.3065e+01 
+2024-05-14 05:33:12,812 INFO: [OURNe..][epoch:145, iter:  72,700, lr:(9.207e-04,)] [eta: 2:58:20, time (data): 0.362 (0.002)] l_pix: -3.9532e+01 
+2024-05-14 05:33:49,008 INFO: [OURNe..][epoch:145, iter:  72,800, lr:(9.205e-04,)] [eta: 2:57:40, time (data): 0.362 (0.002)] l_pix: -3.2782e+01 
+2024-05-14 05:34:25,206 INFO: [OURNe..][epoch:145, iter:  72,900, lr:(9.203e-04,)] [eta: 2:57:00, time (data): 0.361 (0.002)] l_pix: -3.6020e+01 
+2024-05-14 05:35:01,500 INFO: [OURNe..][epoch:145, iter:  73,000, lr:(9.201e-04,)] [eta: 2:56:20, time (data): 0.363 (0.002)] l_pix: -3.3774e+01 
+2024-05-14 05:35:37,702 INFO: [OURNe..][epoch:146, iter:  73,100, lr:(9.198e-04,)] [eta: 2:55:39, time (data): 0.361 (0.001)] l_pix: -3.3462e+01 
+2024-05-14 05:36:13,931 INFO: [OURNe..][epoch:146, iter:  73,200, lr:(9.196e-04,)] [eta: 2:54:59, time (data): 0.362 (0.002)] l_pix: -3.2202e+01 
+2024-05-14 05:36:50,120 INFO: [OURNe..][epoch:146, iter:  73,300, lr:(9.194e-04,)] [eta: 2:54:19, time (data): 0.363 (0.001)] l_pix: -3.2789e+01 
+2024-05-14 05:37:26,355 INFO: [OURNe..][epoch:146, iter:  73,400, lr:(9.192e-04,)] [eta: 2:53:39, time (data): 0.360 (0.001)] l_pix: -3.5951e+01 
+2024-05-14 05:38:02,492 INFO: [OURNe..][epoch:146, iter:  73,500, lr:(9.190e-04,)] [eta: 2:52:58, time (data): 0.361 (0.001)] l_pix: -3.7095e+01 
+2024-05-14 05:38:38,663 INFO: [OURNe..][epoch:147, iter:  73,600, lr:(9.188e-04,)] [eta: 2:52:18, time (data): 0.361 (0.002)] l_pix: -3.3706e+01 
+2024-05-14 05:39:14,849 INFO: [OURNe..][epoch:147, iter:  73,700, lr:(9.186e-04,)] [eta: 2:51:38, time (data): 0.360 (0.001)] l_pix: -3.5320e+01 
+2024-05-14 05:39:51,083 INFO: [OURNe..][epoch:147, iter:  73,800, lr:(9.183e-04,)] [eta: 2:50:58, time (data): 0.361 (0.002)] l_pix: -3.6340e+01 
+2024-05-14 05:40:27,250 INFO: [OURNe..][epoch:147, iter:  73,900, lr:(9.181e-04,)] [eta: 2:50:17, time (data): 0.364 (0.002)] l_pix: -3.5413e+01 
+2024-05-14 05:41:03,410 INFO: [OURNe..][epoch:147, iter:  74,000, lr:(9.179e-04,)] [eta: 2:49:37, time (data): 0.360 (0.001)] l_pix: -3.4797e+01 
+2024-05-14 05:41:39,637 INFO: [OURNe..][epoch:148, iter:  74,100, lr:(9.177e-04,)] [eta: 2:48:57, time (data): 0.363 (0.002)] l_pix: -3.5920e+01 
+2024-05-14 05:42:15,955 INFO: [OURNe..][epoch:148, iter:  74,200, lr:(9.175e-04,)] [eta: 2:48:17, time (data): 0.363 (0.002)] l_pix: -3.4230e+01 
+2024-05-14 05:42:52,273 INFO: [OURNe..][epoch:148, iter:  74,300, lr:(9.173e-04,)] [eta: 2:47:37, time (data): 0.363 (0.002)] l_pix: -3.0916e+01 
+2024-05-14 05:43:28,578 INFO: [OURNe..][epoch:148, iter:  74,400, lr:(9.170e-04,)] [eta: 2:46:57, time (data): 0.363 (0.002)] l_pix: -3.2734e+01 
+2024-05-14 05:44:04,903 INFO: [OURNe..][epoch:148, iter:  74,500, lr:(9.168e-04,)] [eta: 2:46:17, time (data): 0.364 (0.002)] l_pix: -3.2825e+01 
+2024-05-14 05:44:41,167 INFO: [OURNe..][epoch:149, iter:  74,600, lr:(9.166e-04,)] [eta: 2:45:36, time (data): 0.362 (0.001)] l_pix: -3.4535e+01 
+2024-05-14 05:45:17,448 INFO: [OURNe..][epoch:149, iter:  74,700, lr:(9.164e-04,)] [eta: 2:44:56, time (data): 0.362 (0.002)] l_pix: -3.4635e+01 
+2024-05-14 05:45:53,656 INFO: [OURNe..][epoch:149, iter:  74,800, lr:(9.162e-04,)] [eta: 2:44:16, time (data): 0.363 (0.001)] l_pix: -3.4863e+01 
+2024-05-14 05:46:29,837 INFO: [OURNe..][epoch:149, iter:  74,900, lr:(9.160e-04,)] [eta: 2:43:36, time (data): 0.361 (0.001)] l_pix: -3.5602e+01 
+2024-05-14 05:47:06,043 INFO: [OURNe..][epoch:149, iter:  75,000, lr:(9.157e-04,)] [eta: 2:42:56, time (data): 0.363 (0.001)] l_pix: -3.5267e+01 
+2024-05-14 05:47:06,044 INFO: Saving models and training states.
+2024-05-14 05:49:28,397 INFO: Validation SOTS-indoor, 		 # psnr: 16.5913	 # ssim: 0.8069
+2024-05-14 05:49:28,398 INFO: [OURNe..][epoch:149, iter:  75,000, lr:(9.157e-04,)] m_psnr: 1.6591e+01 m_ssim: 8.0688e-01 
+2024-05-14 05:50:04,664 INFO: [OURNe..][epoch:150, iter:  75,100, lr:(9.155e-04,)] [eta: 2:43:03, time (data): 0.363 (0.002)] l_pix: -3.5459e+01 
+2024-05-14 05:50:40,932 INFO: [OURNe..][epoch:150, iter:  75,200, lr:(9.153e-04,)] [eta: 2:42:23, time (data): 0.363 (0.002)] l_pix: -3.1010e+01 
+2024-05-14 05:51:17,174 INFO: [OURNe..][epoch:150, iter:  75,300, lr:(9.151e-04,)] [eta: 2:41:43, time (data): 0.363 (0.002)] l_pix: -3.0496e+01 
+2024-05-14 05:51:53,373 INFO: [OURNe..][epoch:150, iter:  75,400, lr:(9.149e-04,)] [eta: 2:41:02, time (data): 0.362 (0.001)] l_pix: -3.5376e+01 
+2024-05-14 05:52:29,630 INFO: [OURNe..][epoch:150, iter:  75,500, lr:(9.147e-04,)] [eta: 2:40:22, time (data): 0.363 (0.002)] l_pix: -3.5815e+01 
+2024-05-14 05:53:05,894 INFO: [OURNe..][epoch:151, iter:  75,600, lr:(9.144e-04,)] [eta: 2:39:42, time (data): 0.362 (0.002)] l_pix: -2.9576e+01 
+2024-05-14 05:53:42,133 INFO: [OURNe..][epoch:151, iter:  75,700, lr:(9.142e-04,)] [eta: 2:39:02, time (data): 0.361 (0.002)] l_pix: -3.1512e+01 
+2024-05-14 05:54:18,291 INFO: [OURNe..][epoch:151, iter:  75,800, lr:(9.140e-04,)] [eta: 2:38:21, time (data): 0.361 (0.002)] l_pix: -3.1809e+01 
+2024-05-14 05:54:54,423 INFO: [OURNe..][epoch:151, iter:  75,900, lr:(9.138e-04,)] [eta: 2:37:41, time (data): 0.360 (0.002)] l_pix: -3.0854e+01 
+2024-05-14 05:55:30,683 INFO: [OURNe..][epoch:151, iter:  76,000, lr:(9.136e-04,)] [eta: 2:37:01, time (data): 0.363 (0.002)] l_pix: -3.5129e+01 
+2024-05-14 05:56:06,927 INFO: [OURNe..][epoch:152, iter:  76,100, lr:(9.133e-04,)] [eta: 2:36:21, time (data): 0.361 (0.002)] l_pix: -3.4807e+01 
+2024-05-14 05:56:43,203 INFO: [OURNe..][epoch:152, iter:  76,200, lr:(9.131e-04,)] [eta: 2:35:41, time (data): 0.363 (0.002)] l_pix: -3.1782e+01 
+2024-05-14 05:57:19,499 INFO: [OURNe..][epoch:152, iter:  76,300, lr:(9.129e-04,)] [eta: 2:35:00, time (data): 0.363 (0.002)] l_pix: -3.8324e+01 
+2024-05-14 05:57:55,787 INFO: [OURNe..][epoch:152, iter:  76,400, lr:(9.127e-04,)] [eta: 2:34:20, time (data): 0.362 (0.002)] l_pix: -3.3601e+01 
+2024-05-14 05:58:32,027 INFO: [OURNe..][epoch:152, iter:  76,500, lr:(9.124e-04,)] [eta: 2:33:40, time (data): 0.362 (0.002)] l_pix: -3.1801e+01 
+2024-05-14 05:59:08,297 INFO: [OURNe..][epoch:153, iter:  76,600, lr:(9.122e-04,)] [eta: 2:33:00, time (data): 0.361 (0.002)] l_pix: -3.2785e+01 
+2024-05-14 05:59:44,539 INFO: [OURNe..][epoch:153, iter:  76,700, lr:(9.120e-04,)] [eta: 2:32:20, time (data): 0.363 (0.002)] l_pix: -3.3052e+01 
+2024-05-14 06:00:20,754 INFO: [OURNe..][epoch:153, iter:  76,800, lr:(9.118e-04,)] [eta: 2:31:40, time (data): 0.362 (0.002)] l_pix: -3.6089e+01 
+2024-05-14 06:00:56,921 INFO: [OURNe..][epoch:153, iter:  76,900, lr:(9.116e-04,)] [eta: 2:30:59, time (data): 0.362 (0.002)] l_pix: -3.5067e+01 
+2024-05-14 06:01:33,123 INFO: [OURNe..][epoch:153, iter:  77,000, lr:(9.113e-04,)] [eta: 2:30:19, time (data): 0.361 (0.002)] l_pix: -3.4402e+01 
+2024-05-14 06:02:09,366 INFO: [OURNe..][epoch:154, iter:  77,100, lr:(9.111e-04,)] [eta: 2:29:39, time (data): 0.362 (0.002)] l_pix: -3.5544e+01 
+2024-05-14 06:02:45,665 INFO: [OURNe..][epoch:154, iter:  77,200, lr:(9.109e-04,)] [eta: 2:28:59, time (data): 0.364 (0.002)] l_pix: -3.5417e+01 
+2024-05-14 06:03:22,044 INFO: [OURNe..][epoch:154, iter:  77,300, lr:(9.107e-04,)] [eta: 2:28:19, time (data): 0.364 (0.002)] l_pix: -3.5289e+01 
+2024-05-14 06:03:58,336 INFO: [OURNe..][epoch:154, iter:  77,400, lr:(9.104e-04,)] [eta: 2:27:39, time (data): 0.362 (0.002)] l_pix: -3.5362e+01 
+2024-05-14 06:04:34,608 INFO: [OURNe..][epoch:154, iter:  77,500, lr:(9.102e-04,)] [eta: 2:26:59, time (data): 0.361 (0.002)] l_pix: -3.5156e+01 
+2024-05-14 06:05:10,903 INFO: [OURNe..][epoch:155, iter:  77,600, lr:(9.100e-04,)] [eta: 2:26:19, time (data): 0.363 (0.002)] l_pix: -2.8139e+01 
+2024-05-14 06:05:47,111 INFO: [OURNe..][epoch:155, iter:  77,700, lr:(9.098e-04,)] [eta: 2:25:39, time (data): 0.361 (0.002)] l_pix: -3.1856e+01 
+2024-05-14 06:06:23,411 INFO: [OURNe..][epoch:155, iter:  77,800, lr:(9.095e-04,)] [eta: 2:24:59, time (data): 0.363 (0.002)] l_pix: -3.1937e+01 
+2024-05-14 06:06:59,725 INFO: [OURNe..][epoch:155, iter:  77,900, lr:(9.093e-04,)] [eta: 2:24:19, time (data): 0.363 (0.002)] l_pix: -3.3592e+01 
+2024-05-14 06:07:36,012 INFO: [OURNe..][epoch:155, iter:  78,000, lr:(9.091e-04,)] [eta: 2:23:39, time (data): 0.363 (0.002)] l_pix: -3.5211e+01 
+2024-05-14 06:08:12,336 INFO: [OURNe..][epoch:156, iter:  78,100, lr:(9.089e-04,)] [eta: 2:22:59, time (data): 0.363 (0.002)] l_pix: -3.9142e+01 
+2024-05-14 06:08:48,648 INFO: [OURNe..][epoch:156, iter:  78,200, lr:(9.086e-04,)] [eta: 2:22:19, time (data): 0.363 (0.002)] l_pix: -3.2588e+01 
+2024-05-14 06:09:24,919 INFO: [OURNe..][epoch:156, iter:  78,300, lr:(9.084e-04,)] [eta: 2:21:39, time (data): 0.362 (0.002)] l_pix: -3.7775e+01 
+2024-05-14 06:10:01,209 INFO: [OURNe..][epoch:156, iter:  78,400, lr:(9.082e-04,)] [eta: 2:20:59, time (data): 0.363 (0.002)] l_pix: -3.4151e+01 
+2024-05-14 06:10:37,496 INFO: [OURNe..][epoch:156, iter:  78,500, lr:(9.080e-04,)] [eta: 2:20:19, time (data): 0.362 (0.002)] l_pix: -2.8768e+01 
+2024-05-14 06:11:13,824 INFO: [OURNe..][epoch:157, iter:  78,600, lr:(9.077e-04,)] [eta: 2:19:39, time (data): 0.363 (0.002)] l_pix: -3.3618e+01 
+2024-05-14 06:11:50,138 INFO: [OURNe..][epoch:157, iter:  78,700, lr:(9.075e-04,)] [eta: 2:18:59, time (data): 0.364 (0.002)] l_pix: -3.1209e+01 
+2024-05-14 06:12:26,445 INFO: [OURNe..][epoch:157, iter:  78,800, lr:(9.073e-04,)] [eta: 2:18:19, time (data): 0.362 (0.002)] l_pix: -3.3150e+01 
+2024-05-14 06:13:02,745 INFO: [OURNe..][epoch:157, iter:  78,900, lr:(9.070e-04,)] [eta: 2:17:39, time (data): 0.364 (0.002)] l_pix: -3.6479e+01 
+2024-05-14 06:13:39,063 INFO: [OURNe..][epoch:157, iter:  79,000, lr:(9.068e-04,)] [eta: 2:16:59, time (data): 0.362 (0.002)] l_pix: -3.4953e+01 
+2024-05-14 06:14:15,327 INFO: [OURNe..][epoch:158, iter:  79,100, lr:(9.066e-04,)] [eta: 2:16:20, time (data): 0.361 (0.002)] l_pix: -4.0260e+01 
+2024-05-14 06:14:51,498 INFO: [OURNe..][epoch:158, iter:  79,200, lr:(9.064e-04,)] [eta: 2:15:40, time (data): 0.363 (0.001)] l_pix: -2.7493e+01 
+2024-05-14 06:15:27,737 INFO: [OURNe..][epoch:158, iter:  79,300, lr:(9.061e-04,)] [eta: 2:15:00, time (data): 0.363 (0.002)] l_pix: -3.6519e+01 
+2024-05-14 06:16:04,090 INFO: [OURNe..][epoch:158, iter:  79,400, lr:(9.059e-04,)] [eta: 2:14:20, time (data): 0.364 (0.002)] l_pix: -3.5073e+01 
+2024-05-14 06:16:40,405 INFO: [OURNe..][epoch:158, iter:  79,500, lr:(9.057e-04,)] [eta: 2:13:40, time (data): 0.363 (0.002)] l_pix: -3.5009e+01 
+2024-05-14 06:17:16,766 INFO: [OURNe..][epoch:159, iter:  79,600, lr:(9.054e-04,)] [eta: 2:13:00, time (data): 0.364 (0.002)] l_pix: -3.7251e+01 
+2024-05-14 06:17:53,054 INFO: [OURNe..][epoch:159, iter:  79,700, lr:(9.052e-04,)] [eta: 2:12:20, time (data): 0.363 (0.002)] l_pix: -3.4794e+01 
+2024-05-14 06:18:29,346 INFO: [OURNe..][epoch:159, iter:  79,800, lr:(9.050e-04,)] [eta: 2:11:40, time (data): 0.363 (0.002)] l_pix: -3.7152e+01 
+2024-05-14 06:19:05,613 INFO: [OURNe..][epoch:159, iter:  79,900, lr:(9.048e-04,)] [eta: 2:11:01, time (data): 0.363 (0.002)] l_pix: -3.5773e+01 
+2024-05-14 06:19:41,894 INFO: [OURNe..][epoch:159, iter:  80,000, lr:(9.045e-04,)] [eta: 2:10:21, time (data): 0.363 (0.002)] l_pix: -3.2203e+01 
+2024-05-14 06:19:41,895 INFO: Saving models and training states.
+2024-05-14 06:22:04,378 INFO: Validation SOTS-indoor, 		 # psnr: 16.8633	 # ssim: 0.8161
+2024-05-14 06:22:04,378 INFO: [OURNe..][epoch:159, iter:  80,000, lr:(9.045e-04,)] m_psnr: 1.6863e+01 m_ssim: 8.1611e-01 
+2024-05-14 06:22:40,694 INFO: [OURNe..][epoch:160, iter:  80,100, lr:(9.043e-04,)] [eta: 2:10:16, time (data): 0.365 (0.002)] l_pix: -3.5089e+01 
+2024-05-14 06:23:17,015 INFO: [OURNe..][epoch:160, iter:  80,200, lr:(9.041e-04,)] [eta: 2:09:36, time (data): 0.362 (0.002)] l_pix: -3.5935e+01 
+2024-05-14 06:23:53,225 INFO: [OURNe..][epoch:160, iter:  80,300, lr:(9.038e-04,)] [eta: 2:08:56, time (data): 0.362 (0.002)] l_pix: -3.0835e+01 
+2024-05-14 06:24:29,435 INFO: [OURNe..][epoch:160, iter:  80,400, lr:(9.036e-04,)] [eta: 2:08:16, time (data): 0.363 (0.002)] l_pix: -3.6365e+01 
+2024-05-14 06:25:05,703 INFO: [OURNe..][epoch:160, iter:  80,500, lr:(9.034e-04,)] [eta: 2:07:36, time (data): 0.362 (0.002)] l_pix: -3.3937e+01 
+2024-05-14 06:25:41,926 INFO: [OURNe..][epoch:161, iter:  80,600, lr:(9.031e-04,)] [eta: 2:06:56, time (data): 0.364 (0.002)] l_pix: -3.2082e+01 
+2024-05-14 06:26:18,225 INFO: [OURNe..][epoch:161, iter:  80,700, lr:(9.029e-04,)] [eta: 2:06:16, time (data): 0.362 (0.002)] l_pix: -3.4424e+01 
+2024-05-14 06:26:54,489 INFO: [OURNe..][epoch:161, iter:  80,800, lr:(9.027e-04,)] [eta: 2:05:36, time (data): 0.361 (0.002)] l_pix: -3.8755e+01 
+2024-05-14 06:27:30,763 INFO: [OURNe..][epoch:161, iter:  80,900, lr:(9.024e-04,)] [eta: 2:04:56, time (data): 0.363 (0.002)] l_pix: -3.3191e+01 
+2024-05-14 06:28:07,021 INFO: [OURNe..][epoch:161, iter:  81,000, lr:(9.022e-04,)] [eta: 2:04:16, time (data): 0.361 (0.001)] l_pix: -3.5780e+01 
+2024-05-14 06:28:43,353 INFO: [OURNe..][epoch:162, iter:  81,100, lr:(9.020e-04,)] [eta: 2:03:37, time (data): 0.362 (0.002)] l_pix: -3.8232e+01 
+2024-05-14 06:29:19,653 INFO: [OURNe..][epoch:162, iter:  81,200, lr:(9.017e-04,)] [eta: 2:02:57, time (data): 0.363 (0.002)] l_pix: -3.7921e+01 
+2024-05-14 06:29:55,980 INFO: [OURNe..][epoch:162, iter:  81,300, lr:(9.015e-04,)] [eta: 2:02:17, time (data): 0.363 (0.002)] l_pix: -3.1571e+01 
+2024-05-14 06:30:32,262 INFO: [OURNe..][epoch:162, iter:  81,400, lr:(9.013e-04,)] [eta: 2:01:37, time (data): 0.363 (0.002)] l_pix: -3.6481e+01 
+2024-05-14 06:31:08,538 INFO: [OURNe..][epoch:162, iter:  81,500, lr:(9.010e-04,)] [eta: 2:00:57, time (data): 0.390 (0.002)] l_pix: -3.4855e+01 
+2024-05-14 06:31:44,837 INFO: [OURNe..][epoch:163, iter:  81,600, lr:(9.008e-04,)] [eta: 2:00:17, time (data): 0.364 (0.002)] l_pix: -3.3400e+01 
+2024-05-14 06:32:21,164 INFO: [OURNe..][epoch:163, iter:  81,700, lr:(9.006e-04,)] [eta: 1:59:37, time (data): 0.363 (0.002)] l_pix: -3.2376e+01 
+2024-05-14 06:32:57,499 INFO: [OURNe..][epoch:163, iter:  81,800, lr:(9.003e-04,)] [eta: 1:58:57, time (data): 0.362 (0.002)] l_pix: -3.2670e+01 
+2024-05-14 06:33:33,743 INFO: [OURNe..][epoch:163, iter:  81,900, lr:(9.001e-04,)] [eta: 1:58:17, time (data): 0.362 (0.002)] l_pix: -3.4467e+01 
+2024-05-14 06:34:10,061 INFO: [OURNe..][epoch:163, iter:  82,000, lr:(8.999e-04,)] [eta: 1:57:38, time (data): 0.363 (0.002)] l_pix: -3.1720e+01 
+2024-05-14 06:34:46,367 INFO: [OURNe..][epoch:164, iter:  82,100, lr:(8.996e-04,)] [eta: 1:56:58, time (data): 0.363 (0.002)] l_pix: -3.4023e+01 
+2024-05-14 06:35:22,702 INFO: [OURNe..][epoch:164, iter:  82,200, lr:(8.994e-04,)] [eta: 1:56:18, time (data): 0.362 (0.002)] l_pix: -3.5700e+01 
+2024-05-14 06:35:58,975 INFO: [OURNe..][epoch:164, iter:  82,300, lr:(8.991e-04,)] [eta: 1:55:38, time (data): 0.364 (0.002)] l_pix: -3.4489e+01 
+2024-05-14 06:36:35,305 INFO: [OURNe..][epoch:164, iter:  82,400, lr:(8.989e-04,)] [eta: 1:54:58, time (data): 0.363 (0.002)] l_pix: -3.6120e+01 
+2024-05-14 06:37:11,579 INFO: [OURNe..][epoch:164, iter:  82,500, lr:(8.987e-04,)] [eta: 1:54:18, time (data): 0.363 (0.002)] l_pix: -3.6404e+01 
+2024-05-14 06:37:47,886 INFO: [OURNe..][epoch:165, iter:  82,600, lr:(8.984e-04,)] [eta: 1:53:39, time (data): 0.364 (0.002)] l_pix: -3.5083e+01 
+2024-05-14 06:38:24,185 INFO: [OURNe..][epoch:165, iter:  82,700, lr:(8.982e-04,)] [eta: 1:52:59, time (data): 0.363 (0.002)] l_pix: -2.9169e+01 
+2024-05-14 06:39:00,479 INFO: [OURNe..][epoch:165, iter:  82,800, lr:(8.980e-04,)] [eta: 1:52:19, time (data): 0.362 (0.002)] l_pix: -3.5436e+01 
+2024-05-14 06:39:36,684 INFO: [OURNe..][epoch:165, iter:  82,900, lr:(8.977e-04,)] [eta: 1:51:39, time (data): 0.360 (0.001)] l_pix: -2.6817e+01 
+2024-05-14 06:40:12,974 INFO: [OURNe..][epoch:165, iter:  83,000, lr:(8.975e-04,)] [eta: 1:50:59, time (data): 0.363 (0.002)] l_pix: -2.6013e+01 
+2024-05-14 06:40:49,202 INFO: [OURNe..][epoch:166, iter:  83,100, lr:(8.972e-04,)] [eta: 1:50:20, time (data): 0.363 (0.002)] l_pix: -3.4174e+01 
+2024-05-14 06:41:25,542 INFO: [OURNe..][epoch:166, iter:  83,200, lr:(8.970e-04,)] [eta: 1:49:40, time (data): 0.362 (0.002)] l_pix: -3.4157e+01 
+2024-05-14 06:42:01,827 INFO: [OURNe..][epoch:166, iter:  83,300, lr:(8.968e-04,)] [eta: 1:49:00, time (data): 0.363 (0.002)] l_pix: -3.5011e+01 
+2024-05-14 06:42:38,137 INFO: [OURNe..][epoch:166, iter:  83,400, lr:(8.965e-04,)] [eta: 1:48:20, time (data): 0.363 (0.002)] l_pix: -3.4414e+01 
+2024-05-14 06:43:14,472 INFO: [OURNe..][epoch:166, iter:  83,500, lr:(8.963e-04,)] [eta: 1:47:41, time (data): 0.363 (0.002)] l_pix: -3.4182e+01 
+2024-05-14 06:43:50,828 INFO: [OURNe..][epoch:167, iter:  83,600, lr:(8.961e-04,)] [eta: 1:47:01, time (data): 0.362 (0.002)] l_pix: -3.7065e+01 
+2024-05-14 06:44:27,149 INFO: [OURNe..][epoch:167, iter:  83,700, lr:(8.958e-04,)] [eta: 1:46:21, time (data): 0.363 (0.002)] l_pix: -3.0484e+01 
+2024-05-14 06:45:03,485 INFO: [OURNe..][epoch:167, iter:  83,800, lr:(8.956e-04,)] [eta: 1:45:42, time (data): 0.364 (0.002)] l_pix: -2.9772e+01 
+2024-05-14 06:45:39,831 INFO: [OURNe..][epoch:167, iter:  83,900, lr:(8.953e-04,)] [eta: 1:45:02, time (data): 0.364 (0.002)] l_pix: -2.8969e+01 
+2024-05-14 06:46:16,130 INFO: [OURNe..][epoch:167, iter:  84,000, lr:(8.951e-04,)] [eta: 1:44:22, time (data): 0.364 (0.002)] l_pix: -2.8624e+01 
+2024-05-14 06:46:52,495 INFO: [OURNe..][epoch:168, iter:  84,100, lr:(8.948e-04,)] [eta: 1:43:43, time (data): 0.364 (0.002)] l_pix: -3.5373e+01 
+2024-05-14 06:47:28,834 INFO: [OURNe..][epoch:168, iter:  84,200, lr:(8.946e-04,)] [eta: 1:43:03, time (data): 0.363 (0.002)] l_pix: -2.7965e+01 
+2024-05-14 06:48:05,181 INFO: [OURNe..][epoch:168, iter:  84,300, lr:(8.944e-04,)] [eta: 1:42:23, time (data): 0.362 (0.002)] l_pix: -3.1661e+01 
+2024-05-14 06:48:41,505 INFO: [OURNe..][epoch:168, iter:  84,400, lr:(8.941e-04,)] [eta: 1:41:44, time (data): 0.363 (0.002)] l_pix: -3.5712e+01 
+2024-05-14 06:49:17,843 INFO: [OURNe..][epoch:168, iter:  84,500, lr:(8.939e-04,)] [eta: 1:41:04, time (data): 0.363 (0.002)] l_pix: -3.2074e+01 
+2024-05-14 06:49:54,162 INFO: [OURNe..][epoch:169, iter:  84,600, lr:(8.936e-04,)] [eta: 1:40:24, time (data): 0.364 (0.002)] l_pix: -2.9945e+01 
+2024-05-14 06:50:30,524 INFO: [OURNe..][epoch:169, iter:  84,700, lr:(8.934e-04,)] [eta: 1:39:45, time (data): 0.363 (0.002)] l_pix: -3.4267e+01 
+2024-05-14 06:51:06,785 INFO: [OURNe..][epoch:169, iter:  84,800, lr:(8.932e-04,)] [eta: 1:39:05, time (data): 0.362 (0.002)] l_pix: -4.1753e+01 
+2024-05-14 06:51:43,100 INFO: [OURNe..][epoch:169, iter:  84,900, lr:(8.929e-04,)] [eta: 1:38:25, time (data): 0.363 (0.002)] l_pix: -3.6517e+01 
+2024-05-14 06:52:19,419 INFO: [OURNe..][epoch:169, iter:  85,000, lr:(8.927e-04,)] [eta: 1:37:46, time (data): 0.362 (0.002)] l_pix: -3.2177e+01 
+2024-05-14 06:52:19,420 INFO: Saving models and training states.
+2024-05-14 06:54:41,583 INFO: Validation SOTS-indoor, 		 # psnr: 15.7913	 # ssim: 0.7895
+2024-05-14 06:54:41,584 INFO: [OURNe..][epoch:169, iter:  85,000, lr:(8.927e-04,)] m_psnr: 1.5791e+01 m_ssim: 7.8948e-01 
+2024-05-14 06:55:17,856 INFO: [OURNe..][epoch:170, iter:  85,100, lr:(8.924e-04,)] [eta: 1:37:31, time (data): 0.362 (0.002)] l_pix: -2.5802e+01 
+2024-05-14 06:55:54,149 INFO: [OURNe..][epoch:170, iter:  85,200, lr:(8.922e-04,)] [eta: 1:36:51, time (data): 0.362 (0.002)] l_pix: -3.7202e+01 
+2024-05-14 06:56:30,418 INFO: [OURNe..][epoch:170, iter:  85,300, lr:(8.919e-04,)] [eta: 1:36:11, time (data): 0.363 (0.002)] l_pix: -3.3110e+01 
+2024-05-14 06:57:06,698 INFO: [OURNe..][epoch:170, iter:  85,400, lr:(8.917e-04,)] [eta: 1:35:32, time (data): 0.363 (0.002)] l_pix: -3.4011e+01 
+2024-05-14 06:57:42,923 INFO: [OURNe..][epoch:170, iter:  85,500, lr:(8.915e-04,)] [eta: 1:34:52, time (data): 0.361 (0.001)] l_pix: -3.3129e+01 
+2024-05-14 06:58:19,151 INFO: [OURNe..][epoch:171, iter:  85,600, lr:(8.912e-04,)] [eta: 1:34:12, time (data): 0.362 (0.002)] l_pix: -3.6564e+01 
+2024-05-14 06:58:55,426 INFO: [OURNe..][epoch:171, iter:  85,700, lr:(8.910e-04,)] [eta: 1:33:32, time (data): 0.362 (0.002)] l_pix: -3.5546e+01 
+2024-05-14 06:59:31,687 INFO: [OURNe..][epoch:171, iter:  85,800, lr:(8.907e-04,)] [eta: 1:32:53, time (data): 0.362 (0.002)] l_pix: -3.5126e+01 
+2024-05-14 07:00:07,932 INFO: [OURNe..][epoch:171, iter:  85,900, lr:(8.905e-04,)] [eta: 1:32:13, time (data): 0.361 (0.002)] l_pix: -3.6286e+01 
+2024-05-14 07:00:44,154 INFO: [OURNe..][epoch:171, iter:  86,000, lr:(8.902e-04,)] [eta: 1:31:33, time (data): 0.363 (0.002)] l_pix: -3.4543e+01 
+2024-05-14 07:01:20,384 INFO: [OURNe..][epoch:172, iter:  86,100, lr:(8.900e-04,)] [eta: 1:30:53, time (data): 0.362 (0.002)] l_pix: -3.1505e+01 
+2024-05-14 07:01:56,557 INFO: [OURNe..][epoch:172, iter:  86,200, lr:(8.897e-04,)] [eta: 1:30:14, time (data): 0.361 (0.002)] l_pix: -3.1763e+01 
+2024-05-14 07:02:32,778 INFO: [OURNe..][epoch:172, iter:  86,300, lr:(8.895e-04,)] [eta: 1:29:34, time (data): 0.362 (0.002)] l_pix: -3.6163e+01 
+2024-05-14 07:03:09,019 INFO: [OURNe..][epoch:172, iter:  86,400, lr:(8.892e-04,)] [eta: 1:28:54, time (data): 0.362 (0.002)] l_pix: -2.9944e+01 
+2024-05-14 07:03:45,208 INFO: [OURNe..][epoch:172, iter:  86,500, lr:(8.890e-04,)] [eta: 1:28:15, time (data): 0.361 (0.002)] l_pix: -3.7641e+01 
+2024-05-14 07:04:21,365 INFO: [OURNe..][epoch:173, iter:  86,600, lr:(8.888e-04,)] [eta: 1:27:35, time (data): 0.362 (0.002)] l_pix: -4.1382e+01 
+2024-05-14 07:04:57,532 INFO: [OURNe..][epoch:173, iter:  86,700, lr:(8.885e-04,)] [eta: 1:26:55, time (data): 0.361 (0.002)] l_pix: -3.5531e+01 
+2024-05-14 07:05:33,715 INFO: [OURNe..][epoch:173, iter:  86,800, lr:(8.883e-04,)] [eta: 1:26:16, time (data): 0.362 (0.002)] l_pix: -3.2696e+01 
+2024-05-14 07:06:09,933 INFO: [OURNe..][epoch:173, iter:  86,900, lr:(8.880e-04,)] [eta: 1:25:36, time (data): 0.364 (0.002)] l_pix: -3.6178e+01 
+2024-05-14 07:06:46,181 INFO: [OURNe..][epoch:173, iter:  87,000, lr:(8.878e-04,)] [eta: 1:24:56, time (data): 0.363 (0.002)] l_pix: -3.2757e+01 
+2024-05-14 07:07:22,503 INFO: [OURNe..][epoch:174, iter:  87,100, lr:(8.875e-04,)] [eta: 1:24:17, time (data): 0.363 (0.002)] l_pix: -3.5975e+01 
+2024-05-14 07:07:58,791 INFO: [OURNe..][epoch:174, iter:  87,200, lr:(8.873e-04,)] [eta: 1:23:37, time (data): 0.363 (0.002)] l_pix: -3.7958e+01 
+2024-05-14 07:08:35,099 INFO: [OURNe..][epoch:174, iter:  87,300, lr:(8.870e-04,)] [eta: 1:22:57, time (data): 0.362 (0.002)] l_pix: -3.9342e+01 
+2024-05-14 07:09:11,379 INFO: [OURNe..][epoch:174, iter:  87,400, lr:(8.868e-04,)] [eta: 1:22:18, time (data): 0.363 (0.002)] l_pix: -3.6004e+01 
+2024-05-14 07:09:47,662 INFO: [OURNe..][epoch:174, iter:  87,500, lr:(8.865e-04,)] [eta: 1:21:38, time (data): 0.363 (0.002)] l_pix: -3.6616e+01 
+2024-05-14 07:10:23,949 INFO: [OURNe..][epoch:175, iter:  87,600, lr:(8.863e-04,)] [eta: 1:20:58, time (data): 0.363 (0.002)] l_pix: -3.2955e+01 
+2024-05-14 07:11:00,173 INFO: [OURNe..][epoch:175, iter:  87,700, lr:(8.860e-04,)] [eta: 1:20:19, time (data): 0.362 (0.002)] l_pix: -3.0590e+01 
+2024-05-14 07:11:36,373 INFO: [OURNe..][epoch:175, iter:  87,800, lr:(8.858e-04,)] [eta: 1:19:39, time (data): 0.362 (0.002)] l_pix: -3.3066e+01 
+2024-05-14 07:12:12,565 INFO: [OURNe..][epoch:175, iter:  87,900, lr:(8.855e-04,)] [eta: 1:19:00, time (data): 0.363 (0.002)] l_pix: -3.3175e+01 
+2024-05-14 07:12:48,762 INFO: [OURNe..][epoch:175, iter:  88,000, lr:(8.853e-04,)] [eta: 1:18:20, time (data): 0.363 (0.002)] l_pix: -3.3993e+01 
+2024-05-14 07:13:24,944 INFO: [OURNe..][epoch:176, iter:  88,100, lr:(8.850e-04,)] [eta: 1:17:40, time (data): 0.361 (0.002)] l_pix: -3.2760e+01 
+2024-05-14 07:14:01,120 INFO: [OURNe..][epoch:176, iter:  88,200, lr:(8.848e-04,)] [eta: 1:17:01, time (data): 0.363 (0.002)] l_pix: -3.2191e+01 
+2024-05-14 07:14:37,284 INFO: [OURNe..][epoch:176, iter:  88,300, lr:(8.845e-04,)] [eta: 1:16:21, time (data): 0.361 (0.002)] l_pix: -2.9978e+01 
+2024-05-14 07:15:13,445 INFO: [OURNe..][epoch:176, iter:  88,400, lr:(8.843e-04,)] [eta: 1:15:42, time (data): 0.361 (0.002)] l_pix: -3.2100e+01 
+2024-05-14 07:15:49,644 INFO: [OURNe..][epoch:176, iter:  88,500, lr:(8.840e-04,)] [eta: 1:15:02, time (data): 0.361 (0.002)] l_pix: -3.4705e+01 
+2024-05-14 07:16:25,841 INFO: [OURNe..][epoch:177, iter:  88,600, lr:(8.838e-04,)] [eta: 1:14:23, time (data): 0.361 (0.002)] l_pix: -3.3804e+01 
+2024-05-14 07:17:02,095 INFO: [OURNe..][epoch:177, iter:  88,700, lr:(8.835e-04,)] [eta: 1:13:43, time (data): 0.362 (0.002)] l_pix: -3.6706e+01 
+2024-05-14 07:17:38,375 INFO: [OURNe..][epoch:177, iter:  88,800, lr:(8.833e-04,)] [eta: 1:13:04, time (data): 0.363 (0.002)] l_pix: -3.3956e+01 
+2024-05-14 07:18:14,630 INFO: [OURNe..][epoch:177, iter:  88,900, lr:(8.830e-04,)] [eta: 1:12:24, time (data): 0.363 (0.002)] l_pix: -3.3885e+01 
+2024-05-14 07:18:50,904 INFO: [OURNe..][epoch:177, iter:  89,000, lr:(8.828e-04,)] [eta: 1:11:45, time (data): 0.362 (0.001)] l_pix: -3.7937e+01 
+2024-05-14 07:19:27,192 INFO: [OURNe..][epoch:178, iter:  89,100, lr:(8.825e-04,)] [eta: 1:11:05, time (data): 0.361 (0.002)] l_pix: -3.1892e+01 
+2024-05-14 07:20:03,436 INFO: [OURNe..][epoch:178, iter:  89,200, lr:(8.823e-04,)] [eta: 1:10:26, time (data): 0.362 (0.001)] l_pix: -3.6099e+01 
+2024-05-14 07:20:39,674 INFO: [OURNe..][epoch:178, iter:  89,300, lr:(8.820e-04,)] [eta: 1:09:46, time (data): 0.363 (0.002)] l_pix: -3.6626e+01 
+2024-05-14 07:21:15,900 INFO: [OURNe..][epoch:178, iter:  89,400, lr:(8.817e-04,)] [eta: 1:09:07, time (data): 0.362 (0.002)] l_pix: -3.3096e+01 
+2024-05-14 07:21:52,115 INFO: [OURNe..][epoch:178, iter:  89,500, lr:(8.815e-04,)] [eta: 1:08:27, time (data): 0.362 (0.002)] l_pix: -3.0388e+01 
+2024-05-14 07:22:28,296 INFO: [OURNe..][epoch:179, iter:  89,600, lr:(8.812e-04,)] [eta: 1:07:48, time (data): 0.361 (0.002)] l_pix: -3.4514e+01 
+2024-05-14 07:23:04,489 INFO: [OURNe..][epoch:179, iter:  89,700, lr:(8.810e-04,)] [eta: 1:07:08, time (data): 0.361 (0.002)] l_pix: -3.5652e+01 
+2024-05-14 07:23:40,763 INFO: [OURNe..][epoch:179, iter:  89,800, lr:(8.807e-04,)] [eta: 1:06:29, time (data): 0.362 (0.002)] l_pix: -3.8986e+01 
+2024-05-14 07:24:16,951 INFO: [OURNe..][epoch:179, iter:  89,900, lr:(8.805e-04,)] [eta: 1:05:49, time (data): 0.361 (0.002)] l_pix: -3.3640e+01 
+2024-05-14 07:24:53,174 INFO: [OURNe..][epoch:179, iter:  90,000, lr:(8.802e-04,)] [eta: 1:05:10, time (data): 0.362 (0.002)] l_pix: -3.5795e+01 
+2024-05-14 07:24:53,175 INFO: Saving models and training states.
+2024-05-14 07:27:15,443 INFO: Validation SOTS-indoor, 		 # psnr: 16.5323	 # ssim: 0.8076
+2024-05-14 07:27:15,443 INFO: [OURNe..][epoch:179, iter:  90,000, lr:(8.802e-04,)] m_psnr: 1.6532e+01 m_ssim: 8.0761e-01 
+2024-05-14 07:27:51,723 INFO: [OURNe..][epoch:180, iter:  90,100, lr:(8.800e-04,)] [eta: 1:04:46, time (data): 0.363 (0.002)] l_pix: -3.8422e+01 
+2024-05-14 07:28:27,993 INFO: [OURNe..][epoch:180, iter:  90,200, lr:(8.797e-04,)] [eta: 1:04:07, time (data): 0.362 (0.002)] l_pix: -3.6380e+01 
+2024-05-14 07:29:04,230 INFO: [OURNe..][epoch:180, iter:  90,300, lr:(8.795e-04,)] [eta: 1:03:27, time (data): 0.361 (0.002)] l_pix: -3.5176e+01 
+2024-05-14 07:29:40,390 INFO: [OURNe..][epoch:180, iter:  90,400, lr:(8.792e-04,)] [eta: 1:02:47, time (data): 0.363 (0.002)] l_pix: -3.9019e+01 
+2024-05-14 07:30:16,570 INFO: [OURNe..][epoch:180, iter:  90,500, lr:(8.789e-04,)] [eta: 1:02:08, time (data): 0.362 (0.002)] l_pix: -3.4096e+01 
+2024-05-14 07:30:52,826 INFO: [OURNe..][epoch:181, iter:  90,600, lr:(8.787e-04,)] [eta: 1:01:28, time (data): 0.361 (0.001)] l_pix: -3.7676e+01 
+2024-05-14 07:31:28,990 INFO: [OURNe..][epoch:181, iter:  90,700, lr:(8.784e-04,)] [eta: 1:00:49, time (data): 0.361 (0.001)] l_pix: -3.0823e+01 
+2024-05-14 07:32:05,098 INFO: [OURNe..][epoch:181, iter:  90,800, lr:(8.782e-04,)] [eta: 1:00:09, time (data): 0.361 (0.002)] l_pix: -3.5452e+01 
+2024-05-14 07:32:41,226 INFO: [OURNe..][epoch:181, iter:  90,900, lr:(8.779e-04,)] [eta: 0:59:30, time (data): 0.361 (0.001)] l_pix: -3.6620e+01 
+2024-05-14 07:33:17,334 INFO: [OURNe..][epoch:181, iter:  91,000, lr:(8.777e-04,)] [eta: 0:58:50, time (data): 0.361 (0.002)] l_pix: -3.4592e+01 
+2024-05-14 07:33:53,563 INFO: [OURNe..][epoch:182, iter:  91,100, lr:(8.774e-04,)] [eta: 0:58:11, time (data): 0.363 (0.002)] l_pix: -3.1627e+01 
+2024-05-14 07:34:29,783 INFO: [OURNe..][epoch:182, iter:  91,200, lr:(8.771e-04,)] [eta: 0:57:31, time (data): 0.363 (0.002)] l_pix: -3.5990e+01 
+2024-05-14 07:35:05,985 INFO: [OURNe..][epoch:182, iter:  91,300, lr:(8.769e-04,)] [eta: 0:56:52, time (data): 0.362 (0.002)] l_pix: -3.2948e+01 
+2024-05-14 07:35:42,186 INFO: [OURNe..][epoch:182, iter:  91,400, lr:(8.766e-04,)] [eta: 0:56:12, time (data): 0.361 (0.002)] l_pix: -3.5368e+01 
+2024-05-14 07:36:18,343 INFO: [OURNe..][epoch:182, iter:  91,500, lr:(8.764e-04,)] [eta: 0:55:33, time (data): 0.361 (0.001)] l_pix: -3.9871e+01 
+2024-05-14 07:36:54,504 INFO: [OURNe..][epoch:183, iter:  91,600, lr:(8.761e-04,)] [eta: 0:54:53, time (data): 0.361 (0.002)] l_pix: -3.2826e+01 
+2024-05-14 07:37:30,692 INFO: [OURNe..][epoch:183, iter:  91,700, lr:(8.758e-04,)] [eta: 0:54:14, time (data): 0.363 (0.002)] l_pix: -3.9125e+01 
+2024-05-14 07:38:06,908 INFO: [OURNe..][epoch:183, iter:  91,800, lr:(8.756e-04,)] [eta: 0:53:34, time (data): 0.361 (0.002)] l_pix: -3.6058e+01 
+2024-05-14 07:38:43,098 INFO: [OURNe..][epoch:183, iter:  91,900, lr:(8.753e-04,)] [eta: 0:52:55, time (data): 0.363 (0.002)] l_pix: -3.9621e+01 
+2024-05-14 07:39:19,330 INFO: [OURNe..][epoch:183, iter:  92,000, lr:(8.751e-04,)] [eta: 0:52:15, time (data): 0.362 (0.002)] l_pix: -3.3089e+01 
+2024-05-14 07:39:55,569 INFO: [OURNe..][epoch:184, iter:  92,100, lr:(8.748e-04,)] [eta: 0:51:36, time (data): 0.363 (0.002)] l_pix: -3.7929e+01 
+2024-05-14 07:40:31,800 INFO: [OURNe..][epoch:184, iter:  92,200, lr:(8.746e-04,)] [eta: 0:50:56, time (data): 0.362 (0.002)] l_pix: -3.6948e+01 
+2024-05-14 07:41:08,044 INFO: [OURNe..][epoch:184, iter:  92,300, lr:(8.743e-04,)] [eta: 0:50:17, time (data): 0.362 (0.002)] l_pix: -3.6061e+01 
+2024-05-14 07:41:44,353 INFO: [OURNe..][epoch:184, iter:  92,400, lr:(8.740e-04,)] [eta: 0:49:37, time (data): 0.362 (0.002)] l_pix: -3.6860e+01 
+2024-05-14 07:42:20,581 INFO: [OURNe..][epoch:184, iter:  92,500, lr:(8.738e-04,)] [eta: 0:48:58, time (data): 0.363 (0.002)] l_pix: -2.8280e+01 
+2024-05-14 07:42:56,809 INFO: [OURNe..][epoch:185, iter:  92,600, lr:(8.735e-04,)] [eta: 0:48:19, time (data): 0.361 (0.002)] l_pix: -3.2703e+01 
+2024-05-14 07:43:32,957 INFO: [OURNe..][epoch:185, iter:  92,700, lr:(8.732e-04,)] [eta: 0:47:39, time (data): 0.361 (0.002)] l_pix: -3.4496e+01 
+2024-05-14 07:44:09,137 INFO: [OURNe..][epoch:185, iter:  92,800, lr:(8.730e-04,)] [eta: 0:47:00, time (data): 0.361 (0.002)] l_pix: -3.6747e+01 
+2024-05-14 07:44:45,298 INFO: [OURNe..][epoch:185, iter:  92,900, lr:(8.727e-04,)] [eta: 0:46:20, time (data): 0.362 (0.002)] l_pix: -3.2522e+01 
+2024-05-14 07:45:21,468 INFO: [OURNe..][epoch:185, iter:  93,000, lr:(8.725e-04,)] [eta: 0:45:41, time (data): 0.361 (0.002)] l_pix: -3.7581e+01 
+2024-05-14 07:45:57,611 INFO: [OURNe..][epoch:186, iter:  93,100, lr:(8.722e-04,)] [eta: 0:45:01, time (data): 0.362 (0.002)] l_pix: -3.9310e+01 
+2024-05-14 07:46:33,756 INFO: [OURNe..][epoch:186, iter:  93,200, lr:(8.719e-04,)] [eta: 0:44:22, time (data): 0.361 (0.002)] l_pix: -3.5754e+01 
+2024-05-14 07:47:09,924 INFO: [OURNe..][epoch:186, iter:  93,300, lr:(8.717e-04,)] [eta: 0:43:43, time (data): 0.362 (0.002)] l_pix: -3.2711e+01 
+2024-05-14 07:47:46,101 INFO: [OURNe..][epoch:186, iter:  93,400, lr:(8.714e-04,)] [eta: 0:43:03, time (data): 0.363 (0.002)] l_pix: -3.6537e+01 
+2024-05-14 07:48:22,320 INFO: [OURNe..][epoch:186, iter:  93,500, lr:(8.711e-04,)] [eta: 0:42:24, time (data): 0.361 (0.002)] l_pix: -3.9554e+01 
+2024-05-14 07:48:58,517 INFO: [OURNe..][epoch:187, iter:  93,600, lr:(8.709e-04,)] [eta: 0:41:45, time (data): 0.363 (0.002)] l_pix: -3.5812e+01 
+2024-05-14 07:49:34,711 INFO: [OURNe..][epoch:187, iter:  93,700, lr:(8.706e-04,)] [eta: 0:41:05, time (data): 0.361 (0.002)] l_pix: -3.5453e+01 
+2024-05-14 07:50:10,909 INFO: [OURNe..][epoch:187, iter:  93,800, lr:(8.704e-04,)] [eta: 0:40:26, time (data): 0.362 (0.002)] l_pix: -3.7557e+01 
+2024-05-14 07:50:47,108 INFO: [OURNe..][epoch:187, iter:  93,900, lr:(8.701e-04,)] [eta: 0:39:47, time (data): 0.361 (0.002)] l_pix: -3.7787e+01 
+2024-05-14 07:51:23,286 INFO: [OURNe..][epoch:187, iter:  94,000, lr:(8.698e-04,)] [eta: 0:39:07, time (data): 0.362 (0.002)] l_pix: -3.8387e+01 
+2024-05-14 07:51:59,539 INFO: [OURNe..][epoch:188, iter:  94,100, lr:(8.696e-04,)] [eta: 0:38:28, time (data): 0.363 (0.002)] l_pix: -3.4597e+01 
+2024-05-14 07:52:35,783 INFO: [OURNe..][epoch:188, iter:  94,200, lr:(8.693e-04,)] [eta: 0:37:49, time (data): 0.363 (0.002)] l_pix: -3.6364e+01 
+2024-05-14 07:53:12,058 INFO: [OURNe..][epoch:188, iter:  94,300, lr:(8.690e-04,)] [eta: 0:37:09, time (data): 0.362 (0.002)] l_pix: -3.1773e+01 
+2024-05-14 07:53:48,271 INFO: [OURNe..][epoch:188, iter:  94,400, lr:(8.688e-04,)] [eta: 0:36:30, time (data): 0.363 (0.002)] l_pix: -3.2054e+01 
+2024-05-14 07:54:24,543 INFO: [OURNe..][epoch:188, iter:  94,500, lr:(8.685e-04,)] [eta: 0:35:51, time (data): 0.362 (0.002)] l_pix: -3.5151e+01 
+2024-05-14 07:55:00,803 INFO: [OURNe..][epoch:189, iter:  94,600, lr:(8.682e-04,)] [eta: 0:35:11, time (data): 0.362 (0.002)] l_pix: -3.6880e+01 
+2024-05-14 07:55:37,111 INFO: [OURNe..][epoch:189, iter:  94,700, lr:(8.680e-04,)] [eta: 0:34:32, time (data): 0.362 (0.002)] l_pix: -3.8186e+01 
+2024-05-14 07:56:13,340 INFO: [OURNe..][epoch:189, iter:  94,800, lr:(8.677e-04,)] [eta: 0:33:53, time (data): 0.363 (0.002)] l_pix: -3.5699e+01 
+2024-05-14 07:56:49,649 INFO: [OURNe..][epoch:189, iter:  94,900, lr:(8.674e-04,)] [eta: 0:33:14, time (data): 0.363 (0.002)] l_pix: -3.7298e+01 
+2024-05-14 07:57:25,923 INFO: [OURNe..][epoch:189, iter:  95,000, lr:(8.672e-04,)] [eta: 0:32:34, time (data): 0.362 (0.002)] l_pix: -3.6759e+01 
+2024-05-14 07:57:25,924 INFO: Saving models and training states.
+2024-05-14 07:59:48,340 INFO: Validation SOTS-indoor, 		 # psnr: 17.1729	 # ssim: 0.8062
+2024-05-14 07:59:48,340 INFO: [OURNe..][epoch:189, iter:  95,000, lr:(8.672e-04,)] m_psnr: 1.7173e+01 m_ssim: 8.0618e-01 
+2024-05-14 08:00:24,650 INFO: [OURNe..][epoch:190, iter:  95,100, lr:(8.669e-04,)] [eta: 0:32:03, time (data): 0.363 (0.002)] l_pix: -3.8017e+01 
+2024-05-14 08:01:00,936 INFO: [OURNe..][epoch:190, iter:  95,200, lr:(8.666e-04,)] [eta: 0:31:23, time (data): 0.363 (0.002)] l_pix: -3.3962e+01 
+2024-05-14 08:01:37,146 INFO: [OURNe..][epoch:190, iter:  95,300, lr:(8.664e-04,)] [eta: 0:30:44, time (data): 0.361 (0.002)] l_pix: -2.8280e+01 
+2024-05-14 08:02:13,421 INFO: [OURNe..][epoch:190, iter:  95,400, lr:(8.661e-04,)] [eta: 0:30:04, time (data): 0.362 (0.002)] l_pix: -3.6202e+01 
+2024-05-14 08:02:49,644 INFO: [OURNe..][epoch:190, iter:  95,500, lr:(8.658e-04,)] [eta: 0:29:25, time (data): 0.392 (0.002)] l_pix: -3.5493e+01 
+2024-05-14 08:03:25,850 INFO: [OURNe..][epoch:191, iter:  95,600, lr:(8.656e-04,)] [eta: 0:28:46, time (data): 0.363 (0.002)] l_pix: -3.5057e+01 
+2024-05-14 08:04:02,130 INFO: [OURNe..][epoch:191, iter:  95,700, lr:(8.653e-04,)] [eta: 0:28:06, time (data): 0.363 (0.002)] l_pix: -3.8184e+01 
+2024-05-14 08:04:38,411 INFO: [OURNe..][epoch:191, iter:  95,800, lr:(8.650e-04,)] [eta: 0:27:27, time (data): 0.362 (0.002)] l_pix: -3.6856e+01 
+2024-05-14 08:05:14,698 INFO: [OURNe..][epoch:191, iter:  95,900, lr:(8.648e-04,)] [eta: 0:26:47, time (data): 0.363 (0.002)] l_pix: -3.4466e+01 
+2024-05-14 08:05:51,011 INFO: [OURNe..][epoch:191, iter:  96,000, lr:(8.645e-04,)] [eta: 0:26:08, time (data): 0.363 (0.002)] l_pix: -3.6297e+01 
+2024-05-14 08:06:27,270 INFO: [OURNe..][epoch:192, iter:  96,100, lr:(8.642e-04,)] [eta: 0:25:29, time (data): 0.361 (0.001)] l_pix: -3.4485e+01 
+2024-05-14 08:07:03,590 INFO: [OURNe..][epoch:192, iter:  96,200, lr:(8.640e-04,)] [eta: 0:24:49, time (data): 0.363 (0.002)] l_pix: -3.3405e+01 
+2024-05-14 08:07:39,870 INFO: [OURNe..][epoch:192, iter:  96,300, lr:(8.637e-04,)] [eta: 0:24:10, time (data): 0.362 (0.002)] l_pix: -2.9821e+01 
+2024-05-14 08:08:16,134 INFO: [OURNe..][epoch:192, iter:  96,400, lr:(8.634e-04,)] [eta: 0:23:31, time (data): 0.364 (0.002)] l_pix: -2.9855e+01 
+2024-05-14 08:08:52,358 INFO: [OURNe..][epoch:192, iter:  96,500, lr:(8.632e-04,)] [eta: 0:22:51, time (data): 0.363 (0.002)] l_pix: -3.3670e+01 
+2024-05-14 08:09:28,669 INFO: [OURNe..][epoch:193, iter:  96,600, lr:(8.629e-04,)] [eta: 0:22:12, time (data): 0.363 (0.002)] l_pix: -3.2780e+01 
+2024-05-14 08:10:04,949 INFO: [OURNe..][epoch:193, iter:  96,700, lr:(8.626e-04,)] [eta: 0:21:33, time (data): 0.363 (0.002)] l_pix: -3.3569e+01 
+2024-05-14 08:10:41,227 INFO: [OURNe..][epoch:193, iter:  96,800, lr:(8.623e-04,)] [eta: 0:20:54, time (data): 0.362 (0.002)] l_pix: -2.9298e+01 
+2024-05-14 08:11:17,467 INFO: [OURNe..][epoch:193, iter:  96,900, lr:(8.621e-04,)] [eta: 0:20:14, time (data): 0.362 (0.002)] l_pix: -3.4796e+01 
+2024-05-14 08:11:53,722 INFO: [OURNe..][epoch:193, iter:  97,000, lr:(8.618e-04,)] [eta: 0:19:35, time (data): 0.361 (0.002)] l_pix: -3.7142e+01 
+2024-05-14 08:12:29,970 INFO: [OURNe..][epoch:194, iter:  97,100, lr:(8.615e-04,)] [eta: 0:18:56, time (data): 0.362 (0.002)] l_pix: -3.9086e+01 
+2024-05-14 08:13:06,204 INFO: [OURNe..][epoch:194, iter:  97,200, lr:(8.613e-04,)] [eta: 0:18:16, time (data): 0.362 (0.002)] l_pix: -3.5695e+01 
+2024-05-14 08:13:42,409 INFO: [OURNe..][epoch:194, iter:  97,300, lr:(8.610e-04,)] [eta: 0:17:37, time (data): 0.361 (0.002)] l_pix: -3.5164e+01 
+2024-05-14 08:14:18,650 INFO: [OURNe..][epoch:194, iter:  97,400, lr:(8.607e-04,)] [eta: 0:16:58, time (data): 0.362 (0.001)] l_pix: -3.7172e+01 
+2024-05-14 08:14:54,929 INFO: [OURNe..][epoch:194, iter:  97,500, lr:(8.604e-04,)] [eta: 0:16:19, time (data): 0.362 (0.002)] l_pix: -3.6424e+01 
+2024-05-14 08:15:31,236 INFO: [OURNe..][epoch:195, iter:  97,600, lr:(8.602e-04,)] [eta: 0:15:39, time (data): 0.362 (0.002)] l_pix: -3.4600e+01 
+2024-05-14 08:16:07,541 INFO: [OURNe..][epoch:195, iter:  97,700, lr:(8.599e-04,)] [eta: 0:15:00, time (data): 0.364 (0.002)] l_pix: -3.7569e+01 
+2024-05-14 08:16:43,854 INFO: [OURNe..][epoch:195, iter:  97,800, lr:(8.596e-04,)] [eta: 0:14:21, time (data): 0.362 (0.002)] l_pix: -2.9862e+01 
+2024-05-14 08:17:20,081 INFO: [OURNe..][epoch:195, iter:  97,900, lr:(8.594e-04,)] [eta: 0:13:42, time (data): 0.363 (0.002)] l_pix: -2.9932e+01 
+2024-05-14 08:17:56,333 INFO: [OURNe..][epoch:195, iter:  98,000, lr:(8.591e-04,)] [eta: 0:13:02, time (data): 0.362 (0.002)] l_pix: -3.0542e+01 
+2024-05-14 08:18:32,639 INFO: [OURNe..][epoch:196, iter:  98,100, lr:(8.588e-04,)] [eta: 0:12:23, time (data): 0.363 (0.002)] l_pix: -3.3569e+01 
+2024-05-14 08:19:08,893 INFO: [OURNe..][epoch:196, iter:  98,200, lr:(8.585e-04,)] [eta: 0:11:44, time (data): 0.362 (0.002)] l_pix: -3.7452e+01 
+2024-05-14 08:19:45,180 INFO: [OURNe..][epoch:196, iter:  98,300, lr:(8.583e-04,)] [eta: 0:11:05, time (data): 0.363 (0.002)] l_pix: -3.4269e+01 
+2024-05-14 08:20:21,454 INFO: [OURNe..][epoch:196, iter:  98,400, lr:(8.580e-04,)] [eta: 0:10:26, time (data): 0.362 (0.002)] l_pix: -3.2860e+01 
+2024-05-14 08:20:57,639 INFO: [OURNe..][epoch:196, iter:  98,500, lr:(8.577e-04,)] [eta: 0:09:46, time (data): 0.362 (0.002)] l_pix: -3.4512e+01 
+2024-05-14 08:21:33,864 INFO: [OURNe..][epoch:197, iter:  98,600, lr:(8.574e-04,)] [eta: 0:09:07, time (data): 0.362 (0.002)] l_pix: -3.0219e+01 
+2024-05-14 08:22:10,058 INFO: [OURNe..][epoch:197, iter:  98,700, lr:(8.572e-04,)] [eta: 0:08:28, time (data): 0.362 (0.002)] l_pix: -3.3638e+01 
+2024-05-14 08:22:46,300 INFO: [OURNe..][epoch:197, iter:  98,800, lr:(8.569e-04,)] [eta: 0:07:49, time (data): 0.362 (0.002)] l_pix: -3.6114e+01 
+2024-05-14 08:23:22,538 INFO: [OURNe..][epoch:197, iter:  98,900, lr:(8.566e-04,)] [eta: 0:07:10, time (data): 0.362 (0.002)] l_pix: -3.6904e+01 
+2024-05-14 08:23:58,717 INFO: [OURNe..][epoch:197, iter:  99,000, lr:(8.563e-04,)] [eta: 0:06:30, time (data): 0.362 (0.002)] l_pix: -3.0206e+01 
+2024-05-14 08:24:34,923 INFO: [OURNe..][epoch:198, iter:  99,100, lr:(8.561e-04,)] [eta: 0:05:51, time (data): 0.361 (0.002)] l_pix: -3.5184e+01 
+2024-05-14 08:25:11,193 INFO: [OURNe..][epoch:198, iter:  99,200, lr:(8.558e-04,)] [eta: 0:05:12, time (data): 0.363 (0.002)] l_pix: -3.4712e+01 
+2024-05-14 08:25:47,320 INFO: [OURNe..][epoch:198, iter:  99,300, lr:(8.555e-04,)] [eta: 0:04:33, time (data): 0.360 (0.001)] l_pix: -3.7625e+01 
+2024-05-14 08:26:23,450 INFO: [OURNe..][epoch:198, iter:  99,400, lr:(8.552e-04,)] [eta: 0:03:54, time (data): 0.361 (0.002)] l_pix: -3.7962e+01 
+2024-05-14 08:26:59,637 INFO: [OURNe..][epoch:198, iter:  99,500, lr:(8.550e-04,)] [eta: 0:03:15, time (data): 0.363 (0.002)] l_pix: -3.3431e+01 
+2024-05-14 08:27:35,961 INFO: [OURNe..][epoch:199, iter:  99,600, lr:(8.547e-04,)] [eta: 0:02:36, time (data): 0.362 (0.002)] l_pix: -3.6292e+01 
+2024-05-14 08:28:12,291 INFO: [OURNe..][epoch:199, iter:  99,700, lr:(8.544e-04,)] [eta: 0:01:56, time (data): 0.363 (0.002)] l_pix: -3.3523e+01 
+2024-05-14 08:28:48,569 INFO: [OURNe..][epoch:199, iter:  99,800, lr:(8.541e-04,)] [eta: 0:01:17, time (data): 0.365 (0.002)] l_pix: -3.6238e+01 
+2024-05-14 08:29:24,851 INFO: [OURNe..][epoch:199, iter:  99,900, lr:(8.538e-04,)] [eta: 0:00:38, time (data): 0.363 (0.002)] l_pix: -3.5929e+01 
+2024-05-14 08:30:01,114 INFO: [OURNe..][epoch:199, iter: 100,000, lr:(8.536e-04,)] [eta: 0:00:00, time (data): 0.361 (0.001)] l_pix: -3.4217e+01 
+2024-05-14 08:30:01,115 INFO: Saving models and training states.
+2024-05-14 08:32:22,862 INFO: Validation SOTS-indoor, 		 # psnr: 15.3030	 # ssim: 0.7721
+2024-05-14 08:32:22,862 INFO: [OURNe..][epoch:199, iter: 100,000, lr:(8.536e-04,)] m_psnr: 1.5303e+01 m_ssim: 7.7212e-01 
+2024-05-14 08:32:22,875 INFO: End of training. Time consumed: 10:54:07
+2024-05-14 08:32:22,875 INFO: Save the latest model.
+2024-05-14 08:34:41,729 INFO: Validation SOTS-indoor, 		 # psnr: 15.3030	 # ssim: 0.7721
